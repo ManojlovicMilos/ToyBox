@@ -1,7 +1,7 @@
 {
-  "name": "toybox",
+  "name": "toybox-engine",
   "version": "0.0.1",
-  "description": "Toybox engine",
+  "description": "Toybox Engine",
   "main": "build/toybox.js",
   "types": "build/toybox.d.ts",
   "scripts": {
@@ -15,6 +15,7 @@
     "url": "git+https://github.com/ManojlovicMilos/ToyBox"
   },
   "keywords": [
+    "toybox-engine",
     "toybox",
     "engine",
     "game"
