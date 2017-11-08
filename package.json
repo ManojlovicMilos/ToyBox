@@ -1,0 +1,40 @@
+{
+  "name": "toybox",
+  "version": "0.0.1",
+  "description": "Toybox engine",
+  "main": "build/toybox.js",
+  "types": "build/toybox.d.ts",
+  "scripts": {
+    "start": "tsc && webpack-dev-server --hot",
+    "build": "tsc && webpack --watch",
+    "prod": "tsc && webpack -p",
+    "test": "cd tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ManojlovicMilos/ToyBox"
+  },
+  "keywords": [
+    "toybox",
+    "engine",
+    "game"
+  ],
+  "author": "Miloš Manojlović",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ManojlovicMilos/ToyBox/issues"
+  },
+  "homepage": "https://github.com/ManojlovicMilos/ToyBox#readme",
+  "devDependencies": {
+    "typescript": "^2.5.3",
+    "webpack": "^3.7.1",
+    "webpack-dev-server": "^2.9.2"
+  },
+  "dependencies": {
+    "@types/howler": "^2.0.5",
+    "@types/three": "^0.84.27",
+    "howler": "^2.0.5",
+    "three": "^0.86.0",
+    "ts-loader": "^2.3.7"
+  }
+}
