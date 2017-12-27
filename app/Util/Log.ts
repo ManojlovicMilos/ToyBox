@@ -7,43 +7,43 @@ class Log
     public static LogError:boolean = true;
     public static LogWarning:boolean = true;
     public static LogEvent:boolean = false;
-    public static Print(Message:any)
+    public static Print(Message:any) : void
     {
         if(!Log.LogPrint) return;
         console.log(" - - - ");
-        console.info("Toybox: Message");
+        console.info("ToyBox: Message");
         console.info(Message);
         console.log(" - - - ");
     };
-    public static Info(Message:any)
+    public static Info(Message:any) : void
     {
         if(!Log.LogInfo) return;
         console.log(" - - - ");
-        console.info("Toybox: Info");
+        console.info("ToyBox: Info");
         console.info(Message);
         console.log(" - - - ");
     };
-    public static Error(Message:any)
+    public static Error(Message:any) : void
     {
         if(!Log.LogError) return;
         console.log(" - - - ");
-        console.error("Toybox: Error");
+        console.error("ToyBox: Error");
         console.error(Message);
         console.log(" - - - ");
     };
-    public static Warning(Message:any)
+    public static Warning(Message:any) : void
     {
         if(!Log.LogWarning) return;
         console.log(" - - - ");
-        console.warn("Toybox: Warning");
+        console.warn("ToyBox: Warning");
         console.warn(Message);
         console.log(" - - - ");
     };
-    public static Event(Message:any)
+    public static Event(Message:any) : void
     {
         if(!Log.LogEvent) return;
         console.log(" - - - ");
-        console.info("Toybox: Event");
+        console.info("ToyBox: Event");
         console.info(Message);
         console.log(" - - - ");
     };

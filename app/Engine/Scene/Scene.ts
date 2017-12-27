@@ -5,7 +5,9 @@ import * as Util from "./../../Util/Util";
 import * as Math from "./../../Mathematics/Mathematics";
 
 import { EventPackage } from "./../Events/Events";
-import { SceneObject } from "./SceneObject";
+import { SceneObject, SceneObjectType } from "./SceneObject";
+import { DrawObject, DrawObjectType } from "./DrawObject";
+import { Serialization } from "./../../Data/Serialization";
 
 enum SceneType
 {
@@ -85,5 +87,52 @@ class Scene
             }
         }
         return Objects;
+    }
+    public GetObjectsWithDrawType(Type:DrawObjectType) : any[]  
+    {  
+        let Objects:any[] = [];  
+        for(let i = 0; i < this.Objects.length; i++)  
+        {  
+            if(this.Objects[i].Type == SceneObjectType.Drawn)  
+            {  
+                if((<DrawObject>this.Objects[i]).DrawType == Type)  
+                {  
+                    Objects.push(this.Objects[i]);  
+                }  
+            }  
+        }  
+        return Objects;  
+    }  
+    public Serialize() : any
+    {
+        // Virtual
+        let S =
+        {
+            ID: this._ID,
+            Name: this._Name,
+            Type: <number>this._Type,
+            BackColor: this._BackColor.Serialize(),
+            Objects: [],
+            Data: {}
+        };
+        for(let i in this._Objects)
+        {
+            S.Objects.push(this._Objects[i].Serialize());
+        }
+        return S;
+    }
+    public Deserialize(Data:any) : void
+    {
+        // Virtual
+        this._ID = Data.ID;
+        this._Name = Data.Name;
+        this._Type = <SceneType> Data.Type;
+        this._BackColor.Deserialize(Data.BackColor);
+        this._Objects = [];
+        this.Data = Data.Data;
+        for(let i in Data.Objects)
+        {
+            this.AddSceneObject(Serialization.DeserializeSceneObject(Data.Objects[i]));
+        }
     }
 }
