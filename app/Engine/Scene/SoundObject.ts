@@ -19,6 +19,7 @@ class SoundObject extends SceneObject
     public set Volume(value:number) { this._Volume = value; this._Sound.volume(this._Volume); }
     public get Url():string { return this._Url; }
     public set Url(value:string) { this._Url = value; this.GenerateSound(); }
+    public get Sound():any { return this._Sound; }
     public constructor(Url:string, Old?:SoundObject)
     {
         super(Old);
@@ -51,6 +52,7 @@ class SoundObject extends SceneObject
                 autoplay:this._Autoplay,
                 loop:this._Looped,
                 volume:this._Volume/100.0,
+                preload: true
             }
         )
     }

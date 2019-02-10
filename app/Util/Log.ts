@@ -2,49 +2,74 @@ export  { Log };
 
 class Log
 {
-    public static LogPrint:boolean = true;
-    public static LogInfo:boolean = false;
-    public static LogError:boolean = true;
-    public static LogWarning:boolean = true;
-    public static LogEvent:boolean = false;
-    public static Print(Message:any) : void
+    public static Enabled:boolean = true;
+    public static InfoEnabled:boolean = true;
+    public static ErrorEnabled:boolean = true;
+    public static WarningEnabled:boolean = true;
+    public static EventEnabled:boolean = false;
+    public static CustomEnabled:boolean = false;
+    public static CustomTitle:string = "Custom";
+    public static Out(Message:string, Data?:any, Type?:string) : void
     {
-        if(!Log.LogPrint) return;
+        if(!Log.Enabled) return;
         console.log(" - - - ");
-        console.info("ToyBox: Message");
-        console.info(Message);
+        if(Type) console.log("TBX: " + Type);
+        else console.log("TBX: Message");
+        console.log(Message);
+        if(Data) console.log(Data);
         console.log(" - - - ");
     };
-    public static Info(Message:any) : void
+    public static Info(Message:string, Data?:any, Type?:string) : void
     {
-        if(!Log.LogInfo) return;
-        console.log(" - - - ");
-        console.info("ToyBox: Info");
+        if(!Log.Enabled) return;
+        if(!Log.InfoEnabled) return;
+        console.info(" - - - ");
+        if(Type) console.info("TBX: " + Type + " Info");
+        else console.info("TBX: Info");
         console.info(Message);
-        console.log(" - - - ");
+        if(Data) console.log(Data);
+        console.info(" - - - ");
     };
-    public static Error(Message:any) : void
+    public static Error(Message:string, Data?:any, Type?:string) : void
     {
-        if(!Log.LogError) return;
-        console.log(" - - - ");
-        console.error("ToyBox: Error");
+        if(!Log.Enabled) return;
+        if(!Log.ErrorEnabled) return;
+        console.error(" - - - ");
+        if(Type) console.error("TBX: " + Type + " Error");
+        else console.error("TBX: Error");
         console.error(Message);
-        console.log(" - - - ");
+        if(Data) console.log(Data);
+        console.error(" - - - ");
     };
-    public static Warning(Message:any) : void
+    public static Warning(Message:string, Data?:any, Type?:string) : void
     {
-        if(!Log.LogWarning) return;
-        console.log(" - - - ");
-        console.warn("ToyBox: Warning");
+        if(!Log.Enabled) return;
+        if(!Log.WarningEnabled) return;
+        console.warn(" - - - ");
+        if(Type) console.warn("TBX: " + Type + " Warning");
+        else console.warn("TBX: Warning");
         console.warn(Message);
-        console.log(" - - - ");
+        if(Data) console.log(Data);
+        console.warn(" - - - ");
     };
-    public static Event(Message:any) : void
+    public static Event(Message:string, Data?:any) : void
     {
-        if(!Log.LogEvent) return;
-        console.log(" - - - ");
-        console.info("ToyBox: Event");
+        if(!Log.Enabled) return;
+        if(!Log.EventEnabled) return;
+        console.info(" - - - ");
+        console.info("TBX: Event");
         console.info(Message);
-        console.log(" - - - ");
+        console.info(" - - - ");
+    };
+    public static Custom(Message:string, Data?:any, Type?:string) : void
+    {
+        if(!Log.Enabled) return;
+        if(!Log.WarningEnabled) return;
+        console.warn(" - - - ");
+        if(Type) console.warn("TBX: " + Log.CustomTitle + " - " + Type);
+        else console.warn("TBX: " + Log.CustomTitle);
+        console.warn(Message);
+        if(Data) console.log(Data);
+        console.warn(" - - - ");
     };
 }

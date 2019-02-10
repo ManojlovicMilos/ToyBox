@@ -17,13 +17,37 @@ class Color
     {
         return Color.FromRGBA(this.R, this.G, this.B, this.A);
     }
+    public Lighten():Color
+    {
+        this.R += 20;
+        if(this.R > 255) this.R = 255;
+        this.G += 20;
+        if(this.G > 255) this.G = 255;
+        this.B += 20;
+        if(this.B > 255) this.B = 255;
+        return this;
+    }
+    public Darken():Color
+    {
+        this.R -= 20;
+        if(this.R < 0) this.R = 0;
+        this.G -= 20;
+        if(this.G < 0) this.G = 0;
+        this.B -= 20;
+        if(this.B < 0) this.B = 0;
+        return this;
+    }
     public ToArray() : number[]
     {
         return [(this.R * 1.0 + 1) / 256, (this.G * 1.0 + 1) / 256, (this.B * 1.0 + 1) / 256, (this.A * 1.0 + 1) / 256];
     }
+    public ToString() : string
+    {
+        return "rgba("+this.R+","+this.G+","+this.B+","+((this.A * 1.0 + 1) / 256)+")";
+    }
     public static FromRGBA(R:number, G:number, B:number, A:number):Color
     {
-        let New:Color = new Color();
+        let New :Color = new Color();
         New.R = R;
         New.G = G;
         New.B = B;
@@ -32,7 +56,7 @@ class Color
     }
     public Serialize() : any
     {
-        let C = 
+        let C:any = 
         {
             R: this.R,
             G: this.G,
@@ -48,29 +72,42 @@ class Color
         this.B = Data.B;
         this.A = Data.A;
     }
-    /// TODO
-    /// Add some static basic colors for easy creation.
-    public static Empty =       Color.FromRGBA(0,0,0,0);
-    public static Black =       Color.FromRGBA(0,0,0,255);
-    public static White =       Color.FromRGBA(255,255,255,255);
-    public static Aqua =        Color.FromRGBA(0,255,255,255);
-    public static Teal =        Color.FromRGBA(0,128,255,255);
-    public static Blue =        Color.FromRGBA(0,0,255,255);
-    public static Navy =        Color.FromRGBA(0,0,128,255);
-    public static Yellow =      Color.FromRGBA(255,255,0,255);
-    public static Olive =       Color.FromRGBA(128,128,0,255);
-    public static Lime =        Color.FromRGBA(0,255,0,255);
-    public static Green =       Color.FromRGBA(0,128,0,255);
-    public static Fuchsia =     Color.FromRGBA(255,0,255,255);
-    public static Purple =      Color.FromRGBA(128,0,128,255);
-    public static Red =         Color.FromRGBA(255,0,0,255);
-    public static Maroon =      Color.FromRGBA(128,0,0,255);
+    private static _Empty   :Color = Color.FromRGBA(0,0,0,0);
+    private static _Black   :Color = Color.FromRGBA(0,0,0,255);
+    private static _White   :Color = Color.FromRGBA(255,255,255,255);
+    private static _Aqua    :Color = Color.FromRGBA(0,255,255,255);
+    private static _Teal    :Color = Color.FromRGBA(0,128,255,255);
+    private static _Blue    :Color = Color.FromRGBA(0,0,255,255);
+    private static _Navy    :Color = Color.FromRGBA(0,0,128,255);
+    private static _Yellow  :Color = Color.FromRGBA(255,255,0,255);
+    private static _Olive   :Color = Color.FromRGBA(128,128,0,255);
+    private static _Lime    :Color = Color.FromRGBA(0,255,0,255);
+    private static _Green   :Color = Color.FromRGBA(0,128,0,255);
+    private static _Fuchsia :Color = Color.FromRGBA(255,0,255,255);
+    private static _Purple  :Color = Color.FromRGBA(128,0,128,255);
+    private static _Red     :Color = Color.FromRGBA(255,0,0,255);
+    private static _Maroon  :Color = Color.FromRGBA(128,0,0,255);
+    public static get Empty():Color { return this._Empty.Copy(); }
+    public static get Black():Color { return this._Black.Copy(); }
+    public static get White():Color { return this._White.Copy(); }
+    public static get Aqua():Color { return this._Aqua.Copy(); }
+    public static get Teal():Color { return this._Teal.Copy(); }
+    public static get Blue():Color { return this._Blue.Copy(); }
+    public static get Navy():Color { return this._Navy.Copy(); }
+    public static get Yellow():Color { return this._Yellow.Copy(); }
+    public static get Olive():Color { return this._Olive.Copy(); }
+    public static get Lime():Color { return this._Lime.Copy(); }
+    public static get Green():Color { return this._Green.Copy(); }
+    public static get Fuchsia():Color { return this._Fuchsia.Copy(); }
+    public static get Purple():Color { return this._Purple.Copy(); }
+    public static get Red():Color { return this._Red.Copy(); }
+    public static get Maroon():Color { return this._Maroon.Copy(); }
     public static FromString( ColorString:string ) : Color
     {
-        let R = 0;
-        let G = 0;
-        let B = 0;
-        let A = 255;
+        let R:number = 0;
+        let G:number = 0;
+        let B:number = 0;
+        let A:number = 255;
         if( ColorString.indexOf('#') === 0 )
         {
             ColorString = ColorString.substr(1);
@@ -115,5 +152,13 @@ class Color
         else if (ColorString.toUpperCase() == "RED") return Color.Red;
         else if (ColorString.toUpperCase() == "MAROON") return Color.Maroon;
         else return Color.Empty;
+    }
+    public static Blend(Color1:Color, Color2:Color, Ratio:number) : Color
+    {
+        let NewColor:Color = Color.Black;
+        NewColor.R = Math.floor((1-Ratio) * Color1.R + Ratio * Color2.R);
+        NewColor.G = Math.floor((1-Ratio) * Color1.G + Ratio * Color2.G);
+        NewColor.B = Math.floor((1-Ratio) * Color1.B + Ratio * Color2.B);
+        return NewColor;
     }
 }

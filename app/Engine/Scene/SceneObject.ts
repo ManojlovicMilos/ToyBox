@@ -3,23 +3,25 @@ export  { SceneObjectType, SceneObject };
 import * as Data from "./../../Data/Data";
 import * as Mathematics from "./../../Mathematics/Mathematics";
 
-import { EventPackage } from "./../Events/Events";
+import { EventPackage } from "./../Events/EventPackage";
 import { Serialization } from "./../../Data/Serialization";
 
 enum SceneObjectType
 {
-    Undefined,
-    Drawn,
-    Script,
-    Sound,
-    Other
+    Undefined = "Undefined",
+    Drawn = "Drawn",
+    Script = "Script",
+    Sound = "Sound",
+    Control = "Control",
+    Other = "Other"
 }
 class SceneObject
 {
+    // Abstract
     private _ID:string;
     private _Name:string;
     private _Type:SceneObjectType;
-    private _Events:EventPackage;
+    protected _Events:EventPackage;
     public get ID():string { return this._ID; }
     public get Name():string { return this._Name; }
     public set Name(value:string) { this._Name = value; }
@@ -55,7 +57,7 @@ class SceneObject
         {
             ID: this._ID,
             Name: this._Name,
-            Type: <number> this._Type,
+            Type: <string> this._Type,
             Data: Serialization.CleanData(this.Data)
         };
         return SO;
@@ -67,5 +69,21 @@ class SceneObject
         this._Name = Data.Name;
         this._Type = <SceneObjectType>Data.Type;
         this.Data = Data.Data;
+    }
+    public OnAttach(Args:any) : void
+    {
+        // Virtual
+    }
+    public OnRemove(Args:any) : void
+    {
+        // Virtual
+    }
+    public OnSwitch() : void
+    {
+        // Virtual
+    }
+    public OnResize(Args:any) : void
+    {
+        // Virtual
     }
 }
