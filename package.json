@@ -1,6 +1,6 @@
 {
   "name": "toybox-engine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Toybox Engine",
   "main": "build/toybox.js",
   "types": "build/toybox.d.ts",
