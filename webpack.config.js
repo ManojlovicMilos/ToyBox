@@ -5,7 +5,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "build"),
-    library: "Toybox",
+    library: "ToyBox",
     libraryTarget: "umd",
     filename: "toybox.js",
     publicPath: "/resources/"
@@ -14,8 +14,8 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js']
   },
   module: {
-    loaders: [
-      { test: /\.tsx?$/, loader: 'ts-loader' }
+    rules: [
+      { test: /\.tsx?$/, use: 'ts-loader' }
     ]
   }
 };

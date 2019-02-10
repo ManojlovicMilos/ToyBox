@@ -27,15 +27,16 @@
   },
   "homepage": "https://github.com/ManojlovicMilos/ToyBox#readme",
   "devDependencies": {
-    "typescript": "^2.5.3",
-    "webpack": "^3.7.1",
-    "webpack-dev-server": "^2.9.2"
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.1",
+    "webpack": "^4.29.1",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
     "@types/howler": "^2.0.5",
-    "@types/three": "^0.84.27",
-    "howler": "^2.0.5",
-    "three": "^0.86.0",
-    "ts-loader": "^2.3.7"
+    "@types/three": "^0.93.19",
+    "howler": "^2.1.1",
+    "three": "^0.101.1"
   }
 }

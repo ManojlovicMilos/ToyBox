@@ -9,11 +9,14 @@ class Vertex
     public X: number;
     public Y: number;
     public Z: number;
-    public constructor(X:number, Y:number, Z:number = 0)
+    public constructor(X?:number, Y?:number, Z?:number)
     {
-        this.X = X;
-        this.Y = Y;
-        this.Z = Z;
+        if(X) this.X = X;
+        else this.X = 0;
+        if(Y) this.Y = Y;
+        else this.Y = 0;
+        if(Z) this.Z = Z;
+        else this.Z = 0;
     }
     public Copy() : Vertex
     {
@@ -25,6 +28,17 @@ class Vertex
         this.X += V.X;
         this.Y += V.Y;
         this.Z += V.Z;
+        return this;
+    }
+    public Add(V:Vertex) : Vertex
+    {
+        return this.Translate(V);
+    }
+    public Substract(V:Vertex) : Vertex
+    {
+        this.X -= V.X;
+        this.Y -= V.Y;
+        this.Z -= V.Z;
         return this;
     }
     public Scale(V: Vertex) : Vertex
@@ -119,9 +133,15 @@ class Vertex
     {
         return Vertex.CalculateAngle(new Vertex(0,1,0), new Vertex(V2.X - V1.X, V2.Y - V1.Y, V2.Z - V1.Z));
     }
+    public Deserialize(Data:any) : void
+    {
+        this.X = Data.X;
+        this.Y = Data.Y;
+        this.Z = Data.Z;
+    }
     public Serialize() : any
     {
-        let V = 
+        let V:any = 
         {
             X: this.X,
             Y: this.Y,

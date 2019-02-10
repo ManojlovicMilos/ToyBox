@@ -15,11 +15,11 @@ class Scene2D extends Scene
     public set Trans(value:Math.Transformation) { this._Trans = value; }
     public get Sprites() : Sprite[]
     {
-        return this.GetObjectsWithDrawType(DrawObjectType.Sprite);
+        return <Sprite[]>this.FindByDrawType(DrawObjectType.Sprite);
     }
     public get Tiles() : Tile[]
     {
-        return this.GetObjectsWithDrawType(DrawObjectType.Tile);
+        return <Tile[]>this.FindByDrawType(DrawObjectType.Tile);
     }   
     public constructor(Old?:Scene2D)
     {
@@ -40,17 +40,40 @@ class Scene2D extends Scene
         let New:Scene2D = new Scene2D(this);
         return New;
     }
-    public AddSceneObject(Object:SceneObject) : void
+    public Attach(Object:SceneObject) : void
     {
         // Override
         if(Object.Type == SceneObjectType.Drawn)
         {
-            if((<DrawObject>Object).DrawType == DrawObjectType.Sprite || (<DrawObject>Object).DrawType == DrawObjectType.Tile)
+            if((<DrawObject>Object).DrawType == DrawObjectType.Sprite || (<DrawObject>Object).DrawType == DrawObjectType.Tile || (<DrawObject>Object).DrawType == DrawObjectType.Light)
             {
-                this.Data[Object.ID] = Object;
-                this.Objects.push(Object);
+                super.Attach(Object);
             }
         }
+        else if(Object.Type == SceneObjectType.Sound || Object.Type == SceneObjectType.Control)
+        {
+            super.Attach(Object);
+        }
+    }
+    public Composite(Chunk:Scene) : boolean
+    {
+        // Override
+        if(Chunk.Type != SceneType.Scene2D) return false
+        for(let i in Chunk.Objects)
+        {
+            if(Chunk.Objects[i].Type == SceneObjectType.Sound)
+            {
+                this.Objects.push(Chunk.Objects[i].Copy());
+            }
+            else if(Chunk.Objects[i].Type == SceneObjectType.Drawn)
+            {
+                let Drawn = <DrawObject> Chunk.Objects[i].Copy();
+                let Chunk2D = <Scene2D> Chunk;
+                Drawn.Trans.Composite(Chunk2D.Trans);
+                this.Objects.push(Drawn);
+            }
+        }
+        return true;
     }
     public Serialize() : any
     {

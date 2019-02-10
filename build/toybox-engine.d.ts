@@ -2,26 +2,53 @@ import * as Math from "./toybox-math";
 
 export class EventPackage
 {
-    Closing:Function[];
-    KeyPress:Function[];
-    KeyDown:Function[];
-    KeyUp:Function[];
-    Load:Function[];
-    MouseClick:Function[];
-    MouseDown:Function[];
-    MouseUp:Function[];
-    MouseMove:Function[];
-    MouseWheel:Function[];
-    RenderFrame:Function[];
-    Resize:Function[];
-    TimeTick:Function[];
-    OperationProgress:Function[];
-    OperationFinished:Function[];
-    SpriteSetAnimationComplete:Function[];
     constructor(Old?:EventPackage)
     Copy() : EventPackage
     Invoke(EventName:string, CurrentGame:Game, Args) : boolean
     InvokeEvents(Events:Function[], CurrentGame:Game, Args) : boolean
+}
+
+export class SceneEventPackage extends EventPackage
+{
+    WireTouchEvents:boolean;
+    Load:Function[];
+    Switch:Function[];
+    Leave:Function[];
+    Resize:Function[];
+    Update:Function[];
+    KeyPress:Function[];
+    KeyDown:Function[];
+    KeyUp:Function[];
+    Click:Function[];
+    MouseDown:Function[];
+    MouseUp:Function[];
+    MouseMove:Function[];
+    MouseWheel:Function[];
+    TouchStart:Function[];
+    TouchEnd:Function[];
+    TouchMove:Function[];
+    LoadProgress:Function[];
+    LoadComplete:Function[];
+    constructor(Old?:SceneEventPackage)
+    Copy() : SceneEventPackage
+}
+
+export class ImageObjectEventPackage extends EventPackage
+{
+    Click:Function[];
+    MouseDown:Function[];
+    MouseUp:Function[];
+    TouchStart:Function[];
+    TouchEnd:Function[];
+    constructor(Old?:SceneEventPackage)
+    Copy() : ImageObjectEventPackage
+}
+
+export class SpriteEventPackage extends ImageObjectEventPackage
+{
+    SetComplete:Function[];
+    constructor(Old?:SpriteEventPackage)
+    Copy() : SpriteEventPackage
 }
 
 export enum MouseButton 
@@ -33,11 +60,12 @@ export enum MouseButton
 
 export enum SceneObjectType
 {
-    Undefined,
-    Drawn,
-    Script,
-    Sound,
-    Other
+    Undefined = "Undefined",
+    Drawn = "Drawn",
+    Script = "Script",
+    Sound = "Sound",
+    Control = "Control",
+    Other = "Other"
 }
 
 export class SceneObject
@@ -49,15 +77,130 @@ export class SceneObject
     Data:any;
     constructor(Old?:SceneObject)
     Copy() : SceneObject
+    OnAttach(Args:any) : void
+    OnRemove(Args:any) : void
+    OnSwitch() : void
     Serialize() : any
     Deserialize(Data:any) : void
 }
 
-export enum DrawObjectType 
+export enum MaterialNodeValueType
 {
-    Undefined,
-    Sprite,
-    Tile
+    Int = "int",
+    Bool = "bool",
+    Float = "float",
+    Vector2 = "vec2",
+    Vector3 = "vec3",
+    Vector4 = "vec4"
+}
+
+export class MaterialNodeValue
+{
+    ID:string;
+    Name:string;
+    OriginID:string;
+    ParentName:string;
+    Editable:boolean;
+    Type:MaterialNodeValueType;
+    InputTarget:MaterialNodeValue;
+    Value:any;
+    constructor(Old?:MaterialNodeValue)
+    Copy() : MaterialNodeValue
+    Serialize() : any
+    Deserialize(Data:any) : void
+}
+
+export class MaterialNode
+{
+    ID:string;
+    Name:string;
+    FunctionID:string;
+    Values:MaterialNodeValue[];
+    Inputs:MaterialNodeValue[];
+    Outputs:MaterialNodeValue[];
+    constructor(Old?:MaterialNode)
+    Copy() : MaterialNode
+    Serialize() : any
+    Deserialize(Data:any) : void
+    AddValue(NodeValue: MaterialNodeValue) : void
+    AddInput(NodeValue: MaterialNodeValue) : void
+    AddOutput(NodeValue: MaterialNodeValue) : void
+}
+
+export class MaterialNodePool
+{
+    Pool: { [key: string]:MaterialNode; };
+    constructor()
+}
+
+export enum MaterialType
+{
+    Default = "Default",
+    Lit = "Lit",
+    Phong = "Phong",
+    Toon = "Toon",
+    Custom = "Custom",
+    Shader = "Shader"
+}
+
+export enum MaterialInputType
+{
+    Integer = "i",
+    Float = "f",
+    Vector2 = "v2",
+    Vector3 = "v3",
+    Vector4 = "v4",
+    Texture = "tv"
+}
+
+export class MaterialInput
+{
+    ID:string;
+    Type:MaterialInputType;
+    constructor(Old?:MaterialInput, ID?:string, Type?:MaterialInputType)
+    Copy() : MaterialInput
+}
+
+export class ShaderCode
+{
+    Vertex:string;
+    Fragment:string;
+    constructor(Old?:ShaderCode, Vertex?:string, Fragment?:string)
+    Copy() : ShaderCode
+}
+
+export enum TextureSamplingType
+{
+    Linear = "Linear",
+    Nearest = "Nearest"
+}
+
+export class Material
+{
+    ID:string;
+    Name:string;
+    Type:MaterialType;
+    Nodes:MaterialNode[];
+    Inputs:MaterialInput[];
+    Shaders:ShaderCode;
+    Sampling:TextureSamplingType;
+    constructor(Old?:Material)
+    Copy() : Material
+    Serialize() : any
+    Deserialize(Data:any) : void
+    AddNode(Node:MaterialNode) : void
+    RegisterInput(ID:string, Type:MaterialInputType) : boolean
+    FindNodeByName(Name:string) : MaterialNode
+    FindNodeByFunction(Function:string) : MaterialNode
+}
+
+export enum DrawObjectType
+{
+    Undefined = "Undefined",
+    Image = "Image",
+    Sprite = "Sprite",
+    Tile = "Tile",
+    Light = "Light"
 }
 
 export class DrawObject extends SceneObject
@@ -65,34 +208,91 @@ export class DrawObject extends SceneObject
     Modified:boolean;
     Fixed:boolean;
     Active:boolean;
+    Paint:Math.Color;
     DrawType:DrawObjectType;
     Trans:Math.Transformation;
+    Position:Math.Vertex;
+    Size:Math.Vertex;
+    Collision:Math.CollisionValue;
     constructor(Old?:DrawObject)
     Copy() : DrawObject
-    Serialize() : any
-    Deserialize(Data) : void
 }
 
-export class SpriteSet
+export class LightAttenuation
+{
+    Constant:number;
+    Linear:number;
+    Quadratic:number;
+    constructor(Old?:LightAttenuation, Constant?:number, Linear?:number, Quadratic?:number);
+}
+
+export class Light extends DrawObject
+{
+    Radius:number;
+    Intensity:number;
+    Attenuation:LightAttenuation;
+    constructor(Old?:Light);
+}
+
+export class ImageObject extends DrawObject
+{
+    // Abstract
+    Index: number;
+    Images: string[];
+    NormalMaps: string[];
+    SpecularMaps: string[];
+    FlipX:boolean;
+    FlipY:boolean;
+    RepeatX:number;
+    RepeatY:number;
+    AmbientColor:Math.Color;
+    Material:Material;
+    Collection:ImageCollection;
+    NormalCollection:ImageCollection;
+    SpecularCollection:ImageCollection;
+    Events:ImageObjectEventPackage;
+    constructor(Old?:ImageObject)
+    Copy() : ImageObject
+}
+
+export class ImageCollection
 {
     ID:string;
-    Name:string;
-    Seed:number;
-    Sprites:string[];
-    constructor(Old?:SpriteSet, Name?:string, Images?:string[])
-    Copy() : SpriteSet
+    Origin:string;
+    Images:string[];
+    constructor(Old?:ImageCollection, Images?:string[])
+    Copy() : ImageCollection
     Serialize() : any
     Deserialize(Data:any) : void
 }
 
-export class Sprite extends DrawObject
+export class SpriteSet extends ImageCollection
+{
+    Name:string;
+    Seed:number;
+    constructor(Old?:SpriteSet, Images?:string[], Name?:string)
+    Copy() : SpriteSet
+}
+
+export class SpriteSetCollection extends ImageCollection
+{
+    SpriteSets:SpriteSet[];
+    constructor(Old?:SpriteSetCollection, SpriteSets?:SpriteSet[])
+    Copy() : SpriteSetCollection
+}
+
+export class Sprite extends ImageObject
 {
     CurrentIndex:number;
     CurrentSpriteSet:number;
     BackUpSpriteSet:number;
-    Paint:Math.Color;
     SpriteSets:SpriteSet[];
+    NormalSets:SpriteSet[];
     SubSprites:Sprite[];
+    Events:SpriteEventPackage;
+    Collection:SpriteSetCollection;
+    NormalCollection:SpriteSetCollection;
+    SpecularCollection:SpriteSetCollection;
     constructor(Old?:Sprite)
     Copy() : Sprite
     CollectiveList() : string[]
@@ -101,33 +301,15 @@ export class Sprite extends DrawObject
     UpdateSpriteSet(Index:number) : void
     SetSpriteSetByName(Name:string) : void
     UpdateSpriteSetByName(Name:string) : void
-    Index() : number
-    GetActiveSprites() : string[]
     GetSprites(Set:number) : string[]
-    Serialize() : any
-    Deserialize(Data:any) : void
+    GetNormalSprites(Set:number) : string[]
 }
 
-export class TileCollection
+export class Tile extends ImageObject
 {
-    ID:string;
-    Images:string[];
-    constructor(Old?:TileCollection, Images?:string[])
-    Copy() : TileCollection
-    Serialize() : any
-    Deserialize(Data) : void
-}
-
-export class Tile extends DrawObject
-{
-    Index:number;
-    Collection:TileCollection;
-    Paint:Math.Color;
     SubTiles:Tile[];
     constructor(Old?:Tile)
     Copy() : Tile
-    Serialize() : any
-    Deserialize(Data) : void
 }
 
 export class SoundObject extends SceneObject
@@ -140,14 +322,12 @@ export class SoundObject extends SceneObject
     Copy() : SceneObject
     GenerateSound() : void
     Play() : void
-    Serialize() : any
-    Deserialize(Data) : void
 }
 
 export enum SceneType
 {
-    Scene2D,
-    Scene3D
+    Scene2D = "Scene2D",
+    Scene3D = "Scene3D"
 }
 
 export class Scene
@@ -156,16 +336,27 @@ export class Scene
     Name:string;
     Type:SceneType;
     BackColor:Math.Color;
-    Events:EventPackage;
+    Events:SceneEventPackage;
     Objects:SceneObject[];
+    Lights:Light[];
+    DrawObjects:DrawObject[];
+    SoundObjects:SoundObject[];
     Data:any;
+    Current:boolean;
     constructor(Old?:Scene)
     Copy() : Scene
-    AddSceneObject(Object:SceneObject) : void
-    RemoveSceneObject(Object:SceneObject) : void
-    GetObjectsWithData(Key:string, Data?:any) : any[]
+    Attach(Object:SceneObject) : void
+    Remove(Object:SceneObject) : void
+    FindByData(Key:string, Data?:any) : SceneObject[]
+    FindByType(Type:SceneObjectType) : SceneObject[]
+    FindByDrawType(Type:DrawObjectType) : DrawObject[]
+    FindColliders(Tags:string[]) : DrawObject[]
+    FindActiveByDrawType(Type:DrawObjectType) : DrawObject[]
     Serialize() : any
     Deserialize(Data:any) : void
+    OnSwitch() : void
+    OnLeave() : void
+    OnResize(Args:any) : void
 }
 
 export class Scene2D extends Scene
@@ -174,9 +365,6 @@ export class Scene2D extends Scene
     Sprites:Sprite[]
     constructor(Old?:Scene2D)
     Copy() : Scene2D
-    AddSceneObject(Object:SceneObject) : void
-    Serialize() : any
-    Deserialize(Data:any) : void
 }
 
 export class Game
@@ -187,12 +375,28 @@ export class Game
     Data:any;
     constructor(Name?:string)
     Copy() : Game
-    UpdateName() : void
-    AddScene(Scene:Scene) : void
-    ContainsScene(Name:string)
-    RemoveScene(Scene:Scene) : void
-    RemoveSceneByName(SceneName:string) : void
+    Attach(Scene:Scene) : void
+    Contains(Name:string)
+    Remove(Scene:Scene) : void
+    RemoveByName(SceneName:string) : void
     GetScenesWithData(Key:string, Data?:any) : any[]
+}
+
+export enum Quality
+{
+    Low = 1,
+    Medium = 2,
+    High = 4,
+}
+
+export class Settings
+{
+    static Version:string;
+    static LibPath:string;
+    static Graphics:Quality;
+    static IgnoreUICSS:boolean;
+    static GlobalFontScale:number;
+    static GlobalFontFamily:string;
 }
 
 export as namespace Engine;

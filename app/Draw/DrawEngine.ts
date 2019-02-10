@@ -27,7 +27,7 @@ class DrawEngine
     public constructor(Old?:DrawEngine)
     {
         this._FixedSize = false;
-        Util.Log.Print("ToyBox Version " + Engine.Settings.Version);
+        Util.Log.Info("ToyBox Version " + Engine.Settings.Version, null, "Engine");
         this._Matrix = new Math.MatrixTransformer();
     }
     public Copy() : DrawEngine
@@ -35,18 +35,22 @@ class DrawEngine
         let New:DrawEngine = new DrawEngine(this);
         return New;
     }
-    public UpdateResolution(Resolution:Math.Vertex, FixedSize?:boolean) : void
+    public UpdateResolution(Resolution?:Math.Vertex, FixedSize?:boolean) : void
     {
         // Virtual
-        this._Resolution = Resolution;
+        if(Resolution) this._Resolution = Resolution;
         if(FixedSize != null) this._FixedSize = FixedSize;
     }
     public TransformToCanvas(X:number, Y:number) : Math.Vertex
     {
         if(this._FixedSize) return new Math.Vertex(X, Y, 0);
-        return new Math.Vertex((X / this._Parent.innerWidth) * this._Resolution.X, (Y / this._Parent.innerHeight) * this._Resolution.Y, 0);
+        return new Math.Vertex((X / this._Target.clientWidth) * this._Resolution.X, (Y / this._Target.clientHeight) * this._Resolution.Y, 0);
     }
     public Draw2DScene(Scene:Engine.Scene2D, Width:number, Height:number) : void
+    {
+        // Virtual
+    }
+    public Preload2DScene(Scene:Engine.Scene2D, ReportProgress:Function) : void
     {
         // Virtual
     }
@@ -54,19 +58,27 @@ class DrawEngine
     {
         // Virtual
     }
-    private DrawSprite(Scene:Engine.Scene, Drawn:Engine.Sprite) : void
+    protected DrawSprite(Scene:Engine.Scene, Drawn:Engine.Sprite) : void
     {
         // Virtual
     }
-    protected LoadSprite(Scene:Engine.Scene, Drawn:Engine.Sprite) : void
+    protected LoadSprite(Scene:Engine.Scene, Drawn:Engine.Sprite, LoadData:any) : void
     {
         // Virtual
     }
-    private DrawTile(Scene:Engine.Scene, Drawn:Engine.Tile) : void
+    protected DrawTile(Scene:Engine.Scene, Drawn:Engine.Tile) : void
     {
         // Virtual
     }
-    protected LoadTile(Scene:Engine.Scene, Drawn:Engine.Tile) : void
+    protected LoadImage(Scene:Engine.Scene, Drawn:Engine.Tile, LoadData:any) : void
+    {
+        // Virtual
+    }
+    protected LoadTile(Scene:Engine.Scene, Drawn:Engine.Tile, LoadData:any) : void
+    {
+        // Virtual
+    }
+    protected LoadLight(Scene:Engine.Scene, Drawn:Engine.Light, LoadData:any) : void
     {
         // Virtual
     }

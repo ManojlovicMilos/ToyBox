@@ -8,7 +8,10 @@ enum Quality
 }
 class Settings
 {
-    public static Version:string = "0.1.0";
-    public static LibPath:string = "/Resources/";
+    public static Version:string = "0.0.70";
+    public static LibPath:string = "Resources/";
     public static Graphics:Quality = Quality.High;
+    public static IgnoreUICSS:boolean = true;
+    public static GlobalFontScale:number = 1.0;
+    public static GlobalFontFamily:string = "Arial";
 }

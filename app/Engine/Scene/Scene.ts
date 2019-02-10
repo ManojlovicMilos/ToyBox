@@ -4,15 +4,17 @@ import * as Data from "./../../Data/Data";
 import * as Util from "./../../Util/Util";
 import * as Math from "./../../Mathematics/Mathematics";
 
-import { EventPackage } from "./../Events/Events";
+import { SceneEventPackage } from "./../Events/SceneEventPackage";
 import { SceneObject, SceneObjectType } from "./SceneObject";
+import { SoundObject } from "./SoundObject";
 import { DrawObject, DrawObjectType } from "./DrawObject";
 import { Serialization } from "./../../Data/Serialization";
+import { Light } from "./Light";
 
 enum SceneType
 {
-    Scene2D,
-    Scene3D
+    Scene2D = "Scene2D",
+    Scene3D = "Scene3D"
 }
 class Scene
 {
@@ -20,8 +22,9 @@ class Scene
     private _Name:string;
     private _Type:SceneType;
     private _BackColor:Math.Color;
-    private _Events:EventPackage;
+    private _Events:SceneEventPackage;
     private _Objects:SceneObject[];
+    protected _Current:boolean;
     public get ID():string { return this._ID; }
     public get Name():string { return this._Name; }
     public set Name(value:string) { this._Name = value; }
@@ -29,9 +32,26 @@ class Scene
     public set Type(value:SceneType) { this._Type = value; }
     public get BackColor():Math.Color { return this._BackColor; }
     public set BackColor(value:Math.Color) { this._BackColor = value; }
-    public get Events():EventPackage { return this._Events; }
+    public get Events():SceneEventPackage { return this._Events; }
     public get Objects():SceneObject[] { return this._Objects; }
     public set Objects(value:SceneObject[]) { this._Objects = value; }
+    public get Current():boolean { return this._Current; }
+    public get DrawnObjects() : DrawObject[]
+    {
+        return <DrawObject[]>this.FindByType(SceneObjectType.Drawn);
+    }
+    public get SoundObjects() : SoundObject[]
+    {
+        return <SoundObject[]>this.FindByType(SceneObjectType.Sound);
+    }
+    public get Lights() : Light[]
+    {
+        return <Light[]>this.FindByDrawType(DrawObjectType.Light);
+    }
+    public get ActiveLights() : Light[]
+    {
+        return <Light[]>this.FindActiveByDrawType(DrawObjectType.Light);
+    }
     public Data: { [key: string]:any; } = {};
     public constructor(Old?:Scene)
     {
@@ -49,7 +69,7 @@ class Scene
             this._ID = Data.Uuid.Create();
             this._Name = this._ID;
             this._BackColor = Math.Color.FromRGBA(40,40,40,255);
-            this._Events = new EventPackage();
+            this._Events = new SceneEventPackage();
             this._Objects = [];
         }
     }
@@ -57,24 +77,27 @@ class Scene
     {
         return new Scene(this);
     }
-    public AddSceneObject(Object:SceneObject) : void
+    public Attach(Object:SceneObject) : void
     {
         // Virtual
         this.Data[Object.ID] = Object;
         this._Objects.push(Object);
+        Object.OnAttach({Scene:this});
     }
-    public RemoveSceneObject(Object:SceneObject) : void
+    public Remove(Object:SceneObject) : void
     {
+        // Virtual
         let Index:number = this._Objects.indexOf(Object);
         if(Index != -1)
         {
+            Object.OnRemove({Scene:this});
             this._Objects.splice(Index, 1);
         }
-        else Util.Log.Warning("Object " + Object.Name + "/" + Object.ID + " does not exist in scene " + this.Name + "/" + this.ID);
+        else Util.Log.Warning("Object " + Object.Name + "/" + Object.ID + " does not exist in scene " + this.Name + "/" + this.ID, {Objects:this._Objects, Object});
     }
-    public GetObjectsWithData(Key:string, Data?:any) : any[]
+    public FindByData(Key:string, Data?:any) : SceneObject[]
     {
-        let Objects:any[] = [];
+        let Objects:SceneObject[] = [];
         for(let i = 0; i < this.Objects.length; i++)
         {
             if(this.Objects[i].Data[Key])
@@ -88,21 +111,95 @@ class Scene
         }
         return Objects;
     }
-    public GetObjectsWithDrawType(Type:DrawObjectType) : any[]  
+    public FindByType(Type:SceneObjectType) : SceneObject[]  
     {  
-        let Objects:any[] = [];  
+        let Objects:SceneObject[] = [];  
+        for(let i = 0; i < this.Objects.length; i++)  
+        {  
+            if(this.Objects[i].Type == Type)  
+            {  
+                Objects.push(this.Objects[i]);  
+            }    
+        }  
+        return Objects;  
+    } 
+    public FindByDrawType(Type:DrawObjectType) : DrawObject[]  
+    {  
+        let Objects:DrawObject[] = [];  
         for(let i = 0; i < this.Objects.length; i++)  
         {  
             if(this.Objects[i].Type == SceneObjectType.Drawn)  
             {  
                 if((<DrawObject>this.Objects[i]).DrawType == Type)  
                 {  
-                    Objects.push(this.Objects[i]);  
+                    Objects.push(<DrawObject>this.Objects[i]);  
                 }  
             }  
         }  
         return Objects;  
     }  
+    public FindColliders(Tags:string[]) : DrawObject[]  
+    {  
+        let Objects:DrawObject[] = [];  
+        for(let i = 0; i < this.Objects.length; i++)  
+        {  
+            if(this.Objects[i].Type == SceneObjectType.Drawn)  
+            {  
+                let Drawn:DrawObject = <DrawObject>this.Objects[i];
+                if(Drawn.Collision.Active)  
+                {  
+                    if(Tags.length == 0) Objects.push(Drawn);
+                    else for(let i in Tags)
+                    {
+                        if(Drawn.Data[Tags[i]])
+                        {
+                            Objects.push(Drawn);
+                            break;
+                        }
+                    }
+                }  
+            }  
+        }  
+        return Objects;  
+    }  
+    public FindActiveByDrawType(Type:DrawObjectType) : DrawObject[]  
+    {  
+        let Objects:DrawObject[] = [];  
+        for(let i = 0; i < this.Objects.length; i++)  
+        {  
+            if(this.Objects[i].Type == SceneObjectType.Drawn && (<DrawObject>this.Objects[i]).Active)  
+            {  
+                if((<DrawObject>this.Objects[i]).DrawType == Type)
+                {  
+                    Objects.push(<DrawObject>this.Objects[i]);  
+                }  
+            }  
+        }  
+        return Objects;  
+    }
+    public Composite(Chunk:Scene) : boolean
+    {
+        // Virtual
+        return false;
+    }
+    public OnLeave() : void
+    {
+        // Virtual
+        this._Current = false;
+    }
+    public OnSwitch() : void
+    {
+        // Virtual
+        this._Current = true;
+        let UIParent:HTMLElement = document.getElementById("ui-parent");
+        if(UIParent) UIParent.innerHTML = "";
+        for(let i in this._Objects) this._Objects[i].OnSwitch();
+    }
+    public OnResize(Args:any) : void
+    {
+        // Virtual
+        for(let i in this._Objects) this._Objects[i].OnResize(Args);
+    }
     public Serialize() : any
     {
         // Virtual
@@ -110,7 +207,7 @@ class Scene
         {
             ID: this._ID,
             Name: this._Name,
-            Type: <number>this._Type,
+            Type: <string> this._Type,
             BackColor: this._BackColor.Serialize(),
             Objects: [],
             Data: {}
@@ -132,7 +229,7 @@ class Scene
         this.Data = Data.Data;
         for(let i in Data.Objects)
         {
-            this.AddSceneObject(Serialization.DeserializeSceneObject(Data.Objects[i]));
+            this.Attach(Serialization.DeserializeSceneObject(Data.Objects[i]));
         }
     }
 }
