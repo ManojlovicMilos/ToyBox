@@ -1,7 +1,8 @@
 export { SpriteSetCollection }
 
-import * as Data from "./../../Data/Data";
+import * as Core from "./../../Core/Core";
 
+import { Type } from "./../Types";
 import { SpriteSet } from "./SpriteSet";
 import { ImageCollection } from "./ImageCollection";
 
@@ -14,10 +15,12 @@ class SpriteSetCollection extends ImageCollection
     public constructor(Old?:SpriteSetCollection, SpriteSets?:SpriteSet[])
     {
         super(Old);
+        this.RegisterType(Type.SpriteSetCollection);
+        this.RegisterFactory(() => new SpriteSetCollection());
         this._SpriteSets = [];
         if(Old != null)
         {
-            for(let i in Old._SpriteSets) this._SpriteSets.push(Old._SpriteSets[i].Copy());
+            this._SpriteSets = Old._SpriteSets.map(Item => Item.Copy());
         }
         else
         {
@@ -43,21 +46,12 @@ class SpriteSetCollection extends ImageCollection
     public Serialize() : any
     {
         let SSC = super.Serialize();
-        SSC.SpriteSets = [];
-        for(let i in this._SpriteSets)
-        {
-            SSC.SpriteSets.push(this._SpriteSets[i].Serialize());
-        }
+        SSC.SpriteSets = this.SpriteSets.map(Item => Core.Serialization.Serialize(Item));
         return SSC;
     }
     public Deserialize(Data:any) : void
     {
         super.Deserialize(Data);
-        for(let i in Data.SpriteSets)
-        {
-            let SS:SpriteSet = new SpriteSet();
-            SS.Deserialize(Data.SpriteSets[i]);
-            this._SpriteSets.push(SS);
-        }
+        this.SpriteSets = Data.SpriteSets.map(Item => Core.Serialization.Deserialize(Item));
     }
 }

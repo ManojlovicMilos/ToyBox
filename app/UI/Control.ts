@@ -3,7 +3,7 @@ export { Control }
 import * as Math from "./../Mathematics/Mathematics";
 import * as Engine from "./../Engine/Engine";
 
-import { Settings } from "./../Engine/Settings";
+import { Settings } from "../Core/Settings";
 import { Border } from "./Border";
 
 class Control extends Engine.SceneObject

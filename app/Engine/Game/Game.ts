@@ -1,26 +1,36 @@
 export  { Game };
 
-import { Scene } from "./../Scene/Scene";
-import { SceneObject } from "./../Scene/SceneObject";
+import * as Core from "./../../Core/Core";
 
-class Game
+import { Type } from "./../Types";
+import { Scene } from "./../Scene/Scene";
+
+const TITLE_ELEMENT = "title";
+const DEFAULT_NAME = "ToyBox Game";
+
+class Game extends Core.BaseObject
 {
-    private _Name:string;
     private _Scenes:Scene[];
-    private _Assets:SceneObject[];
-    public get Name():string { return this._Name; }
-    public set Name(value:string) { this._Name = value; this.UpdateName(); }
+    public set Name(value:string) { this._Name = value; this.UpdatePageName(); }
     public get Scenes():Scene[] { return this._Scenes; }
     public set Scenes(value:Scene[]) { this._Scenes = value; }
-    public get Assets():SceneObject[] { return this._Assets; }
-    public set Assets(value:SceneObject[]) { this._Assets = value; }
-    public Data: { [key: string]:any; } = {};
-    public constructor(Name?:string)
+    public constructor(Old?:Game, Name?:string)
     {
-        this._Name = "ToyBox Game";
-        this._Scenes = [];
-        if(Name != null) this._Name = Name;
-        this.UpdateName();
+        super(Old);
+        this.RegisterType(Type.Game);
+        this.RegisterFactory(() => new Game());
+        if(Old) 
+        {
+            this._Scenes = [];
+            for(let i in Old._Scenes) this._Scenes.push(Old._Scenes[i].Copy());
+        }
+        else 
+        {
+            this._Name = DEFAULT_NAME;
+            if(Name != null) this._Name = Name;
+            this._Scenes = [];
+        }
+        this.UpdatePageName();
     }
     public Copy() : Game
     {
@@ -28,19 +38,15 @@ class Game
         New._Name = this._Name;
         return New;
     }
-    private UpdateName() : void
+    private UpdatePageName() : void
     {
-        let Title:HTMLElement = document.getElementById("title") as HTMLElement;
+        let Title:HTMLElement = document.getElementById(TITLE_ELEMENT) as HTMLElement;
         Title.innerHTML = this._Name;
     }
     public Attach(Scene:Scene) : void
     {
         this.Data[Scene.Name] = Scene;
         this._Scenes.push(Scene);
-    }
-    public Contains(Name:string)
-    {
-        return !!this.Data[Name];
     }
     public Remove(Scene:Scene) : void
     {

@@ -1,29 +1,20 @@
-export  { Light, LightType, LightAttenuation };
+export  { Light, LightAttenuation };
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Math from "./../../../../Mathematics/Mathematics";
 
-import { DrawObject, DrawObjectType } from "./DrawObject";
+import { Type } from "./../../../Types";
+import { DrawObject } from "../DrawObject";
 
-enum LightType
-{
-    Point = "Point",
-    Spot = "Spot",
-    Directional = "Directional"
-}
 class Light extends DrawObject
 {
     private _Radius:number;
     private _Intensity:number;
-    private _LightType:LightType;
     private _Direction:Math.Vertex;
     private _Attenuation:LightAttenuation;
     public get Radius():number { return this._Radius; }
     public set Radius(value:number) { this._Radius = value; }
     public get Intensity():number { return this._Intensity; }
     public set Intensity(value:number) { this._Intensity = value; }
-    public get LightType():LightType { return this._LightType; }
-    public set LightType(value:LightType) { this._LightType = value; }
     public get Direction():Math.Vertex { return this._Direction; }
     public set Direction(value:Math.Vertex) { this._Direction = value; }
     public get Attenuation():LightAttenuation { return this._Attenuation; }
@@ -32,19 +23,18 @@ class Light extends DrawObject
     public constructor(Old?:Light)
     {
         super(Old);
-        this.DrawType = DrawObjectType.Light;
+        this.RegisterType(Type.Light);
+        this.RegisterFactory(() => new Light());
         if(Old != null)
         {
             this._Radius = Old._Radius;
             this._Intensity = Old._Intensity;
-            this._LightType = Old._LightType;
             this._Attenuation = Old._Attenuation.Copy();
         }
         else
         {
             this._Radius = 100;
             this._Intensity = 100;
-            this._LightType = LightType.Point;
             this._Direction = new Math.Vertex(0,0,0);
             this._Attenuation = new LightAttenuation();
         }
@@ -59,7 +49,6 @@ class Light extends DrawObject
         let L = super.Serialize();
         L.Radius = this._Radius;
         L.Intensity = this._Intensity;
-        L.LightType = <string> this._LightType;
         L.Direction = this._Direction.Serialize();
         L.Attenuation = this._Attenuation.Serialize();
         return L;
@@ -70,7 +59,6 @@ class Light extends DrawObject
         super.Deserialize(Data);
         this._Radius = Data.Radius;
         this._Intensity = Data.Intensity;
-        this._LightType = <LightType> Data.LightType;
         this._Direction.Deserialize(Data.Direction);
         this._Attenuation.Deserialize(Data.Attenuation);
     }

@@ -27,4 +27,16 @@ class ShaderCode
     {
         return new ShaderCode(this);
     }
+    public Serialize() : any
+    {
+        let SC:any = { };
+        SC.Vertex = this._Vertex;
+        SC.Fragment = this._Fragment;
+        return SC;
+    }
+    public Deserialize(Data:any) : void
+    {
+        this._Vertex = Data.Vertex;
+        this._Fragment = Data.Fragment;
+    }
 }

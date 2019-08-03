@@ -106,19 +106,18 @@ class ThreeDrawEngine extends DrawEngine
     {
         LoadData.Scene.background = new Three.Color(Scene.BackColor.R, Scene.BackColor.G, Scene.BackColor.B);
         ThreeGridManager.CheckGrid(LoadData.Scene, this._ToyBoxScene, this.Data, this._GlobalScale);
-        for(let i = 0; i < Scene.Objects.length; i++)
+        for(let i = 0; i < Scene.DrawObjects.length; i++)
         {
             if(LoadData.Report)
             {
-                LoadData.Report(Math.ceil(i * 100.0 / Scene.Objects.length));
+                LoadData.Report(Math.ceil(i * 100.0 / Scene.DrawObjects.length));
             }
-            if(Scene.Objects[i].Type != Engine.SceneObjectType.Drawn) continue;
             let Drawn:Engine.DrawObject = <Engine.DrawObject>Scene.Objects[i];
-            if(Drawn.DrawType == Engine.DrawObjectType.Sprite || Drawn.DrawType == Engine.DrawObjectType.Tile)
+            if(Drawn.IsAnyOf([Engine.Type.Sprite, Engine.Type.Tile]) )
             {
                 this.LoadImage(Scene, <Engine.ImageObject>Drawn, LoadData);
             }
-            else if(Drawn.DrawType == Engine.DrawObjectType.Light)
+            else if(Drawn.Is(Engine.Type.Light))
             {
                 this.LoadLight(Scene, <Engine.Light>Drawn, LoadData);
             }
@@ -204,13 +203,13 @@ class ThreeDrawEngine extends DrawEngine
                 return;
             }
         }
-        if(Drawn.DrawType == Engine.DrawObjectType.Sprite)
+        if(Drawn.Is(Engine.Type.Sprite))
         {
-            this.LoadSprite(Scene, <Engine.Sprite>Drawn, LoadData);
+            this.LoadSprite(Scene, <Engine.Sprite><unknown>Drawn, LoadData);
         }
-        else if(Drawn.DrawType == Engine.DrawObjectType.Tile)
+        else if(Drawn.Is(Engine.Type.Tile))
         {
-            this.LoadTile(Scene, <Engine.Tile>Drawn, LoadData);
+            this.LoadTile(Scene, <Engine.Tile><unknown>Drawn, LoadData);
         }
     }
     protected LoadSprite(Scene:Engine.Scene2D, Drawn:Engine.Sprite, LoadData:any) : void

@@ -1,6 +1,6 @@
 export { MaterialNodeValue, MaterialNodeValueType }
 
-import * as Data from "./../../Data/Data";
+import * as Core from "./../../Core/Core";
 
 enum MaterialNodeValueType
 {
@@ -11,7 +11,6 @@ enum MaterialNodeValueType
     Vector3 = "vec3",
     Vector4 = "vec4"
 }
-
 class MaterialNodeValue
 {
     private _ID:string;
@@ -40,7 +39,7 @@ class MaterialNodeValue
     {
         if(Old != null)
         {
-            this._ID = Data.Uuid.Create();
+            this._ID = Core.Uuid.Create();
             this._Origin = Old._ID;
             this._ParentName = Old._ParentName;
             this._Name = Old._Name;
@@ -50,7 +49,7 @@ class MaterialNodeValue
         }
         else
         {
-            this._ID = Data.Uuid.Create();
+            this._ID = Core.Uuid.Create();
             this._Origin = this._ID;
             this._ParentName = "";
             this._Name = this._ID;

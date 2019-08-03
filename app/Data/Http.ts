@@ -7,7 +7,6 @@ enum RequestType
     Update = "PUT",
     Delete = "DELETE"
 }
-
 class HTTP
 {
     public static Get(Url:string) : Promise<any>

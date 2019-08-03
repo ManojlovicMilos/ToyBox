@@ -4,7 +4,7 @@ import { Game } from "./../Game/Game";
 
 class EventPackage
 {
-    protected _Data:any;
+    protected _Data: { [key: string]:Function[] };
     public constructor(Old?:EventPackage)
     {
         this._Data = {};
@@ -24,12 +24,12 @@ class EventPackage
     {
         return new EventPackage(this);
     }
-    public Invoke(EventName:string, CurrentGame:Game, Args) : boolean
+    public Invoke(EventName:string, CurrentGame:Game, Args:any) : boolean
     {
         let EventsList:Function[] = this._Data[EventName];
         return this.InvokeEvents(EventsList, CurrentGame, Args);
     }
-    private InvokeEvents(Events:Function[], CurrentGame:Game, Args) : boolean
+    private InvokeEvents(Events:Function[], CurrentGame:Game, Args:any) : boolean
     {
         if(Events.length == 0) return false;
         let Handled:boolean = false;

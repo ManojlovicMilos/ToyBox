@@ -129,7 +129,7 @@ class Runner
     private UpdateScene() : void
     {
         this._Seed++;
-        if (this._Current.Type == Engine.SceneType.Scene2D)
+        if (this._Current.Is(Engine.Type.Scene2D))
         {
             let Current2DScene:Engine.Scene2D  = <Engine.Scene2D>this._Current;
             let SceneSprites:Engine.Sprite[] = Current2DScene.Sprites;
@@ -146,7 +146,7 @@ class Runner
     {
         if(this._Stop) return;
         this._DrawHandle = requestAnimationFrame( this.OnRenderFrame.bind(this) );
-        if(this._Current.Type == Engine.SceneType.Scene2D)
+        if(this._Current.Is(Engine.Type.Scene2D))
         {
             this._DrawEngine.Draw2DScene(<Engine.Scene2D>this._Current, window.innerWidth, window.innerHeight);
         }
@@ -285,7 +285,7 @@ class Runner
     private CheckObjectMouseEvents(EventNames:string[], Event) : boolean
     {
         let Handled:boolean = false;
-        if (this._Current.Type == Engine.SceneType.Scene2D)
+        if (this._Current.Is(Engine.Type.Scene2D))
         {
             let Current2DScene:Engine.Scene2D  = <Engine.Scene2D>this._Current;
             let STrans:Math.Vertex = Current2DScene.Trans.Translation;
@@ -293,7 +293,7 @@ class Runner
             for (let i = this._Current.Objects.length - 1; i >= 0; i--)
             {
                 if(!this._Current.Objects[i]) continue;
-                if (this._Current.Objects[i].Type == Engine.SceneObjectType.Drawn)
+                if (this._Current.Objects[i].Is(Engine.Type.DrawObject))
                 {
                     let Current:Engine.DrawObject = <Engine.DrawObject>this._Current.Objects[i];
                     let Trans:Math.Vertex = Current.Trans.Translation;
@@ -324,14 +324,14 @@ class Runner
     public PickSceneObject(Position:any) : Engine.SceneObject
     {
         let Handled:boolean = false;
-        if (this._Current.Type == Engine.SceneType.Scene2D)
+        if (this._Current.Is(Engine.Type.Scene2D))
         {
             let Current2DScene:Engine.Scene2D  = <Engine.Scene2D>this._Current;
             let STrans:Math.Vertex = Current2DScene.Trans.Translation;
             STrans = new Math.Vertex(STrans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, STrans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
             for (let i = this._Current.Objects.length - 1; i >= 0; i--)
             {
-                if (this._Current.Objects[i].Type == Engine.SceneObjectType.Drawn)
+                if (this._Current.Objects[i].Is(Engine.Type.DrawObject))
                 {
                     let Current:Engine.DrawObject = <Engine.DrawObject>this._Current.Objects[i];
                     let Trans:Math.Vertex = Current.Trans.Translation;

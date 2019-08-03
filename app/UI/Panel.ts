@@ -1,6 +1,6 @@
 export { Panel }
 
-import { Settings } from "./../Engine/Settings";
+import { Settings } from "../Core/Settings";
 import { Control } from "./Control";
 
 class Panel extends Control

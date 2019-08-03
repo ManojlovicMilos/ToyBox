@@ -70,7 +70,7 @@ class DrawEngine
     {
         // Virtual
     }
-    protected LoadImage(Scene:Engine.Scene, Drawn:Engine.Tile, LoadData:any) : void
+    protected LoadImage(Scene:Engine.Scene, Drawn:Engine.ImageObject, LoadData:any) : void
     {
         // Virtual
     }

@@ -2,7 +2,7 @@ export { Label, TextAlign }
 
 import * as Mathematics from "./../Mathematics/Mathematics";
 
-import { Settings } from "./../Engine/Settings";
+import { Settings } from "../Core/Settings";
 import { Control } from "./Control";
 
 enum TextAlign

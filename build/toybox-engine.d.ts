@@ -318,10 +318,14 @@ export class SoundObject extends SceneObject
     Looped:boolean;
     Volume:number;
     Url:string;
+    Duration:number;
     constructor(Url:string, Old?:SoundObject)
     Copy() : SceneObject
     GenerateSound() : void
     Play() : void
+    Pause() : void
+    Stop() : void
+    Seek(Value:number) : void
 }
 
 export enum SceneType

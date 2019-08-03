@@ -1,20 +1,22 @@
 export { DirectionalLight }
 
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Math from "../../../../Mathematics/Mathematics";
 
-import { Light, LightType } from "./Light";
+import { Light } from "./Light";
+
+const DIRECTIONAL_LIGHT_TYPE = "DirectionalLight";
 
 class DirectionalLight extends Light
 {
     public constructor(Old?:DirectionalLight)
     {
         super(Old);
+        this.RegisterType(DIRECTIONAL_LIGHT_TYPE);
         if(Old != null)
         {
         }
         else
         {
-            this.LightType = LightType.Directional;
             this.Direction = new Math.Vertex(0,1,0);
         }
     }

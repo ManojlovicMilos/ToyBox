@@ -1,16 +1,12 @@
 export  { Tile };
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
-
+import { Type } from "../../Types";
 import { ImageObject } from "./ImageObject";
-import { ImageCollection } from "./ImageCollection";
-import { DrawObject, DrawObjectType } from "./DrawObject";
+import { ImageCollection } from "../../Collection/ImageCollection";
 
 class Tile extends ImageObject
 {
     private _Index:number;
-    private _SubTiles:Tile[];
     public get Index():number { /*Override*/ return this._Index; }
     public set Index(value:number)
     {
@@ -18,12 +14,11 @@ class Tile extends ImageObject
         else this._Index = 0;
         this.Modified = true;
     }
-    public get SubTiles():Tile[] { return this._SubTiles; }
-    public set SubTiles(value:Tile[]) { this._SubTiles = value; }
     public constructor(Old?:Tile)
     {
         super(Old);
-        this.DrawType = DrawObjectType.Tile;
+        this.RegisterType(Type.Tile);
+        this.RegisterFactory(() => new Tile());
         if(Old != null)
         {
             this._Index = Old._Index;
@@ -47,11 +42,6 @@ class Tile extends ImageObject
         let T = super.Serialize();
         T.Index = this._Index;
         T.Collection = this._Collection.Serialize();
-        T.SubTiles = [];
-        for(let i in this._SubTiles)
-        {
-            T.SubTiles.push(this._SubTiles[i].Serialize());
-        }
         return T;
     }
     public Deserialize(Data) : void
@@ -60,10 +50,5 @@ class Tile extends ImageObject
         super.Deserialize(Data);
         this._Index = Data.Index;
         this._Collection.Deserialize(Data.Collection);
-        for(let i in Data.SubTiles)
-        {
-            let ST:Tile = new Tile();
-            ST.Deserialize(Data.SubTiles[i]);
-        }
     }
 }

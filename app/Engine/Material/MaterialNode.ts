@@ -1,20 +1,16 @@
 export { MaterialNode }
 
-import * as Data from "./../../Data/Data";
+import * as Core from "./../../Core/Core";
 
+import { Type } from "./../Types";
 import { MaterialNodeValue } from "./MaterialNodeValue";
 
-class MaterialNode
+class MaterialNode extends Core.BaseObject
 {
-    private _ID:string;
-    private _Name:string;
     private _FunctionID:string;
     private _Values:MaterialNodeValue[];
     private _Inputs:MaterialNodeValue[];
     private _Outputs:MaterialNodeValue[];
-    public get ID():string { return this._ID; }
-    public get Name():string { return this._Name; }
-    public set Name(value:string) { this._Name = value; this.UpdateName(); }
     public get FunctionID():string { return this._FunctionID; }
     public set FunctionID(value:string) { this._FunctionID = value; }
     public get Values():MaterialNodeValue[] { return this._Values; }
@@ -22,26 +18,21 @@ class MaterialNode
     public get Outputs():MaterialNodeValue[] { return this._Outputs; }
     public constructor(Old?:MaterialNode)
     {
+        super(Old);
+        this.RegisterType(Type.MaterialNode);
+        this._Values = [];
+        this._Inputs = [];
+        this._Outputs = [];
         if(Old != null)
         {
-            this._ID = Data.Uuid.Create();
-            this._Name = Old._Name;
             this._FunctionID = Old._FunctionID;
-            this._Values = [];
             for(let i in Old._Values) this._Values.push(Old._Values[i].Copy());
-            this._Inputs = [];
             for(let i in Old._Inputs) this._Inputs.push(Old._Inputs[i].Copy());
-            this._Outputs = [];
             for(let i in Old._Outputs) this._Outputs.push(Old._Outputs[i].Copy());
         }
         else
         {
-            this._ID = Data.Uuid.Create();
-            this._Name = this._ID;
             this._FunctionID = "";
-            this._Values = [];
-            this._Inputs = [];
-            this._Outputs = [];
         }
     }
     public Copy() : MaterialNode
@@ -81,26 +72,18 @@ class MaterialNode
     }
     public Serialize() : any
     {
-        // Virtual
-        let MN =
-        {
-            ID: this._ID,
-            Name: this._Name,
-            FunctionID: this._FunctionID,
-            Values: [],
-            Inputs: [],
-            Outputs: []
-        };
-        for(let i in this._Values) MN.Values.push(this._Values[i].Serialize());
-        for(let i in this._Inputs) MN.Inputs.push(this._Inputs[i].Serialize());
-        for(let i in this._Outputs) MN.Outputs.push(this._Outputs[i].Serialize());
+        // Override
+        let MN = super.Serialize();
+        MN.FunctionID = this._FunctionID;
+        MN.Values = this._Values.map(Item => Item.Serialize());
+        MN.Inputs = this._Inputs.map(Item => Item.Serialize());
+        MN.Outputs = this._Outputs.map(Item => Item.Serialize());
         return MN;
     }
     public Deserialize(Data:any) : void
     {
-        // Virtual
-        this._ID = Data.ID;
-        this._Name = Data.Name;
+        // Override
+        super.Deserialize(Data);
         this._FunctionID = Data.FunctionID;
         for(let i in Data.Values)
         {

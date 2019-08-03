@@ -3,7 +3,7 @@ export { Button }
 import * as Math from "./../Mathematics/Mathematics";
 
 import { Label } from "./Label";
-import { Settings } from "./../Engine/Settings";
+import { Settings } from "../Core/Settings";
 
 import { ControlEventPackage } from "./ControlEventPackage";
 

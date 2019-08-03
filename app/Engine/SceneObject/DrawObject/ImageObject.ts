@@ -1,12 +1,13 @@
 export { ImageObject }
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Math from "./../../../Mathematics/Mathematics";
 
-import { Material } from "./../Material/Material";
-import { DrawObject, DrawObjectType } from "./DrawObject";
-import { ImageCollection } from "./ImageCollection";
-import { ImageObjectEventPackage } from "./../Events/ImageObjectEventPackage";
+import { Type } from "./../../Types";
+import { Material } from "./../../Material/Material";
+import { PlanarMaterial } from "./../../Material/PlanarMaterial";
+import { DrawObject } from "./DrawObject";
+import { ImageCollection } from "./../../Collection/ImageCollection";
+import { ImageObjectEventPackage } from "./../../Events/ImageObjectEventPackage";
 
 class ImageObject extends DrawObject
 {
@@ -16,7 +17,6 @@ class ImageObject extends DrawObject
     private _RepeatX:number;
     private _RepeatY:number;
     private _AmbientColor:Math.Color;
-    
     private _Material:Material;
     private _CustomShader:any;
     protected _Collection:ImageCollection;
@@ -51,6 +51,8 @@ class ImageObject extends DrawObject
     public constructor(Old?:ImageObject)
     {
         super(Old);
+        this.RegisterType(Type.ImageObject);
+        this.RegisterFactory(() => new ImageObject());
         if(Old != null)
         {
             this._FlipX = Old._FlipX;
@@ -71,8 +73,7 @@ class ImageObject extends DrawObject
             this._RepeatX = 1;
             this._RepeatY = 1;
             this._AmbientColor = Math.Color.FromRGBA(50,50,50,255);
-            this.DrawType = DrawObjectType.Image;
-            this._Material = new Material();
+            this._Material = new PlanarMaterial();
             this._Collection = new ImageCollection();
             this._NormalCollection = new ImageCollection();
             this._SpecularCollection = new ImageCollection();
@@ -85,16 +86,16 @@ class ImageObject extends DrawObject
     public Serialize() : any
     {
         // Override
-        let IO = super.Serialize();
+        let IO:any = super.Serialize();
         IO.FlipX = this._FlipX;
         IO.FlipY = this._FlipY;
         IO.RepeatX = this._RepeatX;
         IO.RepeatY = this._RepeatY;
         IO.AmbientColor = this._AmbientColor.Serialize();
-        if(this._Material) IO.CustomMaterial = this._Material.Serialize();
+        IO.Material = this._Material.Serialize();
         return IO;
     }
-    public Deserialize(Data) : void
+    public Deserialize(Data:any) : void
     {
         // Override
         super.Deserialize(Data);
@@ -103,6 +104,6 @@ class ImageObject extends DrawObject
         this._RepeatX = Data.RepeatX;
         this._RepeatY = Data.RepeatY;
         this._AmbientColor.Deserialize(Data.AmbientColor);
-        if(Data.CustomMaterial) this._Material.Deserialize(Data.CustomMaterial);
+        this._Material.Deserialize(Data.Material);
     }
 }
