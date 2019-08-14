@@ -34,7 +34,7 @@ class Material extends Core.BaseObject
         }
         else
         {
-            this._Lit = true;
+            this._Lit = false;
             this._HasNormals = false;
             this._Sampling = TextureSamplingType.Nearest;
         }

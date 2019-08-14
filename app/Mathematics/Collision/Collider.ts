@@ -11,7 +11,7 @@ class Collider extends Transformation
     public get Type():CollisionType { return this._Type; }
     public set Type(value) { this._Type = value; }
     public get Reference():any { return this._Reference; }
-    public set Reference(value) { this.Reference = value; }
+    public set Reference(value) { this._Reference = value; }
     public get Position():Vector { return this.Translation; }
     public set Position(value:Vector) { this.Translation = value; }
     public constructor(Old?:Collider)
