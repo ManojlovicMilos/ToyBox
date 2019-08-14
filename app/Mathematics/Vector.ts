@@ -1,10 +1,10 @@
-export  { Axis, Vertex };
+export  { Axis, Vector };
 
 enum Axis
 {
     X, Y, Z
 }
-class Vertex
+class Vector
 {
     public X: number;
     public Y: number;
@@ -18,44 +18,44 @@ class Vertex
         if(Z) this.Z = Z;
         else this.Z = 0;
     }
-    public Copy() : Vertex
+    public Copy() : Vector
     {
-        let New:Vertex = new Vertex(this.X, this.Y, this.Z);
+        let New:Vector = new Vector(this.X, this.Y, this.Z);
         return New;
     }
-    public Translate(V:Vertex) : Vertex
+    public Translate(V:Vector) : Vector
     {
         this.X += V.X;
         this.Y += V.Y;
         this.Z += V.Z;
         return this;
     }
-    public Add(V:Vertex) : Vertex
+    public Add(V:Vector) : Vector
     {
         return this.Translate(V);
     }
-    public Substract(V:Vertex) : Vertex
+    public Substract(V:Vector) : Vector
     {
         this.X -= V.X;
         this.Y -= V.Y;
         this.Z -= V.Z;
         return this;
     }
-    public Scale(V: Vertex) : Vertex
+    public Scale(V: Vector) : Vector
     {
         this.X *= V.X;
         this.Y *= V.Y;
         this.Z *= V.Z;
         return this;
     }
-    public Scalar(Value:number) : Vertex
+    public Scalar(Value:number) : Vector
     {
         this.X *= Value;
         this.Y *= Value;
         this.Z *= Value;
         return this;
     }
-    public RotateX(Angle:number) : Vertex
+    public RotateX(Angle:number) : Vector
     {
         let OY:number = this.Y;
         let OZ:number = this.Z;
@@ -63,7 +63,7 @@ class Vertex
         this.Z = Math.cos((Angle / 180) * Math.PI) * OZ + Math.sin((Angle / 180) * Math.PI) * OY;
         return this;
     }
-    public RotateY(Angle:number) : Vertex
+    public RotateY(Angle:number) : Vector
     {
         let OX:number = this.X;
         let OZ:number = this.Z;
@@ -71,7 +71,7 @@ class Vertex
         this.Z = Math.cos((Angle / 180) * Math.PI) * OZ - Math.sin((Angle / 180) * Math.PI) * OX;
             return this;
     }
-    public RotateZ(Angle:number) : Vertex
+    public RotateZ(Angle:number) : Vector
     {
         let OX:number = this.X;
         let OY:number = this.Y;
@@ -83,13 +83,13 @@ class Vertex
     {
         return Math.sqrt(this.X * this.X + this.Y * this.Y + this.Z * this.Z);
     }
-    public Normalize() : Vertex
+    public Normalize() : Vector
     {
         let Divider:number = 1.0 / this.Length();
         this.Scalar(Divider);
         return this;
     }
-    public Absolute() : Vertex
+    public Absolute() : Vector
     {
         this.X = Math.abs(this.X);
         this.Y = Math.abs(this.Y);
@@ -104,20 +104,20 @@ class Vertex
     {
         return [this.X, this.Y, this.Z, W];
     }
-    public static FromRGB(R:number, G:number, B:number) : Vertex
+    public static FromRGB(R:number, G:number, B:number) : Vector
     {
-        return new Vertex((R * 1.0 + 1) / 256, (G * 1.0 + 1) / 256, (B * 1.0 + 1) / 256);
+        return new Vector((R * 1.0 + 1) / 256, (G * 1.0 + 1) / 256, (B * 1.0 + 1) / 256);
     }
-    public static Cross(Left:Vertex, Right:Vertex) : Vertex
+    public static Cross(Left:Vector, Right:Vector) : Vector
     {
-        return new Vertex(Left.Y * Right.Z - Left.Z * Right.Y, Left.Z * Right.X - Left.X * Right.Z, Left.X * Right.Y - Left.Y * Right.X);
+        return new Vector(Left.Y * Right.Z - Left.Z * Right.Y, Left.Z * Right.X - Left.X * Right.Z, Left.X * Right.Y - Left.Y * Right.X);
     }
-    public static Distance(V1:Vertex, V2:Vertex) : number
+    public static Distance(V1:Vector, V2:Vector) : number
     {
-        let V:Vertex = new Vertex(V1.X - V2.X, V1.Y - V2.Y, V1.Z - V2.Z);
+        let V:Vector = new Vector(V1.X - V2.X, V1.Y - V2.Y, V1.Z - V2.Z);
         return V.Length();
     }
-    private static CalculateAngle(V1:Vertex, V2:Vertex) : number
+    private static CalculateAngle(V1:Vector, V2:Vector) : number
     {
         let V1V:number = Math.sqrt(V1.X * V1.X + V1.Y * V1.Y + V1.Z * V1.Z);
         let V2V:number = Math.sqrt(V2.X * V2.X + V2.Y * V2.Y + V2.Z * V2.Z);
@@ -129,9 +129,9 @@ class Vertex
         if(Angle < 0) Angle += 360;
         return Angle;
     }
-    public static Angle(V1:Vertex, V2:Vertex) : number
+    public static Angle(V1:Vector, V2:Vector) : number
     {
-        return Vertex.CalculateAngle(new Vertex(0,1,0), new Vertex(V2.X - V1.X, V2.Y - V1.Y, V2.Z - V1.Z));
+        return Vector.CalculateAngle(new Vector(0,1,0), new Vector(V2.X - V1.X, V2.Y - V1.Y, V2.Z - V1.Z));
     }
     public Deserialize(Data:any) : void
     {

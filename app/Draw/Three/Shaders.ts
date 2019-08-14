@@ -2,7 +2,7 @@ export { ThreeJSShaders }
 
 class ThreeJSShaders
 {
-    public static Vertex2D : string = `
+    public static Vector2D : string = `
         varying vec2 vUv;
         void main()
         {

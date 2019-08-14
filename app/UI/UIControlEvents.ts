@@ -1,15 +1,15 @@
-export { ControlEventPackage }
+export { UIControlEvents }
 
-import * as Runner from "./../Runner/Runner";
-import * as Engine from "./../Engine/Engine";
+import * as Runner from "../Runner/Runner";
+import * as Engine from "../Engine/Engine";
 
-class ControlEventPackage extends Engine.EventPackage
+class UIControlEvents extends Engine.Events
 {
     private _Sender:Engine.SceneObject;
     public get Click() : Function[] { return this._Data["Click"]; }
     public get MouseEnter() : Function[] { return this._Data["MouseEnter"]; }
     public get MouseLeave() : Function[] { return this._Data["MouseLeave"]; }
-    public constructor(Old?:ControlEventPackage)
+    public constructor(Old?:UIControlEvents)
     {
         super(Old);
         if(Old)
@@ -23,9 +23,9 @@ class ControlEventPackage extends Engine.EventPackage
             this._Data["MouseLeave"] = [];
         }
     }
-    public Copy() : ControlEventPackage
+    public Copy() : UIControlEvents
     {
-        return new ControlEventPackage(this);
+        return new UIControlEvents(this);
     }
     public Connect(Sender:Engine.SceneObject, Element:HTMLElement) : void
     {

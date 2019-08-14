@@ -1,29 +1,25 @@
 export { NodeMaterial }
 
-import { Material } from "./Material";
+import { CustomMaterial } from "./CustomMaterial";
 import { MaterialNode } from "./MaterialNode";
 import { MaterialNodeValue } from "./MaterialNodeValue";
 import { MaterialInput, MaterialInputType } from "./MaterialInput";
 
 import { Type } from "./../Types";
 
-class NodeMaterial extends Material
+class NodeMaterial extends CustomMaterial
 {
     private _Nodes:MaterialNode[];
-    private _Inputs:MaterialInput[];
     public get Nodes():MaterialNode[] { return this._Nodes; }
-    public get Inputs():MaterialInput[] { return this._Inputs; }
     public constructor(Old?:NodeMaterial)
     {
         super(Old);
         this.RegisterType(Type.NodeMaterial);
         this.RegisterFactory(() => new NodeMaterial());
         this._Nodes = [];
-        this._Inputs = [];
         if(Old != null)
         {
             for(let i in Old._Nodes) this._Nodes.push(Old._Nodes[i].Copy());
-            for(let i in Old._Inputs) this._Inputs.push(Old._Inputs[i].Copy());
             this.CloneConnections(Old);
         }
     }
@@ -38,12 +34,6 @@ class NodeMaterial extends Material
             Node.Name = this.IncrementalName(Node.Name);
         }
         this._Nodes.push(Node);
-    }
-    public RegisterInput(ID:string, Type:MaterialInputType) : boolean
-    {
-        for(let i in this._Inputs) if(this._Inputs[i].ID == ID) return false;
-        this._Inputs.push(new MaterialInput(null, ID, Type));
-        return true;
     }
     public FindNodeByName(Name:string) : MaterialNode
     {
@@ -122,24 +112,14 @@ class NodeMaterial extends Material
     {
         // Virtual
         let M = super.Serialize();
-        M.Nodes = [];
-        for(let i in this._Nodes)
-        {
-            M.Nodes.push(this._Nodes[i].Serialize());
-        }
+        M.Nodes = this._Nodes.map(Node => Node.Serialize());
         return M;
     }
     public Deserialize(Data:any) : void
     {
         // Virtual
         super.Deserialize(Data);
-        this._Nodes = [];
-        for(let i in Data.Nodes)
-        {
-            let MN:MaterialNode = new MaterialNode();
-            MN.Deserialize(Data.Nodes[i]);
-            this._Nodes.push(MN);
-        }
+        this._Nodes = Data.Nodes.map(Node => { let MN = new MaterialNode(); MN.Deserialize(Node); return MN; });
         this.DeserializeCloneConnections(Data);
     }
 }

@@ -1,10 +1,3 @@
-import * as Engine from "./toybox-engine";
-
-export class Uuid
-{
-    static Create() : string
-}
-
 export class HTTP
 {
     static Get(Url:string) : Promise<any>
@@ -16,12 +9,6 @@ export class HTTP
 export class Reader
 {
     static Read(FilePath:string): Promise<any>
-}
-
-export class Serialization
-{
-    static CleanData(Data:any) : any
-    static DeserializeSceneObject(Data) : Engine.SceneObject
 }
 
 export as namespace Data;

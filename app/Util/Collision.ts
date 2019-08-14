@@ -8,13 +8,13 @@ class CollisionUtil
 {
     public static CheckCollision(Object1:Engine.DrawObject, Object2:Engine.DrawObject)
     {
-        let Collider1:Math.ColliderObject = CollisionUtil.CreateColliderObject(Object1);
-        let Collider2:Math.ColliderObject = CollisionUtil.CreateColliderObject(Object2);
+        let Collider1:Math.Collider = CollisionUtil.CreateCollider(Object1);
+        let Collider2:Math.Collider = CollisionUtil.CreateCollider(Object2);
         return Math.Collision.Check(Collider1, Collider2);
     }
-    public static CreateColliderObject(Object:Engine.DrawObject) : Math.ColliderObject
+    public static CreateCollider(Object:Engine.DrawObject) : Math.Collider
     {
-        let Collider:Math.ColliderObject = new Math.ColliderObject();
+        let Collider:Math.Collider = new Math.Collider();
         Collider.Position = Object.Trans.Translation;
         Collider.Scale= Object.Trans.Scale;
         if(Object.Collision.Scale) Collider.Scale = Object.Collision.Scale;
@@ -25,11 +25,11 @@ class CollisionUtil
     public static CalculateCollisions(Object:Engine.DrawObject, Colliders:Engine.DrawObject[]) : Math.CollisionResult
     {
         let Result:Math.CollisionResult = new Math.CollisionResult();
-        let Collider:Math.ColliderObject = CollisionUtil.CreateColliderObject(Object);
+        let Collider:Math.Collider = CollisionUtil.CreateCollider(Object);
         for(let i = 0; i < Colliders.length; i++)
         {
             if(Object.ID == Colliders[i].ID) continue;
-            let Collider2:Math.ColliderObject = CollisionUtil.CreateColliderObject(Colliders[i]);
+            let Collider2:Math.Collider = CollisionUtil.CreateCollider(Colliders[i]);
             let CollisionValue:Math.CollisionResult = Math.Collision.Check(Collider, Collider2);
             if(CollisionValue.Collision) Result.Combine(CollisionValue);
         }

@@ -15,7 +15,7 @@ class DPad extends Engine.Tile
     private _Left:Engine.Tile;
     private _Press:Function[];
     public get Press():Function[] { return this._Press; }
-    public constructor(Old?:DPad, Position?:Math.Vertex, Size?:Math.Vertex)
+    public constructor(Old?:DPad, Position?:Math.Vector, Size?:Math.Vector)
     {
         super(Old);
         this._Touch = false;
@@ -56,7 +56,7 @@ class DPad extends Engine.Tile
         Direction.Fixed = true;
         return Direction;
     }
-    public Update(Position:Math.Vertex, Size:Math.Vertex) : void
+    public Update(Position:Math.Vector, Size:Math.Vector) : void
     {
         if (Position) this.Trans.Translation = Position.Copy();
         if (Size) this.Trans.Scale = Size.Copy();
@@ -98,7 +98,7 @@ class DPad extends Engine.Tile
     {
         if(this._TouchID != Args.ID) return;
         if(!this._Touch) return false;
-        if(Math.Vertex.Distance(Args.Location, this.Trans.Translation) > this.Trans.Scale.X / 2)
+        if(Math.Vector.Distance(Args.Location, this.Trans.Translation) > this.Trans.Scale.X / 2)
         {
             this.OnPress({});
             this._Touch = false;

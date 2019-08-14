@@ -3,19 +3,19 @@ import * as Engine from "./toybox-engine";
 
 export enum DrawEngineType
 {
-    ThreeJS = 0
+    ThreeJS = "ThreeJS"
 }
 
 export class DrawEngine
 {
     Renderer:any;
-    GlobalScale:Math.Vertex;
-    Resolution:Math.Vertex;
+    GlobalScale:Math.Vector;
+    Resolution:Math.Vector;
     Data: any;
     constructor(Old?:DrawEngine)
     Copy() : DrawEngine
-    UpdateResolution(Resolution?:Math.Vertex, FixedSize?:boolean) : void
-    TransformToCanvas(X:number, Y:number) : Math.Vertex
+    UpdateResolution(Resolution?:Math.Vector, FixedSize?:boolean) : void
+    TransformToCanvas(X:number, Y:number) : Math.Vector
     Draw2DScene(Scene:Engine.Scene2D, Width:number, Height:number) : void
     Draw3DScene(Scene:Engine.Scene, Width:number, Height:number) : void
     DrawSprite(Scene:Engine.Scene, Drawn:Engine.Sprite) : void

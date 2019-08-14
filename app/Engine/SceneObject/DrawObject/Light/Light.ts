@@ -9,14 +9,14 @@ class Light extends DrawObject
 {
     private _Radius:number;
     private _Intensity:number;
-    private _Direction:Math.Vertex;
+    private _Direction:Math.Vector;
     private _Attenuation:LightAttenuation;
     public get Radius():number { return this._Radius; }
     public set Radius(value:number) { this._Radius = value; }
     public get Intensity():number { return this._Intensity; }
     public set Intensity(value:number) { this._Intensity = value; }
-    public get Direction():Math.Vertex { return this._Direction; }
-    public set Direction(value:Math.Vertex) { this._Direction = value; }
+    public get Direction():Math.Vector { return this._Direction; }
+    public set Direction(value:Math.Vector) { this._Direction = value; }
     public get Attenuation():LightAttenuation { return this._Attenuation; }
     public set Attenuation(value:LightAttenuation) { this._Attenuation = value; }
     public get Parameter() : number { /*Virtual*/ return -1; }
@@ -35,7 +35,7 @@ class Light extends DrawObject
         {
             this._Radius = 100;
             this._Intensity = 100;
-            this._Direction = new Math.Vertex(0,0,0);
+            this._Direction = new Math.Vector(0,0,0);
             this._Attenuation = new LightAttenuation();
         }
     }
@@ -96,9 +96,9 @@ class LightAttenuation
     {
         return new LightAttenuation(this);
     }
-    public ToVertex() : Math.Vertex
+    public ToVector() : Math.Vector
     {
-        return new Math.Vertex(this._Constant, this._Linear, this._Quadratic);
+        return new Math.Vector(this._Constant, this._Linear, this._Quadratic);
     }
     public Serialize() : any
     {

@@ -13,7 +13,7 @@ class DrawObject extends SceneObject
     private _Active:boolean;
     private _Paint:Math.Color;
     private _Trans:Math.Transformation;
-    private _Collision:Math.CollisionValue;
+    private _Collision:Math.CollisionData;
     public get Modified():boolean { return this._Modified; }
     public set Modified(value:boolean) { this._Modified = value; }
     public get Active():boolean { return this._Active; }
@@ -24,12 +24,12 @@ class DrawObject extends SceneObject
     public set Paint(value:Math.Color) { this._Paint = value; }
     public get Trans():Math.Transformation { return this._Trans; }
     public set Trans(value:Math.Transformation) { this._Trans = value; }
-    public get Collision():Math.CollisionValue { return this._Collision; }
-    public set Collision(value:Math.CollisionValue) { this._Collision = value; }
-    public get Position():Math.Vertex { return this._Trans.Translation; }
-    public set Position(value:Math.Vertex) { this._Trans.Translation = value; }
-    public get Size():Math.Vertex { return this._Trans.Scale; }
-    public set Size(value:Math.Vertex) { this._Trans.Scale = value; }
+    public get Collision():Math.CollisionData { return this._Collision; }
+    public set Collision(value:Math.CollisionData) { this._Collision = value; }
+    public get Position():Math.Vector { return this._Trans.Translation; }
+    public set Position(value:Math.Vector) { this._Trans.Translation = value; }
+    public get Size():Math.Vector { return this._Trans.Scale; }
+    public set Size(value:Math.Vector) { this._Trans.Scale = value; }
     public constructor(Old?:DrawObject)
     {
         super(Old);
@@ -51,7 +51,7 @@ class DrawObject extends SceneObject
             this._Active = true;
             this._Paint = Math.Color.White;
             this._Trans = new Math.Transformation();
-            this._Collision = new Math.CollisionValue();
+            this._Collision = new Math.CollisionData();
         }
     }
     public Copy() : DrawObject

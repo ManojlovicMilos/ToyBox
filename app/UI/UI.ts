@@ -1,8 +1,14 @@
 import { Border } from "./Border";
-import { ControlEventPackage } from "./ControlEventPackage";
-import { Control } from "./Control";
-import { Label } from "./Label";
 import { Button } from "./Button";
+import { Label } from "./Label";
 import { Panel } from "./Panel";
+import { UIControl } from "./UIControl";
+import { UIControlEvents } from "./UIControlEvents";
 
-export { Border, ControlEventPackage, Control, Label, Button, Panel }
+export {    Border,
+            Button,
+            Label,
+            Panel,
+            UIControl,
+            UIControlEvents
+};

@@ -35,4 +35,16 @@ class MaterialInput
     {
         return new MaterialInput(this);
     }
+    public Serialize() : any
+    {
+        let MI = {
+            ID: this._ID,
+            Type: this._Type
+        }
+    }
+    public Deserialize(Data:any)
+    {
+        this._ID = Data.ID;
+        this._Type = Data.Type;
+    }
 }

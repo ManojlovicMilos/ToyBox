@@ -4,10 +4,9 @@ import * as Math from "./../../../Mathematics/Mathematics";
 
 import { Type } from "./../../Types";
 import { Material } from "./../../Material/Material";
-import { PlanarMaterial } from "./../../Material/PlanarMaterial";
 import { DrawObject } from "./DrawObject";
 import { ImageCollection } from "./../../Collection/ImageCollection";
-import { ImageObjectEventPackage } from "./../../Events/ImageObjectEventPackage";
+import { ImageObjectEvents } from "./../../Events/ImageObjectEvents";
 
 class ImageObject extends DrawObject
 {
@@ -18,7 +17,6 @@ class ImageObject extends DrawObject
     private _RepeatY:number;
     private _AmbientColor:Math.Color;
     private _Material:Material;
-    private _CustomShader:any;
     protected _Collection:ImageCollection;
     protected _NormalCollection:ImageCollection;
     protected _SpecularCollection:ImageCollection;
@@ -39,15 +37,13 @@ class ImageObject extends DrawObject
     public set AmbientColor(value:Math.Color) { this._AmbientColor = value; }
     public get Material():Material { return this._Material; }
     public set Material(value:Material) { this._Material = value; }
-    public get CustomShader():any { return this._CustomShader; }
-    public set CustomShader(value:any) { this._CustomShader = value; }
     public get Collection():ImageCollection { return this._Collection; }
     public set Collection(value:ImageCollection) { this._Collection = value; }
     public get NormalCollection():ImageCollection { return this._NormalCollection; }
     public set NormalCollection(value:ImageCollection) { this._NormalCollection = value; }
     public get SpecularCollection():ImageCollection { return this._SpecularCollection; }
     public set SpecularCollection(value:ImageCollection) { this._SpecularCollection = value; }
-    public get Events():ImageObjectEventPackage { return <ImageObjectEventPackage>this._Events; }
+    public get Events():ImageObjectEvents { return <ImageObjectEvents>this._Events; }
     public constructor(Old?:ImageObject)
     {
         super(Old);
@@ -67,13 +63,13 @@ class ImageObject extends DrawObject
         }
         else
         {
-            this._Events = new ImageObjectEventPackage();
+            this._Events = new ImageObjectEvents();
             this._FlipX = false;
             this._FlipY = false;
             this._RepeatX = 1;
             this._RepeatY = 1;
             this._AmbientColor = Math.Color.FromRGBA(50,50,50,255);
-            this._Material = new PlanarMaterial();
+            this._Material = new Material();
             this._Collection = new ImageCollection();
             this._NormalCollection = new ImageCollection();
             this._SpecularCollection = new ImageCollection();

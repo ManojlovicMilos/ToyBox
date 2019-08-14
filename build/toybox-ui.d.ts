@@ -11,27 +11,27 @@ export class Border
     Apply(Element:HTMLElement)
 }
 
-export class ControlEventPackage extends Engine.EventPackage
+export class UIControlEvents extends Engine.Events
 {
     Click:Function[];
     MouseEnter:Function[];
     MouseLeave:Function[];
-    constructor(Old?:ControlEventPackage)
-    Copy() : ControlEventPackage
+    constructor(Old?:UIControlEvents)
+    Copy() : UIControlEvents
     Connect(Element:HTMLElement) : void
 }
 
-export class Control extends Engine.SceneObject
+export class UIControl extends Engine.SceneObject
 {
     Active:boolean;
-    Position:Math.Vertex;
-    Size:Math.Vertex;
+    Position:Math.Vector;
+    Size:Math.Vector;
     ForeColor:Math.Color;
     BackColor:Math.Color;
     Border:Border;
     Element:HTMLElement;
-    constructor(Old?:Control)
-    Copy() : Control
+    constructor(Old?:UIControl)
+    Copy() : UIControl
     Update() : void
 }
 
@@ -42,7 +42,7 @@ export enum TextAlign
     Center = "center"
 }
 
-export class Label extends Control
+export class Label extends UIControl
 {
     Text:string;
     Font:string;
@@ -55,17 +55,17 @@ export class Label extends Control
 
 export class Button extends Label
 {
-    Events:ControlEventPackage;
+    Events:UIControlEvents;
     constructor(Old?:Button, Text?:string)
     OnMouseEnter(Event:any) : void
     OnMouseLeave(Event:any) : void
     Copy() : Button
 }
 
-export class Panel extends Control
+export class Panel extends UIControl
 {
-    Children:Control[];
+    Children:UIControl[];
     constructor(Old?:Panel)
     Copy() : Panel
-    Attach(Child:Control) : void
+    Attach(Child:UIControl) : void
 }

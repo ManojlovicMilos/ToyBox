@@ -1,44 +1,48 @@
-export enum Axis { }
-export const X: Axis;
-export const Y: Axis;
-export const Z: Axis;
+export enum Axis
+{
+    X,
+    Y,
+    Z
+}
 
-export class Vertex
+export class Vector
 {
     X: number;
     Y: number;
     Z: number;
     constructor(X?:number, Y?:number, Z?:number)
-    Copy() : Vertex
-    Translate(V:Vertex) : Vertex
-    Add(V:Vertex) : Vertex
-    Substract(V:Vertex) : Vertex
-    Scale(V: Vertex) : Vertex
-    Scalar(Value:number) : Vertex
-    RotateX(Angle:number) : Vertex
-    RotateY(Angle:number) : Vertex
-    RotateZ(Angle:number) : Vertex
+    Copy() : Vector
+    Translate(V:Vector) : Vector
+    Add(V:Vector) : Vector
+    Substract(V:Vector) : Vector
+    Scale(V: Vector) : Vector
+    Scalar(Value:number) : Vector
+    RotateX(Angle:number) : Vector
+    RotateY(Angle:number) : Vector
+    RotateZ(Angle:number) : Vector
     Length() : number
-    Normalize() : Vertex
-    Absolute() : Vertex
+    Normalize() : Vector
+    Absolute() : Vector
     ToArray() : number[]
     ToQuattroArray(W:number) : number[]
     Serialize() : any
     Deserialize(Data:any) : void
-    static FromRGB(R:number, G:number, B:number) : Vertex
-    static Cross(Left:Vertex, Right:Vertex) : Vertex
-    static Distance(V1:Vertex, V2:Vertex) : number
-    static CalculateAngle(V1:Vertex, V2:Vertex) : number
-    static Angle(V1:Vertex, V2:Vertex) : number
+    static FromRGB(R:number, G:number, B:number) : Vector
+    static Cross(Left:Vector, Right:Vector) : Vector
+    static Distance(V1:Vector, V2:Vector) : number
+    static CalculateAngle(V1:Vector, V2:Vector) : number
+    static Angle(V1:Vector, V2:Vector) : number
 }
 
 export class Transformation
 {
-    Translation:Vertex;
-    Rotation:Vertex;
-    Scale:Vertex;
+    Translation:Vector;
+    Rotation:Vector;
+    Scale:Vector;
+    Skew:Vector;
     constructor(Old?:Transformation)
     Copy():Transformation
+    Composite(Trans:Transformation) : void
     Serialize() : any
     Deserialize(Data) : void
 }
@@ -86,10 +90,10 @@ export class MatrixTransformer
     Scale(X:number, Y:number, Z:number) : void
     Rotate(Angle:number, X:number, Y:number, Z:number) : void
     Perspective(FieldOfView:number, Aspect:number, Near:number, Far:number) : void
-    LookAt(Eye:Vertex, Target:Vertex, Up:Vertex) : void
+    LookAt(Eye:Vector, Target:Vector, Up:Vector) : void
     DefaultPerspective(Width:number, Height:number) : void
-    DefaultView(Eye:Vertex, Target:Vertex) : void
-    static TransformVertex(M:Matrix, ToTransform:Vertex) : Vertex
+    DefaultView(Eye:Vector, Target:Vector) : void
+    static TransformVector(M:Matrix, ToTransform:Vector) : Vector
 }
 
 export class Color
@@ -126,14 +130,6 @@ export class Color
     static Blend(Color1:Color, Color2:Color, Ratio:number) : Color
 }
 
-export enum CollisionType
-{
-    Radius,
-    Rectangular,
-    Horizontal,
-    Vertical
-}
-
 export class CollisionResult
 {
     Collision:boolean;
@@ -155,24 +151,32 @@ export class CollisionResult
     Combine(Other:CollisionResult) : void
 }
 
-export class CollisionValue
+export enum CollisionType
+{
+    Radius,
+    Rectangular,
+    Horizontal,
+    Vertical
+}
+
+export class CollisionData
 {
     Active:boolean;
     Tags:string[];
-    Scale:Vertex;
+    Scale:Vector;
     Type:CollisionType;
     Result:CollisionResult;
     Specific:any;
-    public constructor(Old?:CollisionValue)
-    public Copy() : CollisionValue
+    public constructor(Old?:CollisionData)
+    public Copy() : CollisionData
     public Serialize() : any
     public Deserialize(Data) : void
 }
 
-export class ColliderObject
+export class Collider
 {
-    Position:Vertex;
-    Scale:Vertex;
+    Position:Vector;
+    Scale:Vector;
     Type:CollisionType;
     Reference:any;
 }
@@ -180,26 +184,26 @@ export class ColliderObject
 export class Collision
 {
     static FocusOffset:number;
-    static Check(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRadius2DToRadius2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRadius2DToRectangular2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRadius2DToHorizontal2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRadius2DToVertical2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRectangular2DToRadius2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRectangular2DToRectangular2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRectangular2DToHorizontal2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRectangular2DToVertical2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
-    static CheckRadius(Collider1:ColliderObject, Collider2:ColliderObject) : boolean
-    static CheckRadiusToPoint(Collider:ColliderObject, Position:Vertex) : boolean
-    static CheckRectangleToPoint(Collider:ColliderObject, Position:Vertex) : boolean
-    static CheckRadiusToLineX(Collider:ColliderObject, X:number) : boolean
-    static CheckRadiusToLineY(Collider:ColliderObject, Y:number) : boolean
-    static CheckRectangleToLineX(Collider:ColliderObject, Position:Vertex) : boolean
-    static GetCollisionCubic(Collider:ColliderObject, Position:Vertex) : CollisionResult
-    static GetCollision4Way(Position1:Vertex, Position2:Vertex) : CollisionResult
-    static GetCollision8Way(Position1:Vertex, Position2:Vertex) : CollisionResult
-    static GetCollisionRectangularWay(Collider:ColliderObject, Position:Vertex) : CollisionResult
-    static GetDefaultRectangularWay(Collider:ColliderObject, Position:Vertex) : CollisionResult
+    static Check(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRadius2DToRadius2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRadius2DToRectangular2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRadius2DToHorizontal2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRadius2DToVertical2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRectangular2DToRadius2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRectangular2DToRectangular2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRectangular2DToHorizontal2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRectangular2DToVertical2D(Collider1:Collider, Collider2:Collider) : CollisionResult
+    static CheckRadius(Collider1:Collider, Collider2:Collider) : boolean
+    static CheckRadiusToPoint(Collider:Collider, Position:Vector) : boolean
+    static CheckRectangleToPoint(Collider:Collider, Position:Vector) : boolean
+    static CheckRadiusToLineX(Collider:Collider, X:number) : boolean
+    static CheckRadiusToLineY(Collider:Collider, Y:number) : boolean
+    static CheckRectangleToLineX(Collider:Collider, Position:Vector) : boolean
+    static GetCollisionCubic(Collider:Collider, Position:Vector) : CollisionResult
+    static GetCollision4Way(Position1:Vector, Position2:Vector) : CollisionResult
+    static GetCollision8Way(Position1:Vector, Position2:Vector) : CollisionResult
+    static GetCollisionRectangularWay(Collider:Collider, Position:Vector) : CollisionResult
+    static GetDefaultRectangularWay(Collider:Collider, Position:Vector) : CollisionResult
 }
 
 export class Random

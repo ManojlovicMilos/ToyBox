@@ -1,8 +1,8 @@
-export { SceneEventPackage }
+export { SceneEvents }
 
-import { EventPackage } from "./EventPackage";
+import { Events } from "./Events";
 
-class SceneEventPackage extends EventPackage
+class SceneEvents extends Events
 {
     private _WireTouchEvents:boolean;
     public get WireTouchEvents(): boolean { return this._WireTouchEvents; }
@@ -25,15 +25,16 @@ class SceneEventPackage extends EventPackage
     public get TouchMove() : Function[] { return this._Data["TouchMove"]; }
     public get LoadProgress() : Function[] { return this._Data["LoadProgress"]; }
     public get LoadComplete() : Function[] { return this._Data["LoadComplete"]; }
-    public constructor(Old?:SceneEventPackage)
+    public constructor(Old?:SceneEvents)
     {
         super(Old);
-        if(Old)
+        if(Old != null)
         {
-
+            this._WireTouchEvents = Old._WireTouchEvents;
         }
         else
         {
+            this._WireTouchEvents = true;
             this._Data["Load"] = [];
             this._Data["Switch"] = [];
             this._Data["Leave"] = [];
@@ -54,8 +55,8 @@ class SceneEventPackage extends EventPackage
             this._Data["LoadComplete"] = [];
         }
     }
-    public Copy() : SceneEventPackage
+    public Copy() : SceneEvents
     {
-        return new SceneEventPackage(this);
+        return new SceneEvents(this);
     }
 }

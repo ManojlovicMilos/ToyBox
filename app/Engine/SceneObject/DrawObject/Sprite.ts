@@ -6,7 +6,7 @@ import { Type } from "./../../Types";
 import { SpriteSet } from "./../../Collection/SpriteSet";
 import { SpriteSetCollection } from "./../../Collection/SpriteSetCollection";
 import { ImageObject } from "./ImageObject";
-import { SpriteEventPackage } from "../../Events/SpriteEventPackage";
+import { SpriteEvents } from "../../Events/SpriteEvents";
 
 class Sprite extends ImageObject
 {
@@ -33,7 +33,7 @@ class Sprite extends ImageObject
     public set NormalSets(value:SpriteSet[]) { (<SpriteSetCollection>this._NormalCollection).SpriteSets = value; }
     public get SpecularSets():SpriteSet[] { return (<SpriteSetCollection>this._SpecularCollection).SpriteSets; }
     public set SpecularSets(value:SpriteSet[]) { (<SpriteSetCollection>this._SpecularCollection).SpriteSets = value; }
-    public get Events():SpriteEventPackage { return <SpriteEventPackage>this._Events; }
+    public get Events():SpriteEvents { return <SpriteEvents>this._Events; }
     public constructor(Old?:Sprite)
     {
         super(Old);
@@ -48,8 +48,8 @@ class Sprite extends ImageObject
         }
         else
         {
-            this._Events = new SpriteEventPackage();
-            this.Trans.Scale = new Math.Vertex(100, 100, 1);
+            this._Events = new SpriteEvents();
+            this.Trans.Scale = new Math.Vector(100, 100, 1);
             this._Collection = new SpriteSetCollection();
             this._NormalCollection = new SpriteSetCollection();
             this._SpecularCollection = new SpriteSetCollection();

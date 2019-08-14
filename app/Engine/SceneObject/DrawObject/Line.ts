@@ -9,11 +9,11 @@ class Line extends DrawObject
 {
     // Abstract
     private _Width: number;
-    private _Position2: Math.Vertex;
+    private _Position2: Math.Vector;
     public get Width(): number { return this._Width; }
     public set Width(value:number) { this._Width = value; }
-    public get Position2(): Math.Vertex { return this._Position2; }
-    public set Position2(value:Math.Vertex) { this._Position2 = value; }
+    public get Position2(): Math.Vector { return this._Position2; }
+    public set Position2(value:Math.Vector) { this._Position2 = value; }
     public constructor(Old?:Line)
     {
         super(Old);
@@ -27,7 +27,7 @@ class Line extends DrawObject
         else
         {
             this._Width = 1;
-            this._Position2 = new Math.Vertex();
+            this._Position2 = new Math.Vector();
         }
     }
     public Copy() : Line

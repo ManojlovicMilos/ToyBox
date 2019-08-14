@@ -6,7 +6,7 @@ import * as Math from "./../Mathematics/Mathematics";
 
 class Convert
 {
-    public static VerticesToByteArray(Vertices:Math.Vertex[], Relevant:number) : Float32Array
+    public static VerticesToByteArray(Vertices:Math.Vector[], Relevant:number) : Float32Array
     {
         let NewArrayBuffer:number[] = [];
         for(let i = 0; i < Vertices.length; i++)
@@ -17,9 +17,9 @@ class Convert
         }
         return new Float32Array(NewArrayBuffer);
     }
-    public static DrawObjectToCollider(Object:Engine.DrawObject) : Math.ColliderObject
+    public static DrawObjectToCollider(Object:Engine.DrawObject) : Math.Collider
     {
-        let Collider:Math.ColliderObject = new Math.ColliderObject();
+        let Collider:Math.Collider = new Math.Collider();
         Collider.Position = Object.Trans.Translation;
         Collider.Scale = Object.Trans.Scale;
         Collider.Type = <Math.CollisionType>Object.Data["Collision"];

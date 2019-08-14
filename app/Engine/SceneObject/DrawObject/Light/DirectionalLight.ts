@@ -17,7 +17,7 @@ class DirectionalLight extends Light
         }
         else
         {
-            this.Direction = new Math.Vertex(0,1,0);
+            this.Direction = new Math.Vector(0,1,0);
         }
     }
     public Copy() : DirectionalLight

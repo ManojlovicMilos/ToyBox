@@ -4,4 +4,9 @@ import { SceneObjectUtil } from "./SceneObject";
 import { BufferUtil } from "./Buffer";
 import { Log } from "./Log";
 
-export { Convert, CollisionUtil, SceneObjectUtil, BufferUtil, Log };
+export {    Convert,
+            CollisionUtil,
+            SceneObjectUtil,
+            BufferUtil,
+            Log
+};

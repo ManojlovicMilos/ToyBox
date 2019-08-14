@@ -1,12 +1,11 @@
 export  { SceneObjectUtil };
 
-import * as Data from "./../Data/Data";
 import * as Engine from "./../Engine/Engine";
 import * as Math from "./../Mathematics/Mathematics";
 
 class SceneObjectUtil
 {
-    public static CreateSprite(Name?:string, Images?:string[], Position?:Math.Vertex, Size?:Math.Vertex) : Engine.Sprite
+    public static CreateSprite(Name?:string, Images?:string[], Position?:Math.Vector, Size?:Math.Vector) : Engine.Sprite
     {
         let NewSprite:Engine.Sprite = new Engine.Sprite();
         if(Name) NewSprite.Name = Name;
@@ -20,7 +19,7 @@ class SceneObjectUtil
         if(Size) NewSprite.Trans.Scale = Size;
         return NewSprite;
     }
-    public static CreateTile(Name?:string, Images?:string[], Position?:Math.Vertex, Size?:Math.Vertex) : Engine.Tile
+    public static CreateTile(Name?:string, Images?:string[], Position?:Math.Vector, Size?:Math.Vector) : Engine.Tile
     {
         let NewTile:Engine.Tile = new Engine.Tile();
         if(Name) NewTile.Name = Name;

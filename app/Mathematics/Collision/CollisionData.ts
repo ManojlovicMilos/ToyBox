@@ -1,6 +1,6 @@
-export  { CollisionType, CollisionValue };
+export  { CollisionType, CollisionData };
 
-import { Vertex } from "./Vertex";
+import { Vector } from "../Vector";
 import { CollisionResult } from "./CollisionResult";
 
 enum CollisionType
@@ -10,11 +10,12 @@ enum CollisionType
     Horizontal,
     Vertical
 }
-class CollisionValue
+class CollisionData
 {
     private _Active:boolean;
     private _Tags:string[];
-    private _Scale:Vertex;
+    private _Scale:Vector;
+    private _Offset:Vector;
     private _Type:CollisionType;
     private _Result:CollisionResult;
     private _Specific:any;
@@ -22,14 +23,16 @@ class CollisionValue
     public set Active(value:boolean) { this._Active = value; }
     public get Tags():string[] { return this._Tags; }
     public set Tags(value:string[]) { this._Tags = value; }
-    public get Scale():Vertex { return this._Scale; }
-    public set Scale(value:Vertex) { this._Scale = value; }
+    public get Scale():Vector { return this._Scale; }
+    public set Scale(value:Vector) { this._Scale = value; }
+    public get Offset():Vector { return this._Offset; }
+    public set Offset(value:Vector) { this._Offset = value; }
     public get Type():CollisionType { return this._Type; }
     public set Type(value:CollisionType) { this._Type = value; }
     public get Result():CollisionResult { return this._Result; }
     public set Result(value:CollisionResult) { this._Result = value; }
     public get Specific():any { return this._Specific; }
-    public constructor(Old?:CollisionValue)
+    public constructor(Old?:CollisionData)
     {
         if(Old)
         {
@@ -51,9 +54,9 @@ class CollisionValue
             this._Specific = {};
         }
     }
-    public Copy() : CollisionValue
+    public Copy() : CollisionData
     {
-        return new CollisionValue(this);
+        return new CollisionData(this);
     }
     public Serialize() : any
     {

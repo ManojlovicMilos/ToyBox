@@ -3,13 +3,13 @@ export  { SceneObject };
 import * as Core from "./../../Core/Core";
 
 import { Type } from "./../Types";
-import { EventPackage } from "./../Events/EventPackage";
+import { Events } from "../Events/Events";
 
 class SceneObject extends Core.BaseObject
 {
     // Abstract
-    protected _Events:EventPackage;
-    public get Events():EventPackage { return this._Events; }
+    protected _Events:Events;
+    public get Events():Events { return this._Events; }
     public constructor(Old?:SceneObject)
     {
         super(Old);
@@ -21,7 +21,7 @@ class SceneObject extends Core.BaseObject
         }
         else
         {
-            this._Events = new EventPackage();
+            this._Events = new Events();
         }
     }
     public Copy() : SceneObject

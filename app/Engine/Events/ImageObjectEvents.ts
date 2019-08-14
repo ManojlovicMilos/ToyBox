@@ -1,18 +1,18 @@
-export { ImageObjectEventPackage }
+export { ImageObjectEvents }
 
-import { EventPackage } from "./EventPackage";
+import { DrawObjectEvents } from "./DrawObjectEvents";
 
-class ImageObjectEventPackage extends EventPackage
+class ImageObjectEvents extends DrawObjectEvents
 {
     public get Click() : Function[] { return this._Data["Click"]; }
     public get MouseDown() : Function[] { return this._Data["MouseDown"]; }
     public get MouseUp() : Function[] { return this._Data["MouseUp"]; }
     public get TouchStart() : Function[] { return this._Data["TouchStart"]; }
     public get TouchEnd() : Function[] { return this._Data["TouchEnd"]; }
-    public constructor(Old?:ImageObjectEventPackage)
+    public constructor(Old?:ImageObjectEvents)
     {
         super(Old);
-        if(Old)
+        if(Old != null)
         {
 
         }
@@ -25,8 +25,8 @@ class ImageObjectEventPackage extends EventPackage
             this._Data["TouchEnd"] = [];
         }
     }
-    public Copy() : ImageObjectEventPackage
+    public Copy() : ImageObjectEvents
     {
-        return new ImageObjectEventPackage(this);
+        return new ImageObjectEvents(this);
     }
 }

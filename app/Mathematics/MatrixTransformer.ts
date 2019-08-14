@@ -1,6 +1,6 @@
 export  { MatrixMode, Matrix, MatrixTransformer };
 
-import { Axis, Vertex } from "./Vertex";
+import { Axis, Vector } from "./Vector";
 
 enum MatrixMode
 {
@@ -210,15 +210,15 @@ class MatrixTransformer
         let Left = -Right;
         this.Frustum(Left, Right, Bottom, Top, Near, Far);
     }
-    public LookAt(Eye:Vertex, Target:Vertex, Up:Vertex) : void
+    public LookAt(Eye:Vector, Target:Vector, Up:Vector) : void
     {
         let M:Matrix = new Matrix();
-        let Forward:Vertex = new Vertex(Target.X - Eye.X, Target.Y - Eye.Y, Target.Z - Eye.Z);
-        let Side:Vertex = new Vertex(0, 0, 0);
+        let Forward:Vector = new Vector(Target.X - Eye.X, Target.Y - Eye.Y, Target.Z - Eye.Z);
+        let Side:Vector = new Vector(0, 0, 0);
         Forward = Forward.Normalize();
-        Side = Vertex.Cross(Forward, Up);
+        Side = Vector.Cross(Forward, Up);
         Side = Side.Normalize();
-        Up = Vertex.Cross(Side, Forward);
+        Up = Vector.Cross(Side, Forward);
         M[0 * 4 + 0] = Side.X;
         M[1 * 4 + 0] = Side.Y;
         M[2 * 4 + 0] = Side.Z;
@@ -235,17 +235,17 @@ class MatrixTransformer
     {
         this.Perspective(45, Width * 1.0 / Height, 0.001, 1000000);
     }
-    public DefaultView(Eye:Vertex, Target:Vertex) : void
+    public DefaultView(Eye:Vector, Target:Vector) : void
     {
-        this.LookAt(Eye, Target, new Vertex(0, 1, 0));
+        this.LookAt(Eye, Target, new Vector(0, 1, 0));
     }
-    public static TransformVertex(M:Matrix, ToTransform:Vertex) : Vertex
+    public static TransformVector(M:Matrix, ToTransform:Vector) : Vector
     {
-        let NewVertex:number[] = [0,0,0,0];
-        NewVertex[0] = M.Fields[0 * 4 + 0] * ToTransform.X + M.Fields[0 * 4 + 1] * ToTransform.Y + M.Fields[0 * 4 + 2] * ToTransform.Z + M.Fields[0 * 4 + 3] * 1;
-        NewVertex[1] = M.Fields[1 * 4 + 0] * ToTransform.X + M.Fields[1 * 4 + 1] * ToTransform.Y + M.Fields[1 * 4 + 2] * ToTransform.Z + M.Fields[1 * 4 + 3] * 1;
-        NewVertex[2] = M.Fields[2 * 4 + 0] * ToTransform.X + M.Fields[2 * 4 + 1] * ToTransform.Y + M.Fields[2 * 4 + 2] * ToTransform.Z + M.Fields[2 * 4 + 3] * 1;
-        NewVertex[3] = M.Fields[3 * 4 + 0] * ToTransform.X + M.Fields[3 * 4 + 1] * ToTransform.Y + M.Fields[3 * 4 + 2] * ToTransform.Z + M.Fields[3 * 4 + 3] * 1;
-        return new Vertex(NewVertex[0], NewVertex[1], NewVertex[2]);
+        let NewVector:number[] = [0,0,0,0];
+        NewVector[0] = M.Fields[0 * 4 + 0] * ToTransform.X + M.Fields[0 * 4 + 1] * ToTransform.Y + M.Fields[0 * 4 + 2] * ToTransform.Z + M.Fields[0 * 4 + 3] * 1;
+        NewVector[1] = M.Fields[1 * 4 + 0] * ToTransform.X + M.Fields[1 * 4 + 1] * ToTransform.Y + M.Fields[1 * 4 + 2] * ToTransform.Z + M.Fields[1 * 4 + 3] * 1;
+        NewVector[2] = M.Fields[2 * 4 + 0] * ToTransform.X + M.Fields[2 * 4 + 1] * ToTransform.Y + M.Fields[2 * 4 + 2] * ToTransform.Z + M.Fields[2 * 4 + 3] * 1;
+        NewVector[3] = M.Fields[3 * 4 + 0] * ToTransform.X + M.Fields[3 * 4 + 1] * ToTransform.Y + M.Fields[3 * 4 + 2] * ToTransform.Z + M.Fields[3 * 4 + 3] * 1;
+        return new Vector(NewVector[0], NewVector[1], NewVector[2]);
     }
 }

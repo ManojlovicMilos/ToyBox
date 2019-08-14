@@ -3,7 +3,7 @@ export { Label, TextAlign }
 import * as Mathematics from "./../Mathematics/Mathematics";
 
 import { Settings } from "../Core/Settings";
-import { Control } from "./Control";
+import { UIControl } from "./UIControl";
 
 enum TextAlign
 {
@@ -12,7 +12,7 @@ enum TextAlign
     Center = "center"
 }
 
-class Label extends Control
+class Label extends UIControl
 {
     private _Text:string;
     private _Font:string;
@@ -49,8 +49,8 @@ class Label extends Control
             this._Padding = 5;
             this._TextSize = 40;
             this._TextAlign = TextAlign.Center;
-            this.Size = new Mathematics.Vertex(300,60);
-            this.Position = new Mathematics.Vertex(960,540,0.1);
+            this.Size = new Mathematics.Vector(300,60);
+            this.Position = new Mathematics.Vector(960,540,0.1);
             this.ForeColor = Mathematics.Color.White;
             this.BackColor = Mathematics.Color.Empty;
         }

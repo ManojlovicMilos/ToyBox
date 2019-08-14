@@ -9,6 +9,7 @@ import { ThreeBasicShaders } from "./ThreeBasicShaders";
 import { ThreeShaderGenerator } from "./ThreeShaderGenerator";
 
 const TOYBOX_MAX_LIGHTS = 8;
+const DATA_PREFIX = "TOYBOX_DATA_";
 
 class ThreeMaterialGenerator
 {
@@ -34,14 +35,60 @@ class ThreeMaterialGenerator
     {
         return new ThreeMaterialGenerator(this);
     }
-    private GenerateMaterial(Drawn:Engine.ImageObject, Textures:Three.Texture[]) : Three.ShaderMaterial
+    public LoadObjectMaterial(Drawn:Engine.ImageObject) : any
     {
-        let Index:number = Drawn.Index;
+        let Material;
+        if(Drawn.Collection.Images.length > 0)
+        {
+            if(this._Metadata[DATA_PREFIX + Drawn.Collection.ID + "_Tex"] == null || Drawn.Modified)
+            {
+                let Textures : Three.Texture[] = [];
+                let TextureUrls : string[] = Drawn.Collection.Images;
+                for(let j = 0; j < TextureUrls.length; j++)
+                {
+                    Textures.push(this.LoadTexture(Drawn, TextureUrls[j]));
+                }
+                if(Drawn.Material.HasNormals)
+                {
+                    let Textures : Three.Texture[] = [];
+                    this._Metadata[DATA_PREFIX + Drawn.NormalCollection.ID + "_Normal"] = Textures;
+                    let TextureUrls : string[] = Drawn.NormalCollection.Images;
+                    for(let j = 0; j < TextureUrls.length; j++)
+                    {
+                        Textures.push(this.LoadTexture(Drawn, TextureUrls[j]));
+                    }
+                }
+                this._Metadata[DATA_PREFIX + Drawn.Collection.ID + "_Tex"] = Textures;
+            }
+            Material = this.LoadMaterial(Drawn);
+        }
+        else Material = this.GenerateMaterialShader(Drawn, null);
+        return Material;
+    }
+    public LoadMaterial(Drawn:Engine.ImageObject) : Three.ShaderMaterial
+    {
+        let Material:Three.ShaderMaterial = null;
+        let Textures : Three.Texture[] = this._Metadata[DATA_PREFIX + Drawn.Collection.ID + "_Tex"];
+        if (Drawn.Material.HasNormals)
+        {
+            let Normals : Three.Texture[] = this._Metadata[DATA_PREFIX + Drawn.NormalCollection.ID + "_Normal"];
+            Material = this.GenerateMaterialShader(Drawn, [Textures[Drawn.Index], Normals[Drawn.Index]]);
+            if(Drawn.Material.Lit) this.RegisterLitMaterial(Material);
+        }
+        else
+        {
+            Material = this.GenerateMaterialShader(Drawn, [Textures[Drawn.Index]]);
+            if(Drawn.Material.Lit) this.RegisterLitMaterial(Material);
+        }
+        return Material;
+    }
+    private GenerateMaterialShader(Drawn:Engine.ImageObject, Textures:Three.Texture[]) : Three.ShaderMaterial
+    {
         let Uniforms:any =
         {
-            index: { type:"i", value: Index },
-            flipx: { type:"i", value: (Drawn.FlipX)?1:0 },
-            flipy: { type:"i", value: (Drawn.FlipY)?1:0 },
+            index: { type:"i", value: Drawn.Index },
+            flipx: { type:"i", value: (Drawn.FlipX) ? 1:0 },
+            flipy: { type:"i", value: (Drawn.FlipY) ? 1:0 },
             color: { type:"v4", value: Drawn.Paint.ToArray() },
             texture: { type:"tv", value: (Textures) ? Textures[0] : null },
             repeatx: { type:"f", value: Drawn.RepeatX },
@@ -49,40 +96,41 @@ class ThreeMaterialGenerator
         };
         let VertexShader = ThreeBasicShaders.Vertex2D;
         let FragmentShader = ThreeBasicShaders.Fragment2D;
-        if(Drawn.Material.Type != Engine.MaterialType.Default)
+        if(Drawn.Material.Lit)
         {
             VertexShader = ThreeBasicShaders.LitVertex2D;
             FragmentShader = ThreeBasicShaders.LitFragment2D;
             this.PrePack2DLights(Uniforms);
             Uniforms.ambient = { type:"v4", value: Drawn.AmbientColor.ToArray() };
         }
-        if(Drawn.Material.Type == Engine.MaterialType.Phong ||
-            Drawn.Material.Type == Engine.MaterialType.Toon ||
-            Drawn.Material.Type == Engine.MaterialType.Custom)
+        if(Drawn.Material.HasNormals)
         {
-            if(Drawn.NormalMaps.length == 0) Index = -1;
+            if(Drawn.NormalMaps.length == 0)
+            {
+                Uniforms.index = -1;
+            }
             else
             {
                 FragmentShader = ThreeBasicShaders.PhongFragment2D;
                 Uniforms.normalMap = { type:"tv", value: Textures[1] };
             }
         }
-        if(Drawn.Material.Type == Engine.MaterialType.Custom ||
-            Drawn.Material.Type == Engine.MaterialType.Shader)
+        if(Drawn.Material.Is(Engine.Type.NodeMaterial))
         {
-            for(let i in Drawn.Material.Inputs)
+            let NM:Engine.NodeMaterial = <Engine.NodeMaterial> Drawn.Material;
+            for(let i in NM.Inputs)
             {
-                let Input:Engine.MaterialInput = Drawn.Material.Inputs[i];
+                let Input:Engine.MaterialInput = NM.Inputs[i];
                 if(Drawn.Data[Input.ID] != null)
                 {
                     if(<string>Input.Type == "tv")
                     {
-                        if(this._Metadata["TOYBOX_TEXTURE_"+Input.ID] == null)
+                        if(this._Metadata[DATA_PREFIX + Input.ID] == null)
                         {
                             let Path:string = Drawn.Data[Input.ID];
-                            this._Metadata["TOYBOX_TEXTURE_"+Input.ID] = this.LoadTexture(Drawn, Path);
+                            this._Metadata[DATA_PREFIX + Input.ID] = this.LoadTexture(Drawn, Path);
                         }
-                        Uniforms[Input.ID] = { type:<string>Input.Type, value:this._Metadata["TOYBOX_TEXTURE_"+Input.ID] };
+                        Uniforms[Input.ID] = { type:<string>Input.Type, value:this._Metadata[DATA_PREFIX + Input.ID] };
                     }
                     else
                     {
@@ -91,18 +139,15 @@ class ThreeMaterialGenerator
                 }
             }
         }
-        if(Drawn.Material.Type == Engine.MaterialType.Toon)
+        if(Drawn.Material.Is(Engine.Type.NodeMaterial))
         {
-            FragmentShader = ThreeBasicShaders.ToonFragment2D;
+            FragmentShader = ThreeShaderGenerator.GenerateFragment(<Engine.NodeMaterial> Drawn.Material);
         }
-        if(Drawn.Material.Type == Engine.MaterialType.Custom)
+        if(Drawn.Material.Is(Engine.Type.ShaderMaterial))
         {
-            FragmentShader = ThreeShaderGenerator.GenerateFragment(Drawn.Material);
-        }
-        if(Drawn.Material.Type == Engine.MaterialType.Shader)
-        {
-            if(Drawn.Material.Shaders.Vertex != "") VertexShader = Drawn.Material.Shaders.Vertex;
-            if(Drawn.Material.Shaders.Fragment != "") FragmentShader = Drawn.Material.Shaders.Fragment;
+            let SM:Engine.ShaderMaterial = <Engine.ShaderMaterial> Drawn.Material;
+            if(SM.Shaders.Vertex != "") VertexShader = SM.Shaders.Vertex;
+            if(SM.Shaders.Fragment != "") FragmentShader = SM.Shaders.Fragment;
         }
         let DrawnMaterial = new Three.ShaderMaterial
         (
@@ -114,74 +159,6 @@ class ThreeMaterialGenerator
         );
         DrawnMaterial.transparent = true;
         return DrawnMaterial;
-    }
-    public LoadMaterial(Drawn:Engine.ImageObject) : Three.ShaderMaterial
-    {
-        let ID:string = Drawn.Collection.ID;
-        let Index:number = Drawn.Index;
-        let NormalID:string = "";
-        let Material:Three.ShaderMaterial = null;
-        if (Drawn.Material.Type == Engine.MaterialType.Phong ||
-            Drawn.Material.Type == Engine.MaterialType.Toon ||
-            Drawn.Material.Type == Engine.MaterialType.Custom ||
-            Drawn.Material.Type == Engine.MaterialType.Shader)
-        {
-            NormalID = Drawn.NormalCollection.ID;
-        }
-        let Textures : Three.Texture[] = this._Metadata["TOYBOX_" + ID + "_Tex"];
-        if(Drawn.Material.Type == Engine.MaterialType.Default ||
-           Drawn.Material.Type == Engine.MaterialType.Lit)
-        {
-            Material = this.GenerateMaterial(Drawn, [Textures[Index]]);
-            if(Drawn.Material.Type == Engine.MaterialType.Lit)
-            {
-                this.RegisterLitMaterial(Material);
-            }
-        }
-        else if(Drawn.Material.Type == Engine.MaterialType.Phong ||
-                Drawn.Material.Type == Engine.MaterialType.Toon ||
-                Drawn.Material.Type == Engine.MaterialType.Custom ||
-                Drawn.Material.Type == Engine.MaterialType.Shader)
-        {
-            let Normals : Three.Texture[] = this._Metadata["TOYBOX_" + NormalID + "_Normal"];
-            if(Normals) Material = this.GenerateMaterial(Drawn, [Textures[Index], Normals[Index]]);
-            else Material = this.GenerateMaterial(Drawn, [Textures[Index]]);
-            this.RegisterLitMaterial(Material);
-        }
-        return Material
-    }
-    public LoadObjectMaterial(Drawn:Engine.ImageObject) : any
-    {
-        let Material;
-        if(Drawn.Collection.Images.length > 0)
-        {
-            if(this._Metadata["TOYBOX_" + Drawn.Collection.ID + "_Tex"] == null || Drawn.Modified)
-            {
-                let Textures : Three.Texture[] = [];
-                let TextureUrls : string[] = Drawn.Collection.Images;
-                for(let j = 0; j < TextureUrls.length; j++)
-                {
-                    Textures.push(this.LoadTexture(Drawn, TextureUrls[j]));
-                }
-                if(Drawn.Material.Type == Engine.MaterialType.Phong ||
-                    Drawn.Material.Type == Engine.MaterialType.Toon ||
-                    Drawn.Material.Type == Engine.MaterialType.Custom ||
-                    Drawn.Material.Type == Engine.MaterialType.Shader)
-                {
-                    let Textures : Three.Texture[] = [];
-                    this._Metadata["TOYBOX_" + Drawn.NormalCollection.ID + "_Normal"] = Textures;
-                    let TextureUrls : string[] = Drawn.NormalCollection.Images;
-                    for(let j = 0; j < TextureUrls.length; j++)
-                    {
-                        Textures.push(this.LoadTexture(Drawn, TextureUrls[j]));
-                    }
-                }
-                this._Metadata["TOYBOX_" + Drawn.Collection.ID + "_Tex"] = Textures;
-            }
-            Material = this.LoadMaterial(Drawn);
-        }
-        else Material = this.GenerateMaterial(Drawn, null);
-        return Material;
     }
     private LoadTexture(Drawn:Engine.ImageObject, Path:string) : Three.Texture
     {
@@ -253,9 +230,9 @@ class ThreeMaterialGenerator
         for(let i = 0; i < Lights.length && i < TOYBOX_MAX_LIGHTS; i++)
         {
             Radii.push(Lights[i].Radius / 100);
-            Locations.push(this._Metadata["TOYBOX_"+Lights[i].ID+"_Light"]);
+            Locations.push(this._Metadata[DATA_PREFIX + Lights[i].ID + "_Light"]);
             Intensities.push(Lights[i].Intensity / 100);
-            Attenuations.push(TMGUtil.Vec3FromData(Lights[i].Attenuation.ToVertex().ToArray()));
+            Attenuations.push(TMGUtil.Vec3FromData(Lights[i].Attenuation.ToVector().ToArray()));
             LightColors.push(TMGUtil.Vec4FromData(Lights[i].Paint.ToArray()));
             Parameters.push(Lights[i].Parameter);
             Directions.push(TMGUtil.Vec3FromData(Lights[i].Direction.ToArray()));
@@ -285,7 +262,7 @@ class ThreeMaterialGenerator
         }
         return LightsPack;
     }
-    public PrepLightLoc(Location:Math.Vertex, Resolution:Math.Vertex) : Three.Vector3
+    public PrepLightLoc(Location:Math.Vector, Resolution:Math.Vector) : Three.Vector3
     {
         let NewVector = new Three.Vector3(Location.X, Location.Y, Location.Z);
         NewVector.x -= Resolution.X / 2;
@@ -315,7 +292,7 @@ class TMGUtil
     {
         return new Three.Vector4(Data[0], Data[1], Data[2], Data[3]);   
     }
-    public static PrepLightLoc(Location:Math.Vertex, Resolution:Math.Vertex) : Three.Vector3
+    public static PrepLightLoc(Location:Math.Vector, Resolution:Math.Vector) : Three.Vector3
     {
         let NewVector = new Three.Vector3(Location.X, Location.Y, Location.Z);
         NewVector.x -= Resolution.X / 2;

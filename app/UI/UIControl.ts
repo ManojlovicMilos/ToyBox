@@ -1,30 +1,32 @@
-export { Control }
+export { UIControl }
 
-import * as Math from "./../Mathematics/Mathematics";
-import * as Engine from "./../Engine/Engine";
+import * as Math from "../Mathematics/Mathematics";
+import * as Engine from "../Engine/Engine";
 
 import { Settings } from "../Core/Settings";
 import { Border } from "./Border";
 
-class Control extends Engine.SceneObject
+const UI_CONTROL_TYPE = "UIControl"
+
+class UIControl extends Engine.SceneObject
 {
     private _Active:boolean;
-    private _Position:Math.Vertex;
-    private _Size:Math.Vertex;
+    private _Position:Math.Vector;
+    private _Size:Math.Vector;
     private _ForeColor:Math.Color;
     private _BackColor:Math.Color;
     private _Border:Border;
     private _Element:HTMLElement;
-    protected _Offset:Math.Vertex;
-    protected _Scale:Math.Vertex;
+    protected _Offset:Math.Vector;
+    protected _Scale:Math.Vector;
     public get Active():boolean { return this._Active; }
     public set Active(value:boolean) { this._Active = value; this.OnToggle(value); this.Update(); }
-    public get Position():Math.Vertex { return this._Position; }
-    public set Position(value:Math.Vertex) { this._Position = value; this.Update(); }
-    public get Size():Math.Vertex { return this._Size; }
-    public set Size(value:Math.Vertex) { this._Size = value; this.Update(); }
-    public get Offset():Math.Vertex { return this._Offset; }
-    public set Offset(value:Math.Vertex) { this._Offset = value; this.Update(); }
+    public get Position():Math.Vector { return this._Position; }
+    public set Position(value:Math.Vector) { this._Position = value; this.Update(); }
+    public get Size():Math.Vector { return this._Size; }
+    public set Size(value:Math.Vector) { this._Size = value; this.Update(); }
+    public get Offset():Math.Vector { return this._Offset; }
+    public set Offset(value:Math.Vector) { this._Offset = value; this.Update(); }
     public get ForeColor():Math.Color { return this._ForeColor; }
     public set ForeColor(value:Math.Color) { this._ForeColor = value; this.Update(); }
     public get BackColor():Math.Color { return this._BackColor; }
@@ -32,15 +34,17 @@ class Control extends Engine.SceneObject
     public get Border():Border { return this._Border; }
     public set Border(value:Border) { this._Border = value; this.Update(); }
     public get Element():HTMLElement { return this._Element; }
-    public constructor(Old?:Control)
+    public constructor(Old?:UIControl)
     {
         super(Old);
+        this.RegisterType(UI_CONTROL_TYPE);
+        this.RegisterFactory(() => new UIControl());
         if(Old)
         {
             this._Active = Old._Active;
             this._Position = Old._Position;
             this._Size = Old._Size;
-            this._Offset = new Math.Vertex();
+            this._Offset = new Math.Vector();
             this._Scale = Old._Scale.Copy();
             this._ForeColor = Old._ForeColor.Copy();
             this._BackColor = Old.BackColor.Copy();
@@ -48,20 +52,19 @@ class Control extends Engine.SceneObject
         }
         else
         {
-            this.Type = Engine.SceneObjectType.Control;
             this._Active = true;
-            this._Position = new Math.Vertex();
-            this._Size = new Math.Vertex();
-            this._Offset = new Math.Vertex();
-            this._Scale = new Math.Vertex(100,100,1);
+            this._Position = new Math.Vector();
+            this._Size = new Math.Vector();
+            this._Offset = new Math.Vector();
+            this._Scale = new Math.Vector(100,100,1);
             this._ForeColor = Math.Color.Black;
             this._BackColor = Math.Color.White;
             this._Border = new Border();
         }
     }
-    public Copy() : Control
+    public Copy() : UIControl
     {
-        return new Control(this);
+        return new UIControl(this);
     }
     public OnToggle(Value:boolean) : void
     {
@@ -107,7 +110,7 @@ class Control extends Engine.SceneObject
     public OnResize(Args:any) : void
     {
         // Override
-        this._Scale = new Math.Vertex(Args.Scale.X / Args.GlobalScale.X, Args.Scale.Y / Args.GlobalScale.Y, 1);
+        this._Scale = new Math.Vector(Args.Scale.X / Args.GlobalScale.X, Args.Scale.Y / Args.GlobalScale.Y, 1);
         this.Update();
     }
     public OnRemove(Args:any) : void

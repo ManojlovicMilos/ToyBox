@@ -1,20 +1,14 @@
-export  { Collision, ColliderObject };
+export  { Collision };
 
-import { Axis, Vertex } from "./Vertex";
+import { Axis, Vector } from "../Vector";
 import { CollisionResult } from "./CollisionResult";
-import { CollisionType, CollisionValue } from "./CollisionValue";
+import { Collider } from "./Collider"; 
+import { CollisionType } from "./CollisionData";
 
-class ColliderObject
-{
-    public Position:Vertex;
-    public Scale:Vertex;
-    public Type:CollisionType;
-    public Reference:any;
-}
 class Collision
 {
     public static FocusOffset:number = 10;
-    public static Check(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    public static Check(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         if(Collider1.Type == CollisionType.Radius)
         {
@@ -32,7 +26,7 @@ class Collision
         }
         return new CollisionResult();
     }
-    private static CheckRadiusToRadius(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRadiusToRadius(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         if(Collision.CheckRadius(Collider1, Collider2))
@@ -44,14 +38,14 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRadiusToRectangular(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRadiusToRectangular(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         let Collided:boolean = false;
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
         if(Collider1.Position.Y > Collider2.Position.Y - Collider2.Scale.Y / 2.0 && Collider1.Position.Y < Collider2.Position.Y + Collider2.Scale.Y / 2.0)
         {
             Collided = Collided || Collision.CheckRadiusToLineX(Collider1, Collider2.Position.X - Collider2.Scale.X / 2.0);
@@ -72,14 +66,14 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRadiusToHorizontal(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRadiusToHorizontal(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         let Collided:boolean = false;
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
         if(Collider1.Position.Y > Collider2.Position.Y - Collider2.Scale.Y / 2.0 && Collider1.Position.Y < Collider2.Position.Y + Collider2.Scale.Y / 2.0)
         {
             Collided = Collided || Collision.CheckRadiusToLineX(Collider1, Collider2.Position.X - Collider2.Scale.X / 2.0);
@@ -93,14 +87,14 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRadiusToVertical(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRadiusToVertical(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         let Collided:boolean = false;
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRadiusToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
         if(Collider1.Position.X > Collider2.Position.X - Collider2.Scale.X / 2.0 && Collider1.Position.X < Collider2.Position.X + Collider2.Scale.X / 2.0)
         {
             Collided = Collided || Collision.CheckRadiusToLineY(Collider1, Collider2.Position.Y - Collider2.Scale.Y / 2.0);
@@ -114,7 +108,7 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRectangularToRadius(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRectangularToRadius(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = Collision.CheckRadiusToRectangular(Collider2, Collider1);
         Result.Revert();
@@ -122,14 +116,14 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRectangularToRectangular(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRectangularToRectangular(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         let Collided:boolean = false;
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
         if(Collider1.Position.Y > Collider2.Position.Y - Collider2.Scale.Y / 2.0 && Collider1.Position.Y < Collider2.Position.Y + Collider2.Scale.Y / 2.0)
         {
             Collided = Collided || Collision.CheckRadiusToLineX(Collider1, Collider2.Position.X - Collider2.Scale.X / 2.0);
@@ -149,14 +143,14 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRectangularToHorizontal(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRectangularToHorizontal(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         let Collided:boolean = false;
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
         if(Collider1.Position.Y > Collider2.Position.Y - Collider2.Scale.Y / 2.0 && Collider1.Position.Y < Collider2.Position.Y + Collider2.Scale.Y / 2.0)
         {
             Collided = Collided || Collision.CheckRadiusToLineX(Collider1, Collider2.Position.X - Collider2.Scale.X / 2.0);
@@ -170,14 +164,14 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRectangularToVertical(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
+    private static CheckRectangularToVertical(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         let Collided:boolean = false;
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
-        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vertex(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y - Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X - Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
+        Collided = Collided || Collision.CheckRectangleToPoint(Collider1, new Vector(Collider2.Position.X + Collider2.Scale.X / 2.0, Collider2.Position.Y + Collider2.Scale.Y / 2.0, 0));
         if(Collider1.Position.X > Collider2.Position.X - Collider2.Scale.X / 2.0 && Collider1.Position.X < Collider2.Position.X + Collider2.Scale.X / 2.0)
         {
             Collided = Collided || Collision.CheckRadiusToLineY(Collider1, Collider2.Position.Y - Collider2.Scale.Y / 2.0);
@@ -191,48 +185,48 @@ class Collision
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
-    private static CheckRadius(Collider1:ColliderObject, Collider2:ColliderObject) : boolean
+    private static CheckRadius(Collider1:Collider, Collider2:Collider) : boolean
     {
         let Collider1Radius:number = (Collider1.Scale.X > Collider1.Scale.Y) ? Collider1.Scale.Y / 2.0 : Collider1.Scale.X / 2.0;
         let Collider2Radius:number = (Collider2.Scale.X > Collider2.Scale.Y) ? Collider2.Scale.Y / 2.0 : Collider2.Scale.X / 2.0;
-        let Distance:number = Vertex.Distance(Collider1.Position, Collider2.Position);
+        let Distance:number = Vector.Distance(Collider1.Position, Collider2.Position);
         return Distance < Collider1Radius + Collider2Radius;
     }
-    private static CheckRadiusToPoint(Collider:ColliderObject, Position:Vertex) : boolean
+    private static CheckRadiusToPoint(Collider:Collider, Position:Vector) : boolean
     {
         let ColliderRadius:number = (Collider.Scale.X > Collider.Scale.Y) ? Collider.Scale.Y / 2.0 : Collider.Scale.X / 2.0;
-        let Distance:number = Vertex.Distance(Collider.Position, Position);
+        let Distance:number = Vector.Distance(Collider.Position, Position);
         return Distance < ColliderRadius;
     }
-    private static CheckRectangleToPoint(Collider:ColliderObject, Position:Vertex) : boolean
+    private static CheckRectangleToPoint(Collider:Collider, Position:Vector) : boolean
     {
         let XCollision:boolean = Collider.Position.X - Collider.Scale.X / 2.0 < Position.X && Collider.Position.X + Collider.Scale.X / 2.0 > Position.X;
         let YCollision:boolean = Collider.Position.Y - Collider.Scale.Y / 2.0 < Position.Y && Collider.Position.Y + Collider.Scale.Y / 2.0 > Position.Y;
         return XCollision && YCollision;
     }
-    private static CheckRadiusToLineX(Collider:ColliderObject, X:number) : boolean
+    private static CheckRadiusToLineX(Collider:Collider, X:number) : boolean
     {
         return Math.abs(Collider.Position.X - X) < Collider.Scale.X / 2.0;
     }
-    private static CheckRadiusToLineY(Collider:ColliderObject, Y:number) : boolean
+    private static CheckRadiusToLineY(Collider:Collider, Y:number) : boolean
     {
         return Math.abs(Collider.Position.Y - Y) < Collider.Scale.Y / 2.0;
     }
-    private static CheckRectangleToLineX(Collider:ColliderObject, Position:Vertex) : boolean
+    private static CheckRectangleToLineX(Collider:Collider, Position:Vector) : boolean
     {
         let XCollision:boolean = Collider.Position.X - Collider.Scale.X / 2.0 < Position.X && Collider.Position.X + Collider.Scale.X / 2.0 > Position.X;
         let YCollision:boolean = Collider.Position.Y - Collider.Scale.Y / 2.0 < Position.Y && Collider.Position.Y + Collider.Scale.Y / 2.0 > Position.Y;
         return XCollision && YCollision;
     }
-    private static GetCollisionCubic(Collider:ColliderObject, Position:Vertex) : CollisionResult
+    private static GetCollisionCubic(Collider:Collider, Position:Vector) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         return Result;
     }
-    public static GetCollision4Way(Position1:Vertex, Position2:Vertex) : CollisionResult
+    public static GetCollision4Way(Position1:Vector, Position2:Vector) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
-        let Angle:number = Vertex.Angle(Position2, Position1);
+        let Angle:number = Vector.Angle(Position2, Position1);
         if(Angle < 45)
         {
             Result.Left = true;
@@ -255,10 +249,10 @@ class Collision
         }
         return Result;
     }
-    public static GetCollision8Way(Position1:Vertex, Position2:Vertex) : CollisionResult
+    public static GetCollision8Way(Position1:Vector, Position2:Vector) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
-        let Angle:number = Vertex.Angle(Position2, Position1);
+        let Angle:number = Vector.Angle(Position2, Position1);
         if(Angle < 22.5)
         {
             Result.Left = true;
@@ -301,7 +295,7 @@ class Collision
         }
         return Result;
     }
-    private static GetCollisionRectangularWay(Collider:ColliderObject, Position:Vertex) : CollisionResult
+    private static GetCollisionRectangularWay(Collider:Collider, Position:Vector) : CollisionResult
     {
         let Result:CollisionResult = new CollisionResult();
         if(Collider.Position.X - Collider.Scale.X / 2.0 > Position.X) Result.Left = true;
@@ -310,11 +304,11 @@ class Collision
         if(Collider.Position.Y + Collider.Scale.Y / 2.0 < Position.Y) Result.Bottom = true;
         return Result;
     }
-    private static GetDefaultRectangularWay(Collider:ColliderObject, Position:Vertex) : CollisionResult
+    private static GetDefaultRectangularWay(Collider:Collider, Position:Vector) : CollisionResult
     {
         return Collision.GetCollisionRectangularWay(Collider, Position);
     }
-    private static UpdateCollidersList(Collider:ColliderObject, Result:CollisionResult) : void 
+    private static UpdateCollidersList(Collider:Collider, Result:CollisionResult) : void 
     { 
         if(!Result.Collision) return; 
         Result.Colliders.push(Collider); 

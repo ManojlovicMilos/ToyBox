@@ -11,7 +11,7 @@ enum Quality
 }
 class Settings
 {
-    public static Version: string = "0.2.1";
+    public static Version: string = "0.3.0";
     public static LibPath: string = "Resources/";
     public static Graphics: Quality = Quality.High;
     public static IgnoreUICSS: boolean = true;

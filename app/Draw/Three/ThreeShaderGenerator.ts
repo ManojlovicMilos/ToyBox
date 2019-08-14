@@ -8,7 +8,7 @@ import { ThreeNodeShaders } from "./ThreeNodeShaders";
 class ThreeShaderGenerator
 {
     private static _Passed:Engine.MaterialNode[];
-    public static GenerateFragment(Material:Engine.Material) : string
+    public static GenerateFragment(Material:Engine.NodeMaterial) : string
     {
         ThreeShaderGenerator._Passed = [];
         let Code = ThreeNodeShaders.Single.Pool;
@@ -19,7 +19,7 @@ class ThreeShaderGenerator
         Shader += Code["FragmentFooter"];
         return Shader;
     }
-    private static Inputs(Material:Engine.Material) : string
+    private static Inputs(Material:Engine.NodeMaterial) : string
     {
         let InputsText:string = "";
         for(let i in Material.Inputs)
@@ -29,7 +29,7 @@ class ThreeShaderGenerator
         }
         return InputsText;
     }
-    private static NodePass(Shader:string, Node:Engine.MaterialNode, Material:Engine.Material) : string
+    private static NodePass(Shader:string, Node:Engine.MaterialNode, Material:Engine.NodeMaterial) : string
     {
         if(ThreeShaderGenerator._Passed.indexOf(Node) != -1) return Shader;
         ThreeShaderGenerator._Passed.push(Node);
@@ -73,12 +73,12 @@ class ThreeShaderGenerator
         }
         if(NodeValue.Type == Engine.MaterialNodeValueType.Vector2)
         {
-            let VVal:Math.Vertex = <Math.Vertex>NodeValue.Value;
+            let VVal:Math.Vector = <Math.Vector>NodeValue.Value;
             return "vec2(" + VVal.X + "," + VVal.Y + ")";
         }
         if(NodeValue.Type == Engine.MaterialNodeValueType.Vector3)
         {
-            let VVal:Math.Vertex = <Math.Vertex>NodeValue.Value;
+            let VVal:Math.Vector = <Math.Vector>NodeValue.Value;
             return "vec3(" + VVal.X + "," + VVal.Y + "," + VVal.Z + ")";
         }
         if(NodeValue.Type == Engine.MaterialNodeValueType.Vector4)

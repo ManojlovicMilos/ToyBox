@@ -9,7 +9,7 @@ export class BufferUtil
 export class CollisionUtil
 {
     static CheckCollision(Object1:Engine.DrawObject, Object2:Engine.DrawObject)
-    static CreateColliderObject(Object:Engine.DrawObject) : Math.ColliderObject
+    static CreateColliderObject(Object:Engine.DrawObject) : Math.Collider
     static CalculateCollisions(Object:Engine.DrawObject, Colliders:Engine.DrawObject[]) : Math.CollisionResult
     static CalculateTypeCollisions(Type:string, Object:Engine.DrawObject, Colliders:Engine.DrawObject[]) : void
     static Check(Object:Engine.DrawObject, Scene:Engine.Scene2D) : void
@@ -17,8 +17,8 @@ export class CollisionUtil
 
 export class Convert
 {
-    static VerticesToByteArray(Vertices:Math.Vertex[], Relevant:number) : Float32Array
-    static DrawObjectToCollider(Object:Engine.DrawObject) : Math.ColliderObject
+    static VerticesToByteArray(Vertices:Math.Vector[], Relevant:number) : Float32Array
+    static DrawObjectToCollider(Object:Engine.DrawObject) : Math.Collider
 }
 
 export class Log
@@ -40,16 +40,16 @@ export class Log
 
 export class SceneObjectUtil
 {
-    static CreateSprite(Name?:string, Images?:string[], Position?:Math.Vertex, Size?:Math.Vertex) : Engine.Sprite
-    static CreateTile(Name?:string, Images?:string[], Position?:Math.Vertex, Size?:Math.Vertex) : Engine.Tile
+    static CreateSprite(Name?:string, Images?:string[], Position?:Math.Vector, Size?:Math.Vector) : Engine.Sprite
+    static CreateTile(Name?:string, Images?:string[], Position?:Math.Vector, Size?:Math.Vector) : Engine.Tile
 }
 
 export class DPad extends Engine.Tile
 {
     static All:DPad[];
     Press:Function[];
-    constructor(Old?:DPad, Position?:Math.Vertex, Size?:Math.Vertex)
-    Update(Position:Math.Vertex, Size:Math.Vertex) : void
+    constructor(Old?:DPad, Position?:Math.Vector, Size?:Math.Vector)
+    Update(Position:Math.Vector, Size:Math.Vector) : void
     SetColors(DPad:Math.Color, Directions:Math.Color) : void
 }
 
@@ -57,8 +57,8 @@ export class Analog extends Engine.Tile
 {
     static All:Analog[];
     Press:Function[];
-    constructor(Old?:Analog, Position?:Math.Vertex, Size?:Math.Vertex)
-    Update(Position:Math.Vertex, Size:Math.Vertex) : void
+    constructor(Old?:Analog, Position?:Math.Vector, Size?:Math.Vector)
+    Update(Position:Math.Vector, Size:Math.Vector) : void
     SetColors(Stick:Math.Color, Pointer:Math.Color) : void
 }
 

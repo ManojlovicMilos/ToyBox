@@ -1,10 +1,10 @@
 export { ShaderMaterial }
 
 import { Type } from "./../Types";
-import { Material } from "./Material";
+import { CustomMaterial } from "./CustomMaterial";
 import { ShaderCode } from "./ShaderCode";
 
-class ShaderMaterial extends Material
+class ShaderMaterial extends CustomMaterial
 {
     private _Shaders:ShaderCode;
     public get Shaders():ShaderCode { return this._Shaders; }

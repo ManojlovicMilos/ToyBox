@@ -19,7 +19,7 @@ class ThreeNodeShaders
     {
         this._Pool = {};
 
-        this._Pool["Vertex"] = `
+        this._Pool["Vector"] = `
         varying vec2 vUv;
         varying vec3 vPosition;
         uniform float repeatx;

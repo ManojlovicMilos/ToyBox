@@ -12,7 +12,7 @@ class Analog extends Engine.Tile
     private _Pointer:Engine.Tile;
     private _Press:Function[];
     public get Press():Function[] { return this._Press; }
-    public constructor(Old?:Analog, Position?:Math.Vertex, Size?:Math.Vertex)
+    public constructor(Old?:Analog, Position?:Math.Vector, Size?:Math.Vector)
     {
         super(Old);
         this._Touch = false;
@@ -49,7 +49,7 @@ class Analog extends Engine.Tile
         Pointer.Fixed = true;
         this._Pointer = Pointer;
     }
-    public Update(Position:Math.Vertex, Size:Math.Vertex)
+    public Update(Position:Math.Vector, Size:Math.Vector)
     {
         if (Position) this.Trans.Translation = Position.Copy();
         if (Size) this.Trans.Scale = Size.Copy();
@@ -85,14 +85,14 @@ class Analog extends Engine.Tile
     {
         if(this._TouchID != Args.ID) return;
         if(!this._Touch) return false;
-        if(Math.Vertex.Distance(Args.Location, this.Trans.Translation) > this.Trans.Scale.X / 2)
+        if(Math.Vector.Distance(Args.Location, this.Trans.Translation) > this.Trans.Scale.X / 2)
         {
             this.OnPress({Pressed:false});
             this._Touch = false;
             return false;
         }
-        let Angle:number = Math.Vertex.Angle(this.Trans.Translation, Args.Location);
-        this._Pointer.Trans.Translation = new Math.Vertex(Args.Location.X, Args.Location.Y, this.Trans.Translation.Z + 0.1);
+        let Angle:number = Math.Vector.Angle(this.Trans.Translation, Args.Location);
+        this._Pointer.Trans.Translation = new Math.Vector(Args.Location.X, Args.Location.Y, this.Trans.Translation.Z + 0.1);
         this.OnPress({Pressed:true, Angle:Angle});
         return true;
     }

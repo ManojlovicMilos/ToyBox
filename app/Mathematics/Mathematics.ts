@@ -1,12 +1,27 @@
-import { Axis, Vertex } from "./Vertex";
-import { Transformation } from "./Transformation";
-import { MatrixMode, Matrix, MatrixTransformer } from "./MatrixTransformer";
+//      Collision
+        import { Collider } from "./Collision/Collider";
+        import { Collision } from "./Collision/Collision";
+        import { CollisionData, CollisionType } from "./Collision/CollisionData";
+        import { CollisionResult } from "./Collision/CollisionResult";
 import { Color } from "./Color";
-import { CollisionResult } from "./CollisionResult";
-import { Collision, ColliderObject } from "./Collision";
-import { CollisionType, CollisionValue } from "./CollisionValue";
 import { Random } from "./Functions";
+import { MatrixMode, Matrix, MatrixTransformer } from "./MatrixTransformer";
+import { Transformation } from "./Transformation";
+import { Axis, Vector } from "./Vector";
 
-export { Axis, Vertex, Transformation, MatrixMode, Matrix, MatrixTransformer,
-        Color, Collision, CollisionType, CollisionResult, CollisionValue, ColliderObject,
-        Random };
+export {        
+        // Collision
+                Collider,
+                Collision,
+                CollisionData,
+                CollisionType,
+                CollisionResult,
+        Color,
+        Random,
+        MatrixMode,
+        Matrix,
+        MatrixTransformer,
+        Transformation,
+        Axis,
+        Vector
+};

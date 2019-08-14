@@ -5,7 +5,7 @@ import * as Util from "./../../Util/Util";
 import * as Math from "./../../Mathematics/Mathematics";
 
 import { Type } from "./../Types";
-import { SceneEventPackage } from "./../Events/SceneEventPackage";
+import { SceneEvents } from "./../Events/SceneEvents";
 import { SceneObject } from "../SceneObject/SceneObject";
 import { SoundObject } from "../SceneObject/SoundObject";
 import { DrawObject } from "../SceneObject/DrawObject/DrawObject";
@@ -17,12 +17,12 @@ class Scene extends Core.BaseObject
 {
     protected _Active:boolean;
     private _BackColor:Math.Color;
-    private _Events:SceneEventPackage;
+    private _Events:SceneEvents;
     private _Objects:SceneObject[];
     public get Active():boolean { return this._Active; }
     public get BackColor():Math.Color { return this._BackColor; }
     public set BackColor(value:Math.Color) { this._BackColor = value; }
-    public get Events():SceneEventPackage { return this._Events; }
+    public get Events():SceneEvents { return this._Events; }
     public get Objects():SceneObject[] { return this._Objects; }
     public set Objects(value:SceneObject[]) { this._Objects = value; }
     public get DrawObjects() : DrawObject[] { return <DrawObject[]>this.FindByType(Type.DrawObject); }
@@ -44,7 +44,7 @@ class Scene extends Core.BaseObject
         else
         {
             this._BackColor = DEFAULT_SCENE_COLOR;
-            this._Events = new SceneEventPackage();
+            this._Events = new SceneEvents();
         }
     }
     public Copy() : Scene

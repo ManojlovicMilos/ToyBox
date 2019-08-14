@@ -8,7 +8,7 @@ class ShaderCode
     public set Vertex(value:string) { this._Vertex = value; }
     public get Fragment():string { return this._Fragment; }
     public set Fragment(value:string) { this._Fragment = value; }
-    public constructor(Old?:ShaderCode, Vertex?:string, Fragment?:string)
+    public constructor(Old?:ShaderCode, Vector?:string, Fragment?:string)
     {
         if(Old)
         {
@@ -19,7 +19,7 @@ class ShaderCode
         {
             this._Vertex = "";
             this._Fragment = "";
-            if(Vertex) this._Vertex = Vertex;
+            if(Vector) this._Vertex = Vector;
             if(Fragment) this._Fragment = Fragment;
         }
     }

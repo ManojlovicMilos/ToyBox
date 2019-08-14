@@ -26,7 +26,7 @@ class Runner
     public Data: { [key: string]:any; } = {};
     public get Engine():Draw.DrawEngine { return this._DrawEngine; }
     public static get Current():Runner { return Runner._Current; }
-    public static get Resolution():Math.Vertex { return Runner._Current._DrawEngine.Resolution; }
+    public static get Resolution():Math.Vector { return Runner._Current._DrawEngine.Resolution; }
     public constructor(Game:Engine.Game, EngineType:Draw.DrawEngineType)
     {
         this._Stop = true;
@@ -78,7 +78,7 @@ class Runner
         }
         Util.Log.Warning("Scene " + SceneName + " does not exist in " + this._Game.Name + ".", this._Game.Scenes);
     }
-    public SetResolution(Resolution:Math.Vertex, FixedSize?:boolean)
+    public SetResolution(Resolution:Math.Vector, FixedSize?:boolean)
     {
         this._DrawEngine.UpdateResolution(Resolution, FixedSize);
     }
@@ -101,7 +101,7 @@ class Runner
         cancelAnimationFrame(this._LoopHandle);
         cancelAnimationFrame(this._DrawHandle);
     }
-    private EngineInit(EngineType:Draw.DrawEngineType, Resolution?:Math.Vertex) : void
+    private EngineInit(EngineType:Draw.DrawEngineType, Resolution?:Math.Vector) : void
     {
         if(EngineType == Draw.DrawEngineType.ThreeJS)
         {
@@ -288,20 +288,20 @@ class Runner
         if (this._Current.Is(Engine.Type.Scene2D))
         {
             let Current2DScene:Engine.Scene2D  = <Engine.Scene2D>this._Current;
-            let STrans:Math.Vertex = Current2DScene.Trans.Translation;
-            STrans = new Math.Vertex(STrans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, STrans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
+            let STrans:Math.Vector = Current2DScene.Trans.Translation;
+            STrans = new Math.Vector(STrans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, STrans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
             for (let i = this._Current.Objects.length - 1; i >= 0; i--)
             {
                 if(!this._Current.Objects[i]) continue;
                 if (this._Current.Objects[i].Is(Engine.Type.DrawObject))
                 {
                     let Current:Engine.DrawObject = <Engine.DrawObject>this._Current.Objects[i];
-                    let Trans:Math.Vertex = Current.Trans.Translation;
-                    Trans = new Math.Vertex(Trans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Trans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
-                    let Scale:Math.Vertex = Current.Trans.Scale;
+                    let Trans:Math.Vector = Current.Trans.Translation;
+                    Trans = new Math.Vector(Trans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Trans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
+                    let Scale:Math.Vector = Current.Trans.Scale;
                     let X:number = Event.offsetX;
                     let Y:number = Event.offsetY;
-                    Scale = new Math.Vertex(Scale.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Scale.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 1);
+                    Scale = new Math.Vector(Scale.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Scale.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 1);
                     if ((Current.Fixed && Trans.X - Scale.X / 2 < X && X < Trans.X + Scale.X / 2 && Trans.Y - Scale.Y / 2 < Y && Y < Trans.Y + Scale.Y / 2) ||
                     (STrans.X + Trans.X - Scale.X / 2 < X && X < STrans.X + Trans.X + Scale.X / 2 && STrans.Y + Trans.Y - Scale.Y / 2 < Y && Y < STrans.Y + Trans.Y + Scale.Y / 2))
                     {
@@ -327,19 +327,19 @@ class Runner
         if (this._Current.Is(Engine.Type.Scene2D))
         {
             let Current2DScene:Engine.Scene2D  = <Engine.Scene2D>this._Current;
-            let STrans:Math.Vertex = Current2DScene.Trans.Translation;
-            STrans = new Math.Vertex(STrans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, STrans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
+            let STrans:Math.Vector = Current2DScene.Trans.Translation;
+            STrans = new Math.Vector(STrans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, STrans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
             for (let i = this._Current.Objects.length - 1; i >= 0; i--)
             {
                 if (this._Current.Objects[i].Is(Engine.Type.DrawObject))
                 {
                     let Current:Engine.DrawObject = <Engine.DrawObject>this._Current.Objects[i];
-                    let Trans:Math.Vertex = Current.Trans.Translation;
-                    Trans = new Math.Vertex(Trans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Trans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
-                    let Scale:Math.Vertex = Current.Trans.Scale;
+                    let Trans:Math.Vector = Current.Trans.Translation;
+                    Trans = new Math.Vector(Trans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Trans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
+                    let Scale:Math.Vector = Current.Trans.Scale;
                     let X:number = Position.X;
                     let Y:number = Position.Y;
-                    Scale = new Math.Vertex(Scale.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Scale.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 1);
+                    Scale = new Math.Vector(Scale.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Scale.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 1);
                     if ((Current.Fixed && Trans.X - Scale.X / 2 < X && X < Trans.X + Scale.X / 2 && Trans.Y - Scale.Y / 2 < Y && Y < Trans.Y + Scale.Y / 2) ||
                     (STrans.X + Trans.X - Scale.X / 2 < X && X < STrans.X + Trans.X + Scale.X / 2 && STrans.Y + Trans.Y - Scale.Y / 2 < Y && Y < STrans.Y + Trans.Y + Scale.Y / 2))
                     {

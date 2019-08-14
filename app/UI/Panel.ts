@@ -1,12 +1,12 @@
 export { Panel }
 
 import { Settings } from "../Core/Settings";
-import { Control } from "./Control";
+import { UIControl } from "./UIControl";
 
-class Panel extends Control
+class Panel extends UIControl
 {
-    private _Children:Control[];
-    public get Children():Control[] { return this._Children; }
+    private _Children:UIControl[];
+    public get Children():UIControl[] { return this._Children; }
     public constructor(Old?:Panel)
     {
         super(Old);
@@ -47,7 +47,7 @@ class Panel extends Control
             this.Element.appendChild(this._Children[i].Element);
         }
     }
-    public Attach(Child:Control) : void
+    public Attach(Child:UIControl) : void
     {
         this._Children.push(Child);
     }

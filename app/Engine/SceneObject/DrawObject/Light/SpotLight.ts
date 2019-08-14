@@ -23,7 +23,7 @@ class SpotLight extends Light
         }
         else
         {
-            this.Direction = new Math.Vertex(0,1,0);
+            this.Direction = new Math.Vector(0,1,0);
             this._RadiusAngle = 60;
         }
     }

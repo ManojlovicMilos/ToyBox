@@ -1,6 +1,5 @@
 export  { ProgressBar };
 
-import * as Data from "./../Data/Data";
 import * as Engine from "./../Engine/Engine";
 import * as Math from "./../Mathematics/Mathematics";
 
@@ -31,13 +30,13 @@ class ProgressBar extends Engine.Tile
         this.Name = "Progress";
         this.Paint = Math.Color.Black;
         this.Fixed = true;
-        this.Position = new Math.Vertex(960, 980, 0.3);
-        this.Size = new Math.Vertex(1520, 30, 1);
+        this.Position = new Math.Vector(960, 980, 0.3);
+        this.Size = new Math.Vector(1520, 30, 1);
         this._Indicator = new Engine.Tile();
         this._Indicator.Name = "ProgressIndicator";
         this._Indicator.Paint = Math.Color.White;
-        this._Indicator.Position = new Math.Vertex(200, 960, 0.3);
-        this._Indicator.Size = new Math.Vertex(1, 30, 1);
+        this._Indicator.Position = new Math.Vector(200, 960, 0.3);
+        this._Indicator.Size = new Math.Vector(1, 30, 1);
     }
     private OnProgress(G:Engine.Game, Args:any)
     {

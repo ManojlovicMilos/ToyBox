@@ -1,11 +1,11 @@
-export  { EventPackage };
+export  { Events};
 
-import { Game } from "./../Game/Game";
+import { Game } from "../Game/Game";
 
-class EventPackage
+class Events
 {
     protected _Data: { [key: string]:Function[] };
-    public constructor(Old?:EventPackage)
+    public constructor(Old?:Events)
     {
         this._Data = {};
         if(Old != null)
@@ -20,9 +20,9 @@ class EventPackage
             }
         }
     }
-    public Copy() : EventPackage
+    public Copy() : Events
     {
-        return new EventPackage(this);
+        return new Events(this);
     }
     public Invoke(EventName:string, CurrentGame:Game, Args:any) : boolean
     {
