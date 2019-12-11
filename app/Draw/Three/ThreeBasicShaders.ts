@@ -14,18 +14,28 @@ class ThreeBasicShaders
             float yval;
             if(flipx == 1) xval = (uv.x)*repeatx;
             else xval = (1.0 - uv.x)*repeatx;
-            if(flipy == 1) yval = (1.0 - uv.y)*repeatx;
-            else yval = (uv.y)*repeatx;
+            if(flipy == 1) yval = (1.0 - uv.y)*repeaty;
+            else yval = (uv.y)*repeaty;
             vUv  = vec2(xval, yval);
 			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
         `;
     public static LitVertex2D : string = `
         varying vec2 vUv;
+        uniform int flipx;
+        uniform int flipy;
+        uniform float repeatx;
+        uniform float repeaty;
         varying vec3 vPosition;
         void main()
         {
-            vUv  = vec2(1.0 - uv.x, uv.y);
+            float xval;
+            float yval;
+            if(flipx == 1) xval = (uv.x)*repeatx;
+            else xval = (1.0 - uv.x)*repeatx;
+            if(flipy == 1) yval = (1.0 - uv.y)*repeaty;
+            else yval = (uv.y)*repeaty;
+            vUv  = vec2(xval, yval);
             vec4 pos = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
             vPosition = pos.xyz;
 			gl_Position = pos;

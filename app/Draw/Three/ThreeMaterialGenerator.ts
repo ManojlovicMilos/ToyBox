@@ -203,6 +203,11 @@ class ThreeMaterialGenerator
             NewTexture.magFilter = Three.NearestFilter;
             NewTexture.minFilter = Three.NearestMipMapNearestFilter;
         }
+        else if(Drawn.Material.Sampling == Engine.TextureSamplingType.Linear)
+        {
+            NewTexture.magFilter = Three.LinearFilter;
+            NewTexture.minFilter = Three.LinearMipMapLinearFilter;
+        }
         return NewTexture;
     }
     public Update2DLights() : void

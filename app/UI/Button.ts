@@ -5,11 +5,8 @@ import * as Math from "./../Mathematics/Mathematics";
 import { Label } from "./Label";
 import { Settings } from "./../Engine/Settings";
 
-import { ControlEventPackage } from "./ControlEventPackage";
-
 class Button extends Label
 {
-    public get Events():ControlEventPackage { return <ControlEventPackage>this._Events; }
     public constructor(Old?:Button, Text?:string)
     {
         super(Old, Text);
@@ -20,7 +17,6 @@ class Button extends Label
         else
         {
             this.BackColor = Math.Color.FromRGBA(127,127,127,255);
-            this._Events = new ControlEventPackage();
         }
     }
     public Copy() : Button
@@ -40,7 +36,6 @@ class Button extends Label
     {
         super.Create();
         this.Element.className += " button";
-        this.Events.Connect(this, this.Element);
         this.Events.MouseEnter.push(this.OnMouseEnter.bind(this));
         this.Events.MouseLeave.push(this.OnMouseLeave.bind(this));
     }

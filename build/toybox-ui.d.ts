@@ -14,11 +14,12 @@ export class Border
 export class ControlEventPackage extends Engine.EventPackage
 {
     Click:Function[];
+    Input:Function[];
     MouseEnter:Function[];
     MouseLeave:Function[];
     constructor(Old?:ControlEventPackage)
     Copy() : ControlEventPackage
-    Connect(Element:HTMLElement) : void
+    Connect(Control:Engine.SceneObject, Element:HTMLElement) : void
 }
 
 export class Control extends Engine.SceneObject
@@ -30,8 +31,10 @@ export class Control extends Engine.SceneObject
     BackColor:Math.Color;
     Border:Border;
     Element:HTMLElement;
+    Events:ControlEventPackage;
     constructor(Old?:Control)
     Copy() : Control
+    Create() : void
     Update() : void
 }
 
@@ -42,20 +45,32 @@ export enum TextAlign
     Center = "center"
 }
 
-export class Label extends Control
+export class Text extends Control
 {
     Text:string;
     Font:string;
     TextSize:number;
     Padding:number;
     TextAlign:TextAlign;
+    TextElement:HTMLElement;
+    constructor(Old?:Text, Text?:string)
+    Copy() : Text
+}
+
+export class Label extends Text
+{
     constructor(Old?:Label, Text?:string)
     Copy() : Label
 }
 
+export class Input extends Text
+{
+    constructor(Old?:Input, Text?:string)
+    Copy() : Input
+}
+
 export class Button extends Label
 {
-    Events:ControlEventPackage;
     constructor(Old?:Button, Text?:string)
     OnMouseEnter(Event:any) : void
     OnMouseLeave(Event:any) : void

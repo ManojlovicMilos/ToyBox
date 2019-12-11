@@ -5,16 +5,17 @@ import * as Engine from "./../Engine/Engine";
 
 import { Settings } from "./../Engine/Settings";
 import { Border } from "./Border";
+import { ControlEventPackage } from "./ControlEventPackage";
 
 class Control extends Engine.SceneObject
 {
-    private _Active:boolean;
-    private _Position:Math.Vertex;
-    private _Size:Math.Vertex;
-    private _ForeColor:Math.Color;
-    private _BackColor:Math.Color;
-    private _Border:Border;
-    private _Element:HTMLElement;
+    protected _Active:boolean;
+    protected _Position:Math.Vertex;
+    protected _Size:Math.Vertex;
+    protected _ForeColor:Math.Color;
+    protected _BackColor:Math.Color;
+    protected _Border:Border;
+    protected _Element:HTMLElement;
     protected _Offset:Math.Vertex;
     protected _Scale:Math.Vertex;
     public get Active():boolean { return this._Active; }
@@ -32,9 +33,11 @@ class Control extends Engine.SceneObject
     public get Border():Border { return this._Border; }
     public set Border(value:Border) { this._Border = value; this.Update(); }
     public get Element():HTMLElement { return this._Element; }
+    public get Events():ControlEventPackage { return <ControlEventPackage>this._Events; }
     public constructor(Old?:Control)
     {
         super(Old);
+        this._Events = new ControlEventPackage();
         if(Old)
         {
             this._Active = Old._Active;
@@ -98,6 +101,7 @@ class Control extends Engine.SceneObject
     {
         this._Element = <HTMLDivElement>(document.createElement('div'));
         this._Element.className = "control";
+        this.Events.Connect(this, this.Element);
     }
     public OnSwitch() : void
     {

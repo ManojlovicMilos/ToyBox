@@ -63,7 +63,7 @@ class Material
             this._Nodes = [];
             this._Inputs = [];
             this._Shaders = new ShaderCode();
-            this._Sampling = TextureSamplingType.Nearest;
+            this._Sampling = TextureSamplingType.Linear;
         }
     }
     public Copy() : Material
