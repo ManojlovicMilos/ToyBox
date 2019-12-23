@@ -36,7 +36,7 @@ class Material extends Core.BaseObject
         {
             this._Lit = false;
             this._HasNormals = false;
-            this._Sampling = TextureSamplingType.Nearest;
+            this._Sampling = TextureSamplingType.Linear;
         }
     }
     public Copy() : Material

@@ -1,5 +1,6 @@
 export  { Collision };
 
+import { Settings } from "../../Core/Settings";
 import { Axis, Vector } from "../Vector";
 import { CollisionResult } from "./CollisionResult";
 import { Collider } from "./Collider"; 
@@ -7,7 +8,6 @@ import { CollisionType } from "./CollisionData";
 
 class Collision
 {
-    public static FocusOffset:number = 10;
     public static Check(Collider1:Collider, Collider2:Collider) : CollisionResult
     {
         if(Collider1.Type == CollisionType.Radius)
@@ -34,7 +34,7 @@ class Collision
             Result = Collision.GetCollision8Way(Collider1.Position, Collider2.Position);
             Result.Collision = true;
         }
-        Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
+        if(Settings.Mathematics.Collision.AdditionalSideCheck) Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
@@ -62,7 +62,7 @@ class Collision
             Result.Revert();
             Result.Collision = true;
         }
-        Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
+        if(Settings.Mathematics.Collision.AdditionalSideCheck) Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }

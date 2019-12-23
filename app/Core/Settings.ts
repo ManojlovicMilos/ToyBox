@@ -1,21 +1,41 @@
-export  { Settings, Quality };
+export  { Settings };
 
-const DATA_SERIALIZATION = "Data";
-const RESOURCE_SERIALIZATION = "Resource";
-
-enum Quality
+enum SerializationType
+{
+    Data = "Data",
+    Resource = "Resource"
+}
+enum GraphicsQuality
 {
     Low = 1,
     Medium = 2,
     High = 4,
 }
-class Settings
+let Settings: any =
 {
-    public static Version: string = "0.3.0";
-    public static LibPath: string = "Resources/";
-    public static Graphics: Quality = Quality.High;
-    public static IgnoreUICSS: boolean = true;
-    public static GlobalFontScale: number = 1.0;
-    public static GlobalFontFamily: string = "Arial";
-    public static SerializationType: string = RESOURCE_SERIALIZATION;
+    Version: "0.3.0",
+    Data:
+    {
+        LibPath: "Resources/"
+    },
+    Graphics:
+    {
+        Quality: GraphicsQuality.High
+    },
+    Mathematics:
+    {
+        Collision:
+        {
+            AdditionalSideCheck: true
+        }
+    },
+    UI:
+    {
+        IgnoreUICSS: true,
+        GlobalFontScale: 1.0,
+        GlobalFontFamily: "Arial",
+        SerializationType: SerializationType.Resource
+    },
+    GraphicsQuality,
+    SerializationType
 }

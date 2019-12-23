@@ -5,22 +5,15 @@ import * as Math from "./../Mathematics/Mathematics";
 import { Label } from "./Label";
 import { Settings } from "../Core/Settings";
 
-import { UIControlEvents } from "./UIControlEvents";
-
 class Button extends Label
 {
-    public get Events():UIControlEvents { return <UIControlEvents>this._Events; }
     public constructor(Old?:Button, Text?:string)
     {
         super(Old, Text);
-        if(Old)
-        {
-
-        }
+        if(Old) { }
         else
         {
             this.BackColor = Math.Color.FromRGBA(127,127,127,255);
-            this._Events = new UIControlEvents();
         }
     }
     public Copy() : Button
@@ -40,7 +33,6 @@ class Button extends Label
     {
         super.Create();
         this.Element.className += " button";
-        this.Events.Connect(this, this.Element);
         this.Events.MouseEnter.push(this.OnMouseEnter.bind(this));
         this.Events.MouseLeave.push(this.OnMouseLeave.bind(this));
     }

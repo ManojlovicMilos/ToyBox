@@ -1,22 +1,24 @@
 export { UIControl }
 
+import * as Util from "./../Util/Util";
 import * as Math from "../Mathematics/Mathematics";
 import * as Engine from "../Engine/Engine";
 
 import { Settings } from "../Core/Settings";
 import { Border } from "./Border";
+import { UIControlEvents } from "./UIControlEvents";
 
 const UI_CONTROL_TYPE = "UIControl"
 
 class UIControl extends Engine.SceneObject
 {
-    private _Active:boolean;
-    private _Position:Math.Vector;
-    private _Size:Math.Vector;
-    private _ForeColor:Math.Color;
-    private _BackColor:Math.Color;
-    private _Border:Border;
-    private _Element:HTMLElement;
+    protected _Active:boolean;
+    protected _Position:Math.Vector;
+    protected _Size:Math.Vector;
+    protected _ForeColor:Math.Color;
+    protected _BackColor:Math.Color;
+    protected _Border:Border;
+    protected _Element:HTMLElement;
     protected _Offset:Math.Vector;
     protected _Scale:Math.Vector;
     public get Active():boolean { return this._Active; }
@@ -34,6 +36,7 @@ class UIControl extends Engine.SceneObject
     public get Border():Border { return this._Border; }
     public set Border(value:Border) { this._Border = value; this.Update(); }
     public get Element():HTMLElement { return this._Element; }
+    public get Events():UIControlEvents { return <UIControlEvents>this._Events; }
     public constructor(Old?:UIControl)
     {
         super(Old);
@@ -49,6 +52,7 @@ class UIControl extends Engine.SceneObject
             this._ForeColor = Old._ForeColor.Copy();
             this._BackColor = Old.BackColor.Copy();
             this._Border = Old._Border.Copy();
+            this._Events = new UIControlEvents();
         }
         else
         {
@@ -60,6 +64,7 @@ class UIControl extends Engine.SceneObject
             this._ForeColor = Math.Color.Black;
             this._BackColor = Math.Color.White;
             this._Border = new Border();
+            this._Events = new UIControlEvents();
         }
     }
     public Copy() : UIControl
@@ -95,12 +100,18 @@ class UIControl extends Engine.SceneObject
     {
         this.Update();
         let UIParent:HTMLElement = document.getElementById("ui-parent");
+        if(!UIParent)
+        {
+            Util.Log.Error("UI Parent Not Found", "Unnable to find UI parent", "UI");
+        }
         UIParent.appendChild(this._Element);
     }
     protected Create() : void
     {
         this._Element = <HTMLDivElement>(document.createElement('div'));
+        this._Element.id = this.ID;
         this._Element.className = "control";
+        this.Events.Connect(this, this.Element);
     }
     public OnSwitch() : void
     {

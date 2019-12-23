@@ -90,6 +90,7 @@
     import { SceneObjectUtil } from "./Util/SceneObject";
     import { BufferUtil } from "./Util/Buffer";
     import { Log } from "./Util/Log";
+    import { ProgressBar } from "./Util/ProgressBar"; //Legacy
 
 export {
     //  Core
@@ -177,5 +178,6 @@ export {
         CollisionUtil,
         SceneObjectUtil,
         BufferUtil,
-        Log
+        Log,
+        ProgressBar //Legacy
 };
