@@ -1,6 +1,5 @@
 export { Panel }
 
-import { Settings } from "./../Engine/Settings";
 import { Control } from "./Control";
 
 class Panel extends Control
@@ -33,6 +32,11 @@ class Panel extends Control
         if(!this.Element) return;
         for(let i in this._Children)
         {
+            if(!this._Children[i].Data["AppendedTo" + this.ID])
+            {
+                this.Element.appendChild(this._Children[i].Element);
+                this._Children[i].Data["AppendedTo" + this.ID] = true;
+            }
             this._Children[i].Offset = this.Position;
             this._Children[i].Update();
         }
@@ -45,25 +49,11 @@ class Panel extends Control
         {
             this._Children[i].Update();
             this.Element.appendChild(this._Children[i].Element);
+            this._Children[i].Data["AppendedTo" + this.ID] = true;
         }
     }
     public Attach(Child:Control) : void
     {
         this._Children.push(Child);
-    }
-    public OnAttach(Args:any) : void
-    {
-        // Override
-        for(let i in this._Children) Args.Scene.Attach(this._Children[i]);
-    }
-    public OnRemove(Args:any) : void
-    {
-        // Override
-        for(let i in this._Children) Args.Scene.Remove(this._Children[i]);
-    }
-    public OnToggle(Value:boolean) : void
-    {
-        // Override
-        for(let i in this._Children) this._Children[i].Active = Value;
     }
 }

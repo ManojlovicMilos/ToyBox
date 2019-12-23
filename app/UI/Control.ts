@@ -1,5 +1,6 @@
 export { Control }
 
+import * as Util from "./../Util/Util";
 import * as Math from "./../Mathematics/Mathematics";
 import * as Engine from "./../Engine/Engine";
 
@@ -95,11 +96,16 @@ class Control extends Engine.SceneObject
     {
         this.Update();
         let UIParent:HTMLElement = document.getElementById("ui-parent");
+        if(!UIParent)
+        {
+            Util.Log.Error("UI Parent Not Found", "Unnable to find UI parent", "UI");
+        }
         UIParent.appendChild(this._Element);
     }
     protected Create() : void
     {
         this._Element = <HTMLDivElement>(document.createElement('div'));
+        this._Element.id = this.ID;
         this._Element.className = "control";
         this.Events.Connect(this, this.Element);
     }

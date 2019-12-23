@@ -13,7 +13,8 @@ class ColliderObject
 }
 class Collision
 {
-    public static FocusOffset:number = 10;
+    public static AdditionalSideCheck: boolean = true;
+    public static FocusOffset: number = 10;
     public static Check(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
     {
         if(Collider1.Type == CollisionType.Radius)
@@ -40,7 +41,7 @@ class Collision
             Result = Collision.GetCollision8Way(Collider1.Position, Collider2.Position);
             Result.Collision = true;
         }
-        Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
+        if(this.AdditionalSideCheck) Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
@@ -68,7 +69,7 @@ class Collision
             Result.Revert();
             Result.Collision = true;
         }
-        Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
+        if(this.AdditionalSideCheck) Result.SideCheck(Collision.GetCollision4Way(Collider1.Position, Collider2.Position));
         this.UpdateCollidersList(Collider2, Result); 
         return Result;
     }
