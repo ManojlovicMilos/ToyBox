@@ -8,7 +8,7 @@ import { Settings } from "../Core/Settings";
 import { Border } from "./Border";
 import { UIControlEvents } from "./UIControlEvents";
 
-const UI_CONTROL_TYPE = "UIControl"
+const UI_CONTROL_TYPE = "UIControlObject"
 
 class UIControl extends Engine.SceneObject
 {
@@ -88,7 +88,7 @@ class UIControl extends Engine.SceneObject
         this._Element.style.width = this._Scale.X * this._Size.X + "px";
         this._Element.style.height = this._Scale.Y * this._Size.Y + "px";
         this._Element.style.zIndex = "3";
-        if(Settings.IgnoreUICSS)
+        if(Settings.UI.IgnoreUICSS)
         {
             this._Element.style.color = this._ForeColor.ToString();
             if(this._BackColor.A == 0) this._Element.style.backgroundColor = "rgba(0,0,0,0)";
@@ -126,10 +126,12 @@ class UIControl extends Engine.SceneObject
     }
     public OnRemove(Args:any) : void
     {
+        // Override
         this._Element.remove();
     }
     public OnAttach(Args:any) : void
     {
+        // Override
         super.OnAttach(Args);
         this.Create();
         if(Args.Scene.Current) this.AddElement();

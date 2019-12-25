@@ -5,11 +5,15 @@ import * as Math from "./../Mathematics/Mathematics";
 import { Label } from "./Label";
 import { Settings } from "../Core/Settings";
 
+const BUTTON_TYPE = "UIButtonObject";
+
 class Button extends Label
 {
     public constructor(Old?:Button, Text?:string)
     {
         super(Old, Text);
+        this.RegisterType(BUTTON_TYPE);
+        this.RegisterFactory(() => new Button());
         if(Old) { }
         else
         {
@@ -24,7 +28,7 @@ class Button extends Label
     {
         super.Update();
         if(!this.Element) return;
-        if(Settings.IgnoreUICSS)
+        if(Settings.UI.IgnoreUICSS)
         {
             this.Element.style.cursor = "pointer";
         }
@@ -38,14 +42,14 @@ class Button extends Label
     }
     protected OnMouseEnter(Event:any) : void
     {
-        if(Settings.IgnoreUICSS)
+        if(Settings.UI.IgnoreUICSS)
         {
             this.Element.style.backgroundColor = this.BackColor.Copy().Lighten().ToString();
         }
     }
     protected OnMouseLeave(Event:any) : void
     {
-        if(Settings.IgnoreUICSS)
+        if(Settings.UI.IgnoreUICSS)
         {
             this.Element.style.backgroundColor = this.BackColor.ToString();
         }

@@ -45,7 +45,7 @@ export enum TextAlign
     Center = "center"
 }
 
-export class Text extends UIControl
+export class UIText extends UIControl
 {
     Text:string;
     Font:string;
@@ -54,16 +54,16 @@ export class Text extends UIControl
     TextAlign:TextAlign;
     TextElement:HTMLElement;
     constructor(Old?:Text, Text?:string)
-    Copy() : Text
+    Copy() : UIText
 }
 
-export class Label extends Text
+export class Label extends UIText
 {
     constructor(Old?:Label, Text?:string)
     Copy() : Label
 }
 
-export class Input extends Text
+export class Input extends UIText
 {
     constructor(Old?:Input, Text?:string)
     Copy() : Input

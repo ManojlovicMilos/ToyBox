@@ -36,9 +36,9 @@ class Serialization
         {
             Name: Data.Name,
             Type: Data.Type,
-            Serialization: Settings.SerializationType
+            Serialization: Settings.Data.SerializationType
         };
-        if(Settings.SerializationType != RESOURCE_SERIALIZATION) Package.Data = Data.Serialize();
+        if(Settings.Data.SerializationType != RESOURCE_SERIALIZATION) Package.Data = Data.Serialize();
         else Package.Key = Data.ResourceKey;
         return Package;
     }

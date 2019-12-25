@@ -106,20 +106,20 @@ class ThreeDrawEngine extends DrawEngine
     public Load2DSceneData(Scene:Engine.Scene2D, LoadData:any) : void
     {
         LoadData.Scene.background = new Three.Color(Scene.BackColor.R, Scene.BackColor.G, Scene.BackColor.B);
-        for(let i = 0; i < Scene.DrawObjects.length; i++)
+        let DrawObjects:Engine.DrawObject[] = Scene.DrawObjects;
+        for(let i = 0; i < DrawObjects.length; i++)
         {
             if(LoadData.Report)
             {
-                LoadData.Report(Math.ceil(i * 100.0 / Scene.DrawObjects.length));
+                LoadData.Report(Math.ceil(i * 100.0 / DrawObjects.length));
             }
-            let Drawn:Engine.DrawObject = <Engine.DrawObject>Scene.Objects[i];
-            if(Drawn.IsAnyOf([Engine.Type.Sprite, Engine.Type.Tile]) )
+            if(DrawObjects[i].IsAnyOf([Engine.Type.Sprite, Engine.Type.Tile]) )
             {
-                this.LoadImage(Scene, <Engine.ImageObject>Drawn, LoadData);
+                this.LoadImage(Scene, <Engine.ImageObject>DrawObjects[i], LoadData);
             }
-            else if(Drawn.Is(Engine.Type.Light))
+            else if(DrawObjects[i].Is(Engine.Type.Light))
             {
-                this.LoadLight(Scene, <Engine.Light>Drawn, LoadData);
+                this.LoadLight(Scene, <Engine.Light>DrawObjects[i], LoadData);
             }
         }
         this._Generator.Update2DLights();
@@ -203,7 +203,7 @@ class ThreeDrawEngine extends DrawEngine
         }
     }
     protected LoadSprite(Scene:Engine.Scene2D, Drawn:Engine.Sprite, LoadData:any) : void
-    {  
+    {
         // Override
         if(this.Data[DATA_PREFIX + Drawn.ID] == null)
         {

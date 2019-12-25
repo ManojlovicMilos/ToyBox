@@ -16,7 +16,8 @@ let Settings: any =
     Version: "0.3.0",
     Data:
     {
-        LibPath: "Resources/"
+        LibPath: "Resources/",
+        SerializationType: SerializationType.Resource
     },
     Graphics:
     {
@@ -33,8 +34,7 @@ let Settings: any =
     {
         IgnoreUICSS: true,
         GlobalFontScale: 1.0,
-        GlobalFontFamily: "Arial",
-        SerializationType: SerializationType.Resource
+        GlobalFontFamily: "Arial"
     },
     GraphicsQuality,
     SerializationType

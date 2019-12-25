@@ -1,15 +1,17 @@
 export { Input }
 
-import * as Mathematics from "./../Mathematics/Mathematics";
-
 import { Settings } from "../Core/Settings";
-import { Text } from "./Text";
+import { UIText } from "./UIText";
 
-class Input extends Text
+const INPUT_TYPE = "UIInputObject";
+
+class Input extends UIText
 {
     public constructor(Old?:Input, Text?:string)
     {
         super(Old, Text);
+        this.RegisterType(INPUT_TYPE);
+        this.RegisterFactory(() => new Input());
         if(Old)
         {
 
@@ -40,7 +42,7 @@ class Input extends Text
         this._TextElement.style.backgroundColor = "transparent";
         this._TextElement.style.borderStyle = "none";
         this._TextElement.style.fontFamily = this._Font;
-        this._TextElement.style.fontSize = Math.floor(Settings.GlobalFontScale * this._TextSize) + "px";
+        this._TextElement.style.fontSize = Math.floor(Settings.UI.GlobalFontScale * this._TextSize) + "px";
         this._TextElement.style.outline = "none";
         this.Element.appendChild(this._TextElement);
         this.Events.Connect(this, this._TextElement);

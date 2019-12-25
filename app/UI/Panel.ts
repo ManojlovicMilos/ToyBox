@@ -2,6 +2,8 @@ export { Panel }
 
 import { UIControl } from "./UIControl";
 
+const PANEL_TYPE = "UIPanelObject";
+
 class Panel extends UIControl
 {
     private _Children:UIControl[];
@@ -9,6 +11,8 @@ class Panel extends UIControl
     public constructor(Old?:Panel)
     {
         super(Old);
+        this.RegisterType(PANEL_TYPE);
+        this.RegisterFactory(() => new Panel());
         this._Children = [];
         if(Old)
         {

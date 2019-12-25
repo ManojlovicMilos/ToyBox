@@ -1,12 +1,16 @@
 export { Label  }
 
-import { Text } from "./Text";
+import { UIText } from "./UIText";
 
-class Label extends Text
+const LABEL_TYPE = "UILabelObject";
+
+class Label extends UIText
 {
     public constructor(Old?:Label, Text?:string)
     {
         super(Old, Text);
+        this.RegisterType(LABEL_TYPE);
+        this.RegisterFactory(() => new Label());
         if(Old)
         {
 
