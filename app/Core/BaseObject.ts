@@ -1,9 +1,9 @@
 export  { BaseObject };
 
 import { Uuid } from "./Uuid";
+import { Settings } from "./Settings";
 import { Serialization } from "./Serialization";
 
-const EDITOR_PREFIX = "EDITOR_";
 const TOYBOX_PREFIX = "TOYBOX_";
 
 class BaseObject
@@ -97,8 +97,10 @@ class BaseObject
         let NewData:any = {};
         for(let Key in Data)
         {
-            if(Key.startsWith(EDITOR_PREFIX)) continue;
             if(Key.startsWith(TOYBOX_PREFIX)) continue;
+            let Skip: boolean = false;
+            Settings.Data.IgnoredPrefixes.forEach(Entry => { Key.startsWith(Entry + "_") });
+            if(Skip) continue;
             NewData[Key] = Data;
         }
         return NewData;

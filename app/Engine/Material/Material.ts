@@ -13,7 +13,7 @@ class Material extends Core.BaseObject
 {
     private _Lit: boolean;
     private _HasNormals: boolean;
-    private _Sampling:TextureSamplingType;
+    private _Sampling: TextureSamplingType;
     public get Lit(): boolean { return this._Lit; }
     public set Lit(value:boolean) { this._Lit = value; }
     public get HasNormals(): boolean { return this._HasNormals; }
@@ -23,7 +23,6 @@ class Material extends Core.BaseObject
     public constructor(Old?:Material)
     {
         super(Old);
-        // Problem is material type
         this.RegisterType(Type.Material);
         this.RegisterFactory(() => new Material());
         if(Old != null)

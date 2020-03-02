@@ -1,6 +1,5 @@
 export class BaseObject
 {
-    // Abstract
     ID:string;
     Name:string;
     ResourceKey:string;
@@ -36,21 +35,50 @@ export class Serialization
     static Serialize(Data:BaseObject) : any
 }
 
-export enum Quality
+declare enum SerializationType
+{
+    Data = "Data",
+    Resource = "Resource"
+}
+
+declare enum GraphicsQuality
 {
     Low = 1,
     Medium = 2,
-    High = 4
+    High = 4,
 }
 
+declare class DataSettings
+{
+    LibPath: string;
+    SerializationType: SerializationType;
+    IgnoredPrefixes: string[];
+}
+declare class GraphicsSettings
+{
+    Quality: GraphicsQuality;
+}
+declare class CollisionSettings
+{
+    AdditionalSideCheck: boolean;
+}
+declare class MathematicsSettings
+{
+    Collision: CollisionSettings;
+}
+declare class UISettings
+{
+    IgnoreUICSS: boolean;
+    GlobalFontScale: number;
+    GlobalFontFamily: string;
+}
 export class Settings
 {
-    static Version:string;
-    static LibPath:string;
-    static Graphics:Quality;
-    static IgnoreUICSS:boolean;
-    static GlobalFontScale:number;
-    static GlobalFontFamily:string;
+    static Version: string;
+    static Data: DataSettings;
+    static Graphics: GraphicsSettings;
+    static Mathematics: MathematicsSettings;
+    static UI: UISettings;
 }
 
 export class Uuid
