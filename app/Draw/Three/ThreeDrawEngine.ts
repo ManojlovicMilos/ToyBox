@@ -269,6 +269,7 @@ class ThreeDrawEngine extends DrawEngine
         {
             let Tile:Three.Mesh = this.Data["TOYBOX_" + Drawn.ID];
             if(LoadData.Scene.children.indexOf(Tile) == -1) LoadData.Scene.add(Tile);
+            Tile.material["uniforms"].color.value = Drawn.Paint.ToArray();
             this.DrawObjectValueCheck(Tile, Drawn);
             LoadData.Checked.push(Tile.uuid);
         }
