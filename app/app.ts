@@ -1,5 +1,4 @@
 import { Uuid } from "./Data/Uuid";
-import { Image } from "./Data/Image";
 import { HTTP } from "./Data/Http";
 import { Reader } from "./Data/Reader";
 import { Serialization} from "./Data/Serialization";
@@ -43,14 +42,7 @@ import { DPad } from "./Util/DPad";
 import { Analog } from "./Util/Analog";
 import { ProgressBar } from "./Util/ProgressBar";
 import { Log } from "./Util/Log";
-import { Border } from "./UI/Border";
-import { ControlEventPackage } from "./UI/ControlEventPackage";
-import { Control } from "./UI/Control";
-import { Text, TextAlign } from "./UI/Text";
-import { Label } from "./UI/Label";
-import { Input } from "./UI/Input";
-import { Button } from "./UI/Button";
-import { Panel } from "./UI/Panel";
+import * as UI from "./UI/UI";
 import { Runner } from "./Runner/Runner";
 
 export
@@ -65,7 +57,5 @@ export
     Axis, Vertex, Transformation, MatrixMode, Matrix, MatrixTransformer, Color, Collision, CollisionType,
     CollisionValue, CollisionResult, ColliderObject, Random,
     Convert, CollisionUtil, SceneObjectUtil, BufferUtil, Log,
-    DPad, Analog, ProgressBar,
-    Border, ControlEventPackage, Control, Text, TextAlign, Label, Input, Button, Panel,
-    Runner,
+    DPad, Analog, ProgressBar, UI, Runner
 };

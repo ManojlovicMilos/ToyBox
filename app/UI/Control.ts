@@ -4,37 +4,43 @@ import * as Util from "./../Util/Util";
 import * as Math from "./../Mathematics/Mathematics";
 import * as Engine from "./../Engine/Engine";
 
-import { Settings } from "./../Engine/Settings";
-import { Border } from "./Border";
+import { Style } from "./Style/Style";
 import { ControlEventPackage } from "./ControlEventPackage";
+import { DockType } from "./Style/LayoutStyle";
 
 class Control extends Engine.SceneObject
 {
-    protected _Active:boolean;
-    protected _Position:Math.Vertex;
-    protected _Size:Math.Vertex;
-    protected _ForeColor:Math.Color;
-    protected _BackColor:Math.Color;
-    protected _Border:Border;
-    protected _Element:HTMLElement;
-    protected _Offset:Math.Vertex;
-    protected _Scale:Math.Vertex;
-    public get Active():boolean { return this._Active; }
+    protected _Active: boolean;
+    protected _Ratio: number;
+    protected _Position: Math.Vertex;
+    protected _Size: Math.Vertex;
+    protected _Element: HTMLElement;
+    protected _Offset: Math.Vertex;
+    protected _Scale: Math.Vertex;
+    protected _Style: Style;
+    protected _Parent: Control;
+    public get Active() : boolean { return this._Active; }
     public set Active(value:boolean) { this._Active = value; this.OnToggle(value); this.Update(); }
-    public get Position():Math.Vertex { return this._Position; }
+    public get ParentAspectRatio() : number { return this._Ratio; }
+    public get Position() : Math.Vertex { return this._Position; }
     public set Position(value:Math.Vertex) { this._Position = value; this.Update(); }
-    public get Size():Math.Vertex { return this._Size; }
+    public get Size() : Math.Vertex { return this._Size; }
     public set Size(value:Math.Vertex) { this._Size = value; this.Update(); }
-    public get Offset():Math.Vertex { return this._Offset; }
+    public get Offset() : Math.Vertex { return this._Offset; }
     public set Offset(value:Math.Vertex) { this._Offset = value; this.Update(); }
-    public get ForeColor():Math.Color { return this._ForeColor; }
-    public set ForeColor(value:Math.Color) { this._ForeColor = value; this.Update(); }
-    public get BackColor():Math.Color { return this._BackColor; }
-    public set BackColor(value:Math.Color) { this._BackColor = value; this.Update(); }
-    public get Border():Border { return this._Border; }
-    public set Border(value:Border) { this._Border = value; this.Update(); }
-    public get Element():HTMLElement { return this._Element; }
-    public get Events():ControlEventPackage { return <ControlEventPackage>this._Events; }
+    public get Dock() : DockType { return this._Style.Layout.Dock; }
+    public set Dock(value: DockType) { this._Style.Layout.Dock = value; }
+    public get ForeColor() : Math.Color { return this._Style.Text.Color; }
+    public set ForeColor(value:Math.Color) { this._Style.Text.Color = value; }
+    public get BackColor() : Math.Color { return this._Style.Background.Color; }
+    public set BackColor(value:Math.Color) { this._Style.Background.Color = value; }
+    public get Scale() : Math.Vertex { return this._Scale; }
+    public set Scale(value:Math.Vertex) { this._Scale = value; }
+    public get Style() : Style { return this._Style; }
+    public get Parent() : Control { return this._Parent; }
+    public set Parent(value:Control) { this._Parent = value; }
+    public get Element() : HTMLElement { return this._Element; }
+    public get Events() : ControlEventPackage { return <ControlEventPackage>this._Events; }
     public constructor(Old?:Control)
     {
         super(Old);
@@ -46,9 +52,7 @@ class Control extends Engine.SceneObject
             this._Size = Old._Size;
             this._Offset = new Math.Vertex();
             this._Scale = Old._Scale.Copy();
-            this._ForeColor = Old._ForeColor.Copy();
-            this._BackColor = Old.BackColor.Copy();
-            this._Border = Old._Border.Copy();
+            this._Style = Old._Style.Copy();
         }
         else
         {
@@ -58,9 +62,7 @@ class Control extends Engine.SceneObject
             this._Size = new Math.Vertex();
             this._Offset = new Math.Vertex();
             this._Scale = new Math.Vertex(100,100,1);
-            this._ForeColor = Math.Color.Black;
-            this._BackColor = Math.Color.White;
-            this._Border = new Border();
+            this._Style = new Style();
         }
     }
     public Copy() : Control
@@ -74,33 +76,45 @@ class Control extends Engine.SceneObject
     public Update() : void
     {
         if(!this._Element) return;
-        if(this._Active) this._Element.style.display = "block";
-        else this._Element.style.display = "none";
-        this._Element.style.margin = "0px";
-        this._Element.style.boxSizing = "border-box";
-        this._Element.style.position = "absolute";
-        this._Element.style.left = (this._Scale.X * (this._Offset.X + this._Position.X - this._Size.X / 2)).toString();
-        this._Element.style.top = (this._Scale.Y * (this._Offset.Y + this._Position.Y - this._Size.Y / 2)).toString();
-        this._Element.style.width = this._Scale.X * this._Size.X + "px";
-        this._Element.style.height = this._Scale.Y * this._Size.Y + "px";
-        this._Element.style.zIndex = "3";
-        if(Settings.IgnoreUICSS)
+        this._Element.setAttribute('tbx-name', this.Name);
+        if(Engine.Settings.EngineUIStyle)
         {
-            this._Element.style.color = this._ForeColor.ToString();
-            if(this._BackColor.A == 0) this._Element.style.backgroundColor = "rgba(0,0,0,0)";
-            else this._Element.style.backgroundColor = this._BackColor.ToString();
+            this._Style.Apply(this);
         }
-        this._Border.Apply(this._Element);
     }
-    private AddElement() : void
+    protected AddElement() : void
     {
         this.Update();
-        let UIParent:HTMLElement = document.getElementById("ui-parent");
-        if(!UIParent)
+        this.Check();
+        let Parent:HTMLElement = document.getElementById("ui-parent");
+        if(this._Parent)
+        {
+            Parent = this._Parent._Element;
+        }
+        if(!Parent)
         {
             Util.Log.Error("UI Parent Not Found", "Unnable to find UI parent", "UI");
         }
-        UIParent.appendChild(this._Element);
+        Parent.appendChild(this._Element);
+    }
+    protected RemoveElement(Parent?: HTMLElement) : void
+    {
+        if(!Parent)
+        {
+            Parent = document.getElementById("ui-parent");
+        }
+        if(!Parent)
+        {
+            Util.Log.Error("Parent Not Found", "Unnable to find parent", "UI");
+        }
+        Parent.removeChild(this._Element);
+    }
+    public Check() : void
+    {
+        if(!this._Element)
+        {
+            this.Create();
+        }
     }
     protected Create() : void
     {
@@ -117,17 +131,23 @@ class Control extends Engine.SceneObject
     public OnResize(Args:any) : void
     {
         // Override
+        this._Ratio = Args.Ratio;
         this._Scale = new Math.Vertex(Args.Scale.X / Args.GlobalScale.X, Args.Scale.Y / Args.GlobalScale.Y, 1);
         this.Update();
     }
-    public OnRemove(Args:any) : void
+    public OnRemove(Args?:any) : void
     {
-        this._Element.remove();
+        // Override
+        this.RemoveElement((Args.Parent) ? Args.Parent.Element : null);
     }
     public OnAttach(Args:any) : void
     {
+        // Override
         super.OnAttach(Args);
         this.Create();
-        if(Args.Scene.Current) this.AddElement();
+        if(Args.Scene)
+        {
+            if(Args.Scene.Current) this.AddElement();
+        }
     }
 }

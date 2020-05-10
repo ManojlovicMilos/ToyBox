@@ -1,4 +1,5 @@
 /node_modules
 /build/resources
+/build/toybox.js
 /tscompiled
 package-lock.json

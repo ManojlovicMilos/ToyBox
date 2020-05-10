@@ -1,9 +1,9 @@
 export { Button }
 
+import * as Engine from "./../Engine/Engine";
 import * as Math from "./../Mathematics/Mathematics";
 
 import { Label } from "./Label";
-import { Settings } from "./../Engine/Settings";
 
 class Button extends Label
 {
@@ -25,32 +25,18 @@ class Button extends Label
     }
     public Update() : void
     {
+        // Override
         super.Update();
         if(!this.Element) return;
-        if(Settings.IgnoreUICSS)
+        if(Engine.Settings.EngineUIStyle)
         {
-            this.Element.style.cursor = "pointer";
+            this._Style.Values["cursor"] = "pointer";
         }
     }
     protected Create() : void
     {
+        // Override
         super.Create();
         this.Element.className += " button";
-        this.Events.MouseEnter.push(this.OnMouseEnter.bind(this));
-        this.Events.MouseLeave.push(this.OnMouseLeave.bind(this));
-    }
-    protected OnMouseEnter(Event:any) : void
-    {
-        if(Settings.IgnoreUICSS)
-        {
-            this.Element.style.backgroundColor = this.BackColor.Copy().Lighten().ToString();
-        }
-    }
-    protected OnMouseLeave(Event:any) : void
-    {
-        if(Settings.IgnoreUICSS)
-        {
-            this.Element.style.backgroundColor = this.BackColor.ToString();
-        }
     }
 }

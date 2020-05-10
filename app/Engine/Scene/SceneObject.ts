@@ -41,7 +41,7 @@ class SceneObject
         else
         {
             this._ID = Data.Uuid.Create();
-            this._Name = this._ID;
+            this._Name = this.constructor.name;
             this._Type = SceneObjectType.Undefined;
             this._Events = new EventPackage();
         }

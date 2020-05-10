@@ -36,8 +36,8 @@ class ThreeDrawEngine extends DrawEngine
     }
     public Resize()
     {
-        let Width:number = this._Parent.clientWidth;
-        let Height:number = this._Parent.clientHeight;
+        let Width: number = this._Parent.clientWidth;
+        let Height: number = this._Parent.clientHeight;
         if(!this._FixedSize)
         {
             this.Renderer.setSize( Width, Height );
@@ -52,7 +52,7 @@ class ThreeDrawEngine extends DrawEngine
             this._Camera = new Three.OrthographicCamera( 0, this.Resolution.X, 0, this.Resolution.Y, 1, 100 );
             this._Camera.position.z = 5;
         }
-        if(this._ToyBoxScene) this._ToyBoxScene.OnResize({GlobalScale:this._GlobalScale, Scale:this._ToyBoxScene.Trans.Scale});
+        if(this._ToyBoxScene) this._ToyBoxScene.OnResize({GlobalScale:this._GlobalScale, Scale:this._ToyBoxScene.Trans.Scale, Ratio: Width / Height});
     }
     public UpdateResolution(Resolution?:Mathematics.Vertex, FixedSize?:boolean)
     {

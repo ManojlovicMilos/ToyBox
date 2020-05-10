@@ -394,9 +394,10 @@ export class Settings
     static Version:string;
     static LibPath:string;
     static Graphics:Quality;
-    static IgnoreUICSS:boolean;
+    static EngineUIStyle:boolean;
     static GlobalFontScale:number;
     static GlobalFontFamily:string;
+    static GlobalLineHeightFactor:number;
 }
 
 export as namespace Engine;
