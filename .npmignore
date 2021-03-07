@@ -3,6 +3,8 @@
 /node_modules
 /build/resources
 /tscompiled
+/Playground
+/Resources
 index.html
 README.md
 tsconfig.json
