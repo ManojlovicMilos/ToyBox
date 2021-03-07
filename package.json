@@ -5,7 +5,8 @@
   "main": "build/toybox.js",
   "types": "build/toybox.d.ts",
   "scripts": {
-    "start": "tsc && webpack-dev-server --hot",
+    "start": "concurrently -k \"npm run build\" \"npm run serve\"",
+    "serve": "webpack-dev-server --hot",
     "build": "tsc && webpack --watch",
     "prod": "tsc && webpack -p",
     "test": "cd tests"
@@ -27,6 +28,7 @@
   },
   "homepage": "https://github.com/ManojlovicMilos/ToyBox#readme",
   "devDependencies": {
+    "concurrently": "^6.0.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.1",
     "webpack": "^4.29.1",

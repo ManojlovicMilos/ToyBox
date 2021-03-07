@@ -2,4 +2,6 @@
 /build/resources
 /build/toybox.js
 /tscompiled
+/Playground
+/Resources
 package-lock.json

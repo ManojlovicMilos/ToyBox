@@ -1,7 +1,7 @@
 import { Uuid } from "./Data/Uuid";
 import { HTTP } from "./Data/Http";
 import { Reader } from "./Data/Reader";
-import { Serialization} from "./Data/Serialization";
+import { Serialization } from "./Data/Serialization";
 import { MaterialNodeValue, MaterialNodeValueType } from "./Engine/Material/MaterialNodeValue";
 import { MaterialNodePool } from "./Engine/Material/MaterialNodePool";
 import { MaterialNode } from "./Engine/Material/MaterialNode";
@@ -33,7 +33,7 @@ import { Color } from "./Mathematics/Color"
 import { Random } from "./Mathematics/Functions"
 import { CollisionResult } from "./Mathematics/CollisionResult";
 import { CollisionType, CollisionValue } from "./Mathematics/CollisionValue";
-import { Collision,  ColliderObject } from "./Mathematics/Collision"
+import { Collision, ColliderObject } from "./Mathematics/Collision"
 import { Convert } from "./Util/Converter";
 import { CollisionUtil } from "./Util/Collision";
 import { SceneObjectUtil } from "./Util/SceneObject";
@@ -45,8 +45,7 @@ import { Log } from "./Util/Log";
 import * as UI from "./UI/UI";
 import { Runner } from "./Runner/Runner";
 
-export
-{
+export {
     HTTP, Reader, Uuid, Serialization,
     DrawEngineType, DrawEngine,
     MaterialType, TextureSamplingType, ImageObject,
