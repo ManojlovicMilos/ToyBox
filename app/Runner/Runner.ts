@@ -152,11 +152,10 @@ class Runner
         }
         else Util.Log.Error("Scene " + this._Current.Name + "is not of valid type.", this._Current);
     }
-    private PackEventArgs(Event): any
+    private PackEventArgs(Event): Engine.EventArguments
     {
-        let Args: any =
-        {
-            ID: 0,
+        return {
+            Identifier: Event.identifier || 0,
             Ctrl: Event.ctrlKey,
             Alt: Event.altKey,
             Shift: Event.shiftKey,
@@ -167,9 +166,7 @@ class Runner
             KeyCode: Event.keyCode,
             Width: window.innerWidth,
             Height: window.innerHeight
-        }
-        if (Event.identifier) Args.ID = Event.identifier;
-        return Args;
+        };
     }
     private PackTouchEvent(Touch, Index): any
     {

@@ -10,12 +10,12 @@ import { DrawEngineType, DrawEngine } from "./Draw/DrawEngine";
 import { DrawObjectType, DrawObject } from "./Engine/Scene/DrawObject";
 import { ImageObject } from "./Engine/Scene/ImageObject";
 import { Light, LightAttenuation } from "./Engine/Scene/Light";
-import { SpriteSet } from "./Engine/Scene/SpriteSet";
-import { SpriteSetCollection } from "./Engine/Scene/SpriteSetCollection";
+import { SpriteSet } from "./Engine/Scene/Collections/SpriteSet";
+import { SpriteSetCollection } from "./Engine/Scene/Collections/SpriteSetCollection";
 import { Sprite } from "./Engine/Scene/Sprite";
-import { ImageCollection } from "./Engine/Scene/ImageCollection";
+import { ImageCollection } from "./Engine/Scene/Collections/ImageCollection";
 import { Tile } from "./Engine/Scene/Tile";
-import { EventPackage } from "./Engine/Events/EventPackage";
+import { EventPackage } from "./Engine/Events/EventManager";
 import { SceneEventPackage } from "./Engine/Events/SceneEventPackage";
 import { ImageObjectEventPackage } from "./Engine/Events/ImageObjectEventPackage";
 import { SpriteEventPackage } from "./Engine/Events/SpriteEventPackage";
@@ -46,15 +46,88 @@ import * as UI from "./UI/UI";
 import { Runner } from "./Runner/Runner";
 
 export {
-    HTTP, Reader, Uuid, Serialization,
-    DrawEngineType, DrawEngine,
-    MaterialType, TextureSamplingType, ImageObject,
-    DrawObjectType, DrawObject, Sprite, SpriteSet, SpriteSetCollection, Tile, ImageCollection, MouseButton,
-    EventPackage, SceneEventPackage, ImageObjectEventPackage, SpriteEventPackage,
-    Light, LightAttenuation, MaterialNodePool, MaterialNodeValue, MaterialNodeValueType, MaterialNode, Material,
-    Game, SceneType, Scene, Scene2D, SceneObjectType, SceneObject, SoundObject, Settings, Quality,
-    Axis, Vertex, Transformation, MatrixMode, Matrix, MatrixTransformer, Color, Collision, CollisionType,
-    CollisionValue, CollisionResult, ColliderObject, Random,
-    Convert, CollisionUtil, SceneObjectUtil, BufferUtil, Log,
-    DPad, Analog, ProgressBar, UI, Runner
+
+    HTTP,
+    Reader,
+    Uuid, 
+    Serialization,
+    DrawEngineType,
+    DrawEngine,
+    MaterialType,
+    TextureSamplingType,
+    ImageObject,
+    DrawObjectType,
+    DrawObject,
+    Sprite,
+    SpriteSet,
+    SpriteSetCollection,
+    Tile,
+    ImageCollection,
+
+    // Core
+    Runner,
+    Quality,
+    Settings,
+
+    // Game
+    Game,
+    Scene,
+    Scene2D,
+    SceneType,
+
+    // Events
+    MouseButton,
+    EventPackage,
+    SceneEventPackage,
+    ImageObjectEventPackage,
+    SpriteEventPackage,
+
+    // Materials
+    MaterialNodePool,
+    MaterialNodeValue,
+    MaterialNodeValueType,
+    MaterialNode,
+    Material,
+
+    // Collections
+
+
+    // Scene Objects
+    Light,
+    LightAttenuation,
+    SceneObject,
+    SceneObjectType,
+    SoundObject,
+
+    // Math
+    Axis,
+    Vertex,
+    Transformation,
+    MatrixMode,
+    Matrix,
+    MatrixTransformer,
+    Color, 
+    Random,
+
+    // Collision
+    Collision,
+    CollisionType,
+    CollisionValue,
+    CollisionResult,
+    ColliderObject,
+    
+    // Util
+    Convert,
+    CollisionUtil,
+    SceneObjectUtil,
+    BufferUtil,
+    Log,
+
+    // Components
+    DPad,
+    Analog,
+    ProgressBar,
+
+    //
+    UI
 };

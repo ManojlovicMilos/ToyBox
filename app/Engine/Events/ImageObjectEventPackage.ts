@@ -1,29 +1,28 @@
 export { ImageObjectEventPackage }
 
-import { EventPackage } from "./EventPackage";
+import { EventManager } from "./EventManager";
+import { EventHandlerCollection } from "./EventHandlerCollection";
 
-class ImageObjectEventPackage extends EventPackage
+enum ImageObjectEventTypes
 {
-    public get Click() : Function[] { return this._Data["Click"]; }
-    public get MouseDown() : Function[] { return this._Data["MouseDown"]; }
-    public get MouseUp() : Function[] { return this._Data["MouseUp"]; }
-    public get TouchStart() : Function[] { return this._Data["TouchStart"]; }
-    public get TouchEnd() : Function[] { return this._Data["TouchEnd"]; }
+    Click = "Click",
+    MouseUp = "MouseUp",
+    MouseDown = "MouseDown",
+    TouchEnd = "TouchEnd",
+    TouchStart = "TouchStart",
+    
+}
+
+class ImageObjectEventPackage extends EventManager
+{
+    public get Click() : EventHandlerCollection { return this._Data[ImageObjectEventTypes.Click]; } 
+    public get MouseUp() : EventHandlerCollection { return this._Data[ImageObjectEventTypes.MouseUp]; }
+    public get MouseDown() : EventHandlerCollection { return this._Data[ImageObjectEventTypes.MouseDown]; }
+    public get TouchEnd() : EventHandlerCollection { return this._Data[ImageObjectEventTypes.TouchEnd]; }
+    public get TouchStart() : EventHandlerCollection { return this._Data[ImageObjectEventTypes.TouchStart]; }
     public constructor(Old?:ImageObjectEventPackage)
     {
         super(Old);
-        if(Old)
-        {
-
-        }
-        else
-        {
-            this._Data["Click"] = [];
-            this._Data["MouseDown"] = [];
-            this._Data["MouseUp"] = [];
-            this._Data["TouchStart"] = [];
-            this._Data["TouchEnd"] = [];
-        }
     }
     public Copy() : ImageObjectEventPackage
     {

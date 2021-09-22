@@ -1,8 +1,8 @@
 export  { DrawEngineType, DrawEngine };
 
-import * as Math from "./../Mathematics/Mathematics"
-import * as Engine from "./../Engine/Engine";
 import * as Util from "./../Util/Util";
+import * as Engine from "./../Engine/Engine";
+import * as Math from "./../Mathematics/Mathematics"
 
 enum DrawEngineType
 {

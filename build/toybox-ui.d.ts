@@ -130,6 +130,7 @@ export namespace UI
         ParentAspectRatio: number;
         Position: Math.Vertex;
         Size: Math.Vertex;
+        Scale: Math.Vertex;
         Offset: Math.Vertex;
         Style: Style;
         Parent: Control;

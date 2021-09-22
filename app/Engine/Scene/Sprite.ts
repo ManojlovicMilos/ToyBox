@@ -3,7 +3,7 @@ export  { Sprite, SpriteSet };
 import * as Data from "./../../Data/Data";
 import * as Math from "./../../Mathematics/Mathematics";
 
-import { SpriteSet } from "./SpriteSet";
+import { SpriteSet } from "./Collections/SpriteSet";
 import { SpriteSetCollection } from "./SpriteSetCollection";
 import { ImageObject } from "./ImageObject";
 import { DrawObject, DrawObjectType } from "./DrawObject";

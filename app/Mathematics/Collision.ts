@@ -1,8 +1,8 @@
 export  { Collision, ColliderObject };
 
-import { Axis, Vertex } from "./Vertex";
+import { Vertex } from "./Vertex";
+import { CollisionType } from "./CollisionValue";
 import { CollisionResult } from "./CollisionResult";
-import { CollisionType, CollisionValue } from "./CollisionValue";
 
 class ColliderObject
 {

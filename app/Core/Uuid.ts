@@ -1,8 +1,8 @@
-export  { Uuid };
+export { Uuid };
 
 class Uuid
 {
-    public static Create() : string
+    public static Create(): string
     {
         let DT: number = new Date().getTime();
         let Uuid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (C) =>

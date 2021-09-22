@@ -1,9 +1,12 @@
 export  { Game };
 
+import * as Core from "./../../Core/Core";
 import { Scene } from "./../Scene/Scene";
 import { SceneObject } from "./../Scene/SceneObject";
 
-class Game
+const DEFAULT_GAME_NAME = "ToyBox Game";
+
+class Game extends Core.BaseObject
 {
     private _Name:string;
     private _Scenes:Scene[];
@@ -14,10 +17,10 @@ class Game
     public set Scenes(value:Scene[]) { this._Scenes = value; }
     public get Assets():SceneObject[] { return this._Assets; }
     public set Assets(value:SceneObject[]) { this._Assets = value; }
-    public Data: { [key: string]:any; } = {};
-    public constructor(Name?:string)
+    public constructor(Old?: Game, Name?:string)
     {
-        this._Name = "ToyBox Game";
+        super(Old);
+        this._Name = Name || DEFAULT_GAME_NAME;
         this._Scenes = [];
         if(Name != null) this._Name = Name;
         this.UpdateName();
@@ -33,7 +36,7 @@ class Game
         let Title:HTMLElement = document.getElementById("title") as HTMLElement;
         Title.innerHTML = this._Name;
     }
-    public Attach(Scene:Scene) : void
+    public Attach(Scene: Scene) : void
     {
         this.Data[Scene.Name] = Scene;
         this._Scenes.push(Scene);

@@ -41,8 +41,7 @@ class Transformation
     }
     public Serialize() : any
     {
-        let T =
-        {
+        let T = {
             Translation: this._Translation.Serialize(),
             Rotation: this._Rotation.Serialize(),
             Scale: this._Scale.Serialize()

@@ -46,6 +46,7 @@ class Input extends Text
     {
         // Override
         super.Create();
+        const FontScale = Settings.UI.GlobalFontScale * this._Style.Text.Size;
         this.Element.className += " input";
         this._TextElement = document.createElement('input');
         this._TextElement.className = "text";

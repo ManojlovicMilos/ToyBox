@@ -1,21 +1,19 @@
 export { SpriteEventPackage }
 
+import { EventHandlerCollection } from "./EventHandlerCollection";
 import { ImageObjectEventPackage } from "./ImageObjectEventPackage";
+
+enum SpriteEventTypes
+{
+    SetComplete = "SetComplete"
+}
 
 class SpriteEventPackage extends ImageObjectEventPackage
 {
-    public get SetComplete() : Function[] { return this._Data["SetComplete"]; }
+    public get SetComplete() : EventHandlerCollection { return this._Data[SpriteEventTypes.SetComplete]; }
     public constructor(Old?:SpriteEventPackage)
     {
         super(Old);
-        if(Old)
-        {
-
-        }
-        else
-        {
-            this._Data["SetComplete"] = [];
-        }
     }
     public Copy() : SpriteEventPackage
     {

@@ -1,7 +1,5 @@
 export { SpriteSetCollection }
 
-import * as Data from "./../../Data/Data";
-
 import { SpriteSet } from "./SpriteSet";
 import { ImageCollection } from "./ImageCollection";
 
@@ -14,6 +12,7 @@ class SpriteSetCollection extends ImageCollection
     public constructor(Old?:SpriteSetCollection, SpriteSets?:SpriteSet[])
     {
         super(Old);
+        this.RegisterType(SpriteSetCollection.name);
         this._SpriteSets = [];
         if(Old != null)
         {

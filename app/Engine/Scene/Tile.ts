@@ -4,7 +4,7 @@ import * as Data from "./../../Data/Data";
 import * as Math from "./../../Mathematics/Mathematics";
 
 import { ImageObject } from "./ImageObject";
-import { ImageCollection } from "./ImageCollection";
+import { ImageCollection } from "./Collections/ImageCollection";
 import { DrawObject, DrawObjectType } from "./DrawObject";
 
 class Tile extends ImageObject

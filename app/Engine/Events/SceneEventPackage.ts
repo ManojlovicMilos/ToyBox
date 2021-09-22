@@ -1,58 +1,56 @@
 export { SceneEventPackage }
 
-import { EventPackage } from "./EventPackage";
+import { EventManager } from "./EventManager";
+import { EventHandlerCollection } from "./EventHandlerCollection";
 
-class SceneEventPackage extends EventPackage
+enum SceneEventTypes
+{
+    Load = "Load",
+    Leave = "Leave",
+    Switch = "Switch",
+    Resize = "Resize",
+    Update = "Update",
+    KeyUp = "KeyUp",
+    KeyDown = "KeyDown",
+    KeyPress = "KeyPress",
+    Click = "Click",
+    MouseUp = "MouseUp",
+    MouseDown = "MouseDown",
+    MouseMove = "MouseMove",
+    MouseWheel = "MouseWheel",
+    TouchEnd = "TouchEnd",
+    TouchMove = "TouchMove",
+    TouchStart = "TouchStart",
+    LoadProgress = "LoadProgress",
+    LoadComplete = "LoadComplete"
+}
+
+class SceneEventPackage extends EventManager
 {
     private _WireTouchEvents:boolean;
     public get WireTouchEvents(): boolean { return this._WireTouchEvents; }
     public set WireTouchEvents(value:boolean) { this._WireTouchEvents = value; }
-    public get Load() : Function[] { return this._Data["Load"]; }
-    public get Switch() : Function[] { return this._Data["Switch"]; }
-    public get Leave() : Function[] { return this._Data["Leave"]; }
-    public get Resize() : Function[] { return this._Data["Resize"]; }
-    public get Update() : Function[] { return this._Data["Update"]; }
-    public get KeyPress() : Function[] { return this._Data["KeyPress"]; }
-    public get KeyDown() : Function[] { return this._Data["KeyDown"]; }
-    public get KeyUp() : Function[] { return this._Data["KeyUp"]; }
-    public get Click() : Function[] { return this._Data["Click"]; }
-    public get MouseDown() : Function[] { return this._Data["MouseDown"]; }
-    public get MouseUp() : Function[] { return this._Data["MouseUp"]; }
-    public get MouseMove() : Function[] { return this._Data["MouseMove"]; }
-    public get MouseWheel() : Function[] { return this._Data["MouseWheel"]; }
-    public get TouchStart() : Function[] { return this._Data["TouchStart"]; }
-    public get TouchEnd() : Function[] { return this._Data["TouchEnd"]; }
-    public get TouchMove() : Function[] { return this._Data["TouchMove"]; }
-    public get LoadProgress() : Function[] { return this._Data["LoadProgress"]; }
-    public get LoadComplete() : Function[] { return this._Data["LoadComplete"]; }
+    public get Load() : EventHandlerCollection { return this._Data[SceneEventTypes.Load]; }
+    public get Leave() : EventHandlerCollection { return this._Data[SceneEventTypes.Leave]; }
+    public get Switch() : EventHandlerCollection { return this._Data[SceneEventTypes.Switch]; }
+    public get Resize() : EventHandlerCollection { return this._Data[SceneEventTypes.Resize]; }
+    public get Update() : EventHandlerCollection { return this._Data[SceneEventTypes.Update]; }
+    public get KeyUp() : EventHandlerCollection { return this._Data[SceneEventTypes.KeyUp]; }
+    public get KeyDown() : EventHandlerCollection { return this._Data[SceneEventTypes.KeyDown]; }
+    public get KeyPress() : EventHandlerCollection { return this._Data[SceneEventTypes.KeyPress]; }
+    public get Click() : EventHandlerCollection { return this._Data[SceneEventTypes.Click]; }
+    public get MouseUp() : EventHandlerCollection { return this._Data[SceneEventTypes.MouseUp]; }
+    public get MouseDown() : EventHandlerCollection { return this._Data[SceneEventTypes.MouseDown]; }
+    public get MouseMove() : EventHandlerCollection { return this._Data[SceneEventTypes.MouseMove]; }
+    public get MouseWheel() : EventHandlerCollection { return this._Data[SceneEventTypes.MouseWheel]; }
+    public get TouchEnd() : EventHandlerCollection { return this._Data[SceneEventTypes.TouchEnd]; }
+    public get TouchMove() : EventHandlerCollection { return this._Data[SceneEventTypes.TouchMove]; }
+    public get TouchStart() : EventHandlerCollection { return this._Data[SceneEventTypes.TouchStart]; }
+    public get LoadProgress() : EventHandlerCollection { return this._Data[SceneEventTypes.LoadProgress]; }
+    public get LoadComplete() : EventHandlerCollection { return this._Data[SceneEventTypes.LoadComplete]; }
     public constructor(Old?:SceneEventPackage)
     {
         super(Old);
-        if(Old)
-        {
-
-        }
-        else
-        {
-            this._Data["Load"] = [];
-            this._Data["Switch"] = [];
-            this._Data["Leave"] = [];
-            this._Data["Resize"] = [];
-            this._Data["Update"] = [];
-            this._Data["KeyPress"] = [];
-            this._Data["KeyDown"] = [];
-            this._Data["KeyUp"] = [];
-            this._Data["Click"] = [];
-            this._Data["MouseDown"] = [];
-            this._Data["MouseUp"] = [];
-            this._Data["MouseMove"] = [];
-            this._Data["MouseWheel"] = [];
-            this._Data["TouchStart"] = [];
-            this._Data["TouchEnd"] = [];
-            this._Data["TouchMove"] = [];
-            this._Data["LoadProgress"] = [];
-            this._Data["LoadComplete"] = [];
-        }
     }
     public Copy() : SceneEventPackage
     {

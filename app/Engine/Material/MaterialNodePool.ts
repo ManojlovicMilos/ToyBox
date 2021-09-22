@@ -7,28 +7,28 @@ import { MaterialNodeValue, MaterialNodeValueType } from "./MaterialNodeValue";
 
 class MaterialNodePool
 {
-    private _Pool: { [key: string]:MaterialNode; };
-    public get Pool():any { return this._Pool; }
+    private _Pool: { [key: string]: MaterialNode; };
+    public get Pool(): any { return this._Pool; }
     public constructor()
     {
         this.Init();
     }
-    private Init() : void
+    private Init(): void
     {
         this._Pool = {};
 
         // Output
 
-        let NMN:MaterialNode = new MaterialNode();
+        let NMN: MaterialNode = new MaterialNode();
         NMN.Name = "Output";
         NMN.FunctionID = "Output";
-        
-        let NMNV:MaterialNodeValue = new MaterialNodeValue();
+
+        let NMNV: MaterialNodeValue = new MaterialNodeValue();
         NMNV.Name = "Color";
         NMNV.Value = Math.Color.White;
         NMNV.Editable = true;
         NMNV.Type = MaterialNodeValueType.Vector4;
-        
+
         NMN.AddInput(NMNV);
 
         this._Pool["Output"] = NMN;
