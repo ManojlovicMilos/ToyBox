@@ -1,75 +1,42 @@
 export { Log };
 
-class Log
-{
-    public static Enabled: boolean = true;
-    public static InfoEnabled: boolean = true;
-    public static ErrorEnabled: boolean = true;
-    public static WarningEnabled: boolean = true;
-    public static EventEnabled: boolean = false;
-    public static CustomEnabled: boolean = false;
-    public static CustomTitle: string = "Custom";
-    public static Out(Message: string, Data?: any, Type?: string): void
-    {
-        if (!Log.Enabled) return;
-        console.log(" - - - ");
-        if (Type) console.log("TBX: " + Type);
-        else console.log("TBX: Message");
-        console.log(Message);
-        if (Data) console.log(Data);
-        console.log(" - - - ");
+class Log {
+    public static Enabled: { [key: string]: boolean } = {
+        Global: true,
+        Info: true,
+        Error: true,
+        Event: true,
+    }
+
+    public static RegisterCustomLog(Type: string): void {
+        this.Enabled[Type] = true;
+    }
+
+    public static Out(Message: string, Data?: any, Type?: string, Method?: () => void): void {
+        if (!this.Enabled.Global) return;
+        if (!this.Enabled[Type]) return;
+        const LogMethod = Method || console.log;
+        LogMethod(" - - - ");
+        if (Type) LogMethod("TBX: " + Type);
+        else LogMethod("TBX: Message");
+        LogMethod(Message);
+        if (Data) LogMethod(Data);
+        LogMethod(" - - - ");
     };
-    public static Info(Message: string, Data?: any, Type?: string): void
-    {
-        if (!Log.Enabled) return;
-        if (!Log.InfoEnabled) return;
-        console.info(" - - - ");
-        if (Type) console.info("TBX: " + Type + " Info");
-        else console.info("TBX: Info");
-        console.info(Message);
-        if (Data) console.log(Data);
-        console.info(" - - - ");
+
+    public static Info(Message: string, Data?: any): void {
+        this.Out(Message, Data, 'Info', console.info);
     };
-    public static Error(Message: string, Data?: any, Type?: string): void
-    {
-        if (!Log.Enabled) return;
-        if (!Log.ErrorEnabled) return;
-        console.error(" - - - ");
-        if (Type) console.error("TBX: " + Type + " Error");
-        else console.error("TBX: Error");
-        console.error(Message);
-        if (Data) console.log(Data);
-        console.error(" - - - ");
+
+    public static Error(Message: string, Data?: any): void {
+        this.Out(Message, Data, 'Error', console.error);
     };
-    public static Warning(Message: string, Data?: any, Type?: string): void
-    {
-        if (!Log.Enabled) return;
-        if (!Log.WarningEnabled) return;
-        console.warn(" - - - ");
-        if (Type) console.warn("TBX: " + Type + " Warning");
-        else console.warn("TBX: Warning");
-        console.warn(Message);
-        if (Data) console.log(Data);
-        console.warn(" - - - ");
+
+    public static Warning(Message: string, Data?: any): void {
+        this.Out(Message, Data, 'Warning', console.warn);
     };
-    public static Event(Message: string, Data?: any): void
-    {
-        if (!Log.Enabled) return;
-        if (!Log.EventEnabled) return;
-        console.info(" - - - ");
-        console.info("TBX: Event");
-        console.info(Message);
-        console.info(" - - - ");
-    };
-    public static Custom(Message: string, Data?: any, Type?: string): void
-    {
-        if (!Log.Enabled) return;
-        if (!Log.WarningEnabled) return;
-        console.warn(" - - - ");
-        if (Type) console.warn("TBX: " + Log.CustomTitle + " - " + Type);
-        else console.warn("TBX: " + Log.CustomTitle);
-        console.warn(Message);
-        if (Data) console.log(Data);
-        console.warn(" - - - ");
+
+    public static Event(Message: string, Data?: any): void {
+        this.Out(Message, Data, 'Event', console.info);
     };
 }

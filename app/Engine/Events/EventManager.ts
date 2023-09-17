@@ -3,29 +3,26 @@ export { EventManager };
 import { EventArguments } from "./EventArguments";
 import { EventHandlerCollection } from "./EventHandlerCollection";
 
-class EventManager
-{
-    private _StopEvents: boolean;
-    protected _Data: { [key: string]: EventHandlerCollection };
-    public constructor(Old?: EventManager)
-    {
-        this._Data = {};
+class EventManager {
+    protected _StopEvents: boolean;
+    protected _Events: { [key: string]: EventHandlerCollection };
+
+    public constructor(Old?: EventManager) {
+        this._Events = {};
         this._StopEvents = false;
-        if (Old)
-        {
+        if (Old) {
             this._StopEvents = Old._StopEvents;
-            Object.keys(Old._Data).forEach(Key =>
-            {
-                this._Data[Key] = Old._Data[Key].Copy();
+            Object.keys(Old._Events).forEach(Key => {
+                this._Events[Key] = Old._Events[Key].Copy();
             });
         }
     }
-    public Copy(): EventManager
-    {
+
+    public Copy(): EventManager {
         return new EventManager(this);
     }
-    public Invoke(EventName: string, Args: EventArguments): boolean
-    {
-        return this._Data[EventName].Invoke(Args);
+
+    public Invoke(EventName: string, Args: EventArguments): boolean {
+        return this._Events[EventName].Invoke(Args);
     }
 }
