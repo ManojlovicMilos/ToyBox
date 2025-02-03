@@ -4,8 +4,7 @@ import * as Core from "./../../Core/Core";
 
 import { MaterialNodeValue } from "./MaterialNodeValue";
 
-class MaterialNode
-{
+class MaterialNode {
     private _ID: string;
     private _Name: string;
     private _FunctionID: string;
@@ -20,10 +19,9 @@ class MaterialNode
     public get Values(): MaterialNodeValue[] { return this._Values; }
     public get Inputs(): MaterialNodeValue[] { return this._Inputs; }
     public get Outputs(): MaterialNodeValue[] { return this._Outputs; }
-    public constructor(Old?: MaterialNode)
-    {
-        if (Old != null)
-        {
+
+    public constructor(Old?: MaterialNode) {
+        if (Old != null) {
             this._ID = Core.Uuid.Create();
             this._Name = Old._Name;
             this._FunctionID = Old._FunctionID;
@@ -34,8 +32,7 @@ class MaterialNode
             this._Outputs = [];
             for (let i in Old._Outputs) this._Outputs.push(Old._Outputs[i].Copy());
         }
-        else
-        {
+        else {
             this._ID = Core.Uuid.Create();
             this._Name = this._ID;
             this._FunctionID = "";
@@ -44,43 +41,43 @@ class MaterialNode
             this._Outputs = [];
         }
     }
-    public Copy(): MaterialNode
-    {
+
+    public Copy(): MaterialNode {
         return new MaterialNode(this);
     }
-    public AddValue(NodeValue: MaterialNodeValue): void
-    {
+
+    public AddValue(NodeValue: MaterialNodeValue): void {
         if (!this.CheckNameAvailable(NodeValue.Name)) return;
         NodeValue.ParentName = this._Name;
         this._Values.push(NodeValue);
     }
-    public AddInput(NodeValue: MaterialNodeValue): void
-    {
+
+    public AddInput(NodeValue: MaterialNodeValue): void {
         if (!this.CheckNameAvailable(NodeValue.Name)) return;
         NodeValue.ParentName = this._Name;
         this._Inputs.push(NodeValue);
     }
-    public AddOutput(NodeValue: MaterialNodeValue): void
-    {
+
+    public AddOutput(NodeValue: MaterialNodeValue): void {
         if (!this.CheckNameAvailable(NodeValue.Name)) return;
         NodeValue.ParentName = this._Name;
         this._Outputs.push(NodeValue);
     }
-    private CheckNameAvailable(Name: string): boolean
-    {
+
+    private CheckNameAvailable(Name: string): boolean {
         for (let i in this._Values) if (this._Values[i].Name == Name) return false;
         for (let i in this._Inputs) if (this._Inputs[i].Name == Name) return false;
         for (let i in this._Outputs) if (this._Outputs[i].Name == Name) return false;
         return true;
     }
-    private UpdateName(): void
-    {
+
+    private UpdateName(): void {
         for (let i in this._Values) this._Values[i].ParentName = this._Name;
         for (let i in this._Inputs) this._Inputs[i].ParentName = this._Name;
         for (let i in this._Outputs) this._Outputs[i].ParentName = this._Name;
     }
-    public Serialize(): any
-    {
+
+    public Serialize(): any {
         // Virtual
         let MN =
         {
@@ -96,26 +93,23 @@ class MaterialNode
         for (let i in this._Outputs) MN.Outputs.push(this._Outputs[i].Serialize());
         return MN;
     }
-    public Deserialize(Data: any): void
-    {
+
+    public Deserialize(Data: any): void {
         // Virtual
         this._ID = Data.ID;
         this._Name = Data.Name;
         this._FunctionID = Data.FunctionID;
-        for (let i in Data.Values)
-        {
+        for (let i in Data.Values) {
             let MNV: MaterialNodeValue = new MaterialNodeValue();
             MNV.Deserialize(Data.Values[i]);
             this._Values.push(MNV);
         }
-        for (let i in Data.Inputs)
-        {
+        for (let i in Data.Inputs) {
             let MNV: MaterialNodeValue = new MaterialNodeValue();
             MNV.Deserialize(Data.Inputs[i]);
             this._Inputs.push(MNV);
         }
-        for (let i in Data.Outputs)
-        {
+        for (let i in Data.Outputs) {
             let MNV: MaterialNodeValue = new MaterialNodeValue();
             MNV.Deserialize(Data.Outputs[i]);
             this._Outputs.push(MNV);

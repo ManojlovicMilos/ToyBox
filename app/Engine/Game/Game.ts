@@ -23,7 +23,7 @@ class Game extends BaseObject {
         this.UpdateName();
     }
 
-    public override Copy(): Game {
+    public override Duplicate(): Game {
         let New: Game = new Game();
         New._Name = this._Name;
         return New;

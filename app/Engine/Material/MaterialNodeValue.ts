@@ -2,8 +2,7 @@ export { MaterialNodeValue, MaterialNodeValueType }
 
 import * as Core from "./../../Core/Core";
 
-enum MaterialNodeValueType
-{
+enum MaterialNodeValueType {
     Int = "int",
     Bool = "bool",
     Float = "float",
@@ -12,8 +11,7 @@ enum MaterialNodeValueType
     Vector4 = "vec4"
 }
 
-class MaterialNodeValue
-{
+class MaterialNodeValue {
     private _ID: string;
     private _Origin: string;
     private _Name: string;
@@ -36,10 +34,9 @@ class MaterialNodeValue
     public set Type(value: MaterialNodeValueType) { this._Type = value; }
     public get InputTarget(): MaterialNodeValue { return this._InputTarget; }
     public set InputTarget(value: MaterialNodeValue) { this._InputTarget = value; }
-    public constructor(Old?: MaterialNodeValue)
-    {
-        if (Old != null)
-        {
+
+    public constructor(Old?: MaterialNodeValue) {
+        if (Old != null) {
             this._ID = Core.Uuid.Create();
             this._Origin = Old._ID;
             this._ParentName = Old._ParentName;
@@ -48,8 +45,7 @@ class MaterialNodeValue
             this._Editable = Old._Editable;
             this._Value = Old.CopyValue();
         }
-        else
-        {
+        else {
             this._ID = Core.Uuid.Create();
             this._Origin = this._ID;
             this._ParentName = "";
@@ -58,12 +54,12 @@ class MaterialNodeValue
             this._Editable = false;
         }
     }
-    public Copy(): MaterialNodeValue
-    {
+
+    public Copy(): MaterialNodeValue {
         return new MaterialNodeValue(this);
     }
-    private CopyValue(): any
-    {
+
+    private CopyValue(): any {
         if (!this._Value) return this._Value;
         if (this._Type == MaterialNodeValueType.Bool ||
             this._Type == MaterialNodeValueType.Int ||
@@ -75,8 +71,8 @@ class MaterialNodeValue
             return this._Value.Copy();
         return null;
     }
-    public Serialize(): any
-    {
+
+    public Serialize(): any {
         // Virtual
         let MNV =
         {
@@ -92,8 +88,8 @@ class MaterialNodeValue
         if (this._InputTarget != null) MNV.InputTarget = this._InputTarget.OriginID;
         return MNV;
     }
-    public Deserialize(Data: any): void
-    {
+
+    public Deserialize(Data: any): void {
         // Virtual
         this._ID = Data.ID;
         this._Origin = Data.OriginID;

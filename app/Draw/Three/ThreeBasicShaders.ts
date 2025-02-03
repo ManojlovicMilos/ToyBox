@@ -1,8 +1,7 @@
 export { ThreeBasicShaders }
 
-class ThreeBasicShaders
-{
-    public static Vertex2D : string = `
+class ThreeBasicShaders {
+    public static Vertex2D: string = `
         varying vec2 vUv;
         uniform int flipx;
         uniform int flipy;
@@ -19,8 +18,9 @@ class ThreeBasicShaders
             vUv  = vec2(xval, yval);
 			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
-        `;
-    public static LitVertex2D : string = `
+    `;
+
+    public static LitVertex2D: string = `
         varying vec2 vUv;
         uniform int flipx;
         uniform int flipy;
@@ -40,8 +40,9 @@ class ThreeBasicShaders
             vPosition = pos.xyz;
 			gl_Position = pos;
         }
-        `;
-    public static Fragment2D : string = `
+    `;
+
+    public static Fragment2D: string = `
         uniform int index;
         uniform vec4 color;
         uniform sampler2D texture;
@@ -57,8 +58,9 @@ class ThreeBasicShaders
                 gl_FragColor = color * texture2D(texture, vUv);
             }
         }
-        `;
-    public static DefaultHeader : string = `
+    `;
+
+    public static DefaultHeader: string = `
         uniform int index;
         uniform vec4 color;
         uniform sampler2D texture;
@@ -80,19 +82,22 @@ class ThreeBasicShaders
 
         void main()
         {
-        `;
-    public static DefaultFooter : string = `
+    `;
+
+    public static DefaultFooter: string = `
             gl_FragColor = finalColor;
         }
-        `;
-    public static ColorCalculation : string = `
+    `;
+
+    public static ColorCalculation: string = `
             vec4 finalColor = color;
             if(index != -1)
             {
                 finalColor = color * texture2D(texture, vUv);
             }
-        `;
-    public static LightCalculation : string = `
+    `;
+
+    public static LightCalculation: string = `
             vec3 SurfacePosition = vPosition;
             vec3 finalLight = ambient.rgb;
             for(int i = 0; i < MAX_LIGHTS; i++)
@@ -110,8 +115,9 @@ class ThreeBasicShaders
                 }
             }
             finalColor = vec4(finalLight * finalColor.rgb, finalColor.a);
-        `;
-    public static LightPhongCalculation : string = `
+    `;
+
+    public static LightPhongCalculation: string = `
             vec3 SurfacePosition = vPosition;
             vec3 finalLight = ambient.rgb;
             for(int i = 0; i < MAX_LIGHTS; i++)
@@ -135,8 +141,9 @@ class ThreeBasicShaders
                 }
             }
             finalColor = vec4(finalLight * finalColor.rgb, finalColor.a);
-        `;
-    public static LightToon : string = `
+    `;
+
+    public static LightToon: string = `
             vec3 SurfacePosition = vPosition;
             float finalLight = 0.0;
             for(int i = 0; i < MAX_LIGHTS; i++)
@@ -160,8 +167,9 @@ class ThreeBasicShaders
             }
             if(finalLight > 0.8) finalColor = vec4(2.0 * finalColor.rgb, finalColor.a);
             else finalColor = vec4(max(1.0, 2.0 * (finalLight) / 0.8) * finalColor.rgb, finalColor.a);
-        `;
-    public static get LitFragment2D() : string { return this.DefaultHeader + this.ColorCalculation + this.LightCalculation + this.DefaultFooter; }
-    public static get PhongFragment2D() : string { return this.DefaultHeader + this.ColorCalculation + this.LightPhongCalculation + this.DefaultFooter; }
-    public static get ToonFragment2D() : string { return this.DefaultHeader + this.ColorCalculation + this.LightToon + this.DefaultFooter; }
+    `;
+
+    public static get LitFragment2D(): string { return this.DefaultHeader + this.ColorCalculation + this.LightCalculation + this.DefaultFooter; }
+    public static get PhongFragment2D(): string { return this.DefaultHeader + this.ColorCalculation + this.LightPhongCalculation + this.DefaultFooter; }
+    public static get ToonFragment2D(): string { return this.DefaultHeader + this.ColorCalculation + this.LightToon + this.DefaultFooter; }
 }

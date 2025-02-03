@@ -7,14 +7,11 @@ export {
 
 import { Uuid } from "./Uuid";
 
-const INFIX = "_";
-
 type Tag = string | number | boolean;
-type TagCollection = { [key: string]: Tag }
-type BaseObjectCollection = { [key: string]: BaseObject }
+type TagCollection = { [key: string]: Tag };
+type BaseObjectCollection = { [key: string]: BaseObject };
 
-class BaseObject {
-    // Abstract
+abstract class BaseObject {
     protected _ID: string;
     protected _Name: string;
     protected _ResourceKey: string;
@@ -32,29 +29,32 @@ class BaseObject {
     public get Children(): BaseObject[] { return this._Children; }
 
     public constructor(Old?: BaseObject) {
-        this._Types = [];
+        this._Types = ['BaseObject'];
         if (Old) {
             this._ID = Uuid.Create();
             this._Name = Old._Name;
+            this._ResourceKey = Old._ResourceKey;
             this._Tags = { ...Old._Tags };
-            this._ResourceKey = Old._Name + INFIX + Old._ID;
             this._Children = Old._Children.map((Child: BaseObject) => Child.Duplicate());
         }
         else {
             this._ID = Uuid.Create();
             this._Tags = {};
-            this._Children = [];
             this._Name = this._ID;
-            this._ResourceKey = this._ID;
+            this._Children = [];
         }
     }
 
     public Duplicate(): BaseObject {
-        return new BaseObject(this);
+        return this; // new BaseObject(this) for non-abstract
     }
 
     public Is(Type: string): boolean {
         return this._Types.indexOf(Type) != -1;
+    }
+
+    public IsExactly(Type: string): boolean {
+        return this.Type === Type;
     }
 
     public IsAnyOf(Types: string[]): boolean {
@@ -64,8 +64,8 @@ class BaseObject {
         return false;
     }
 
-    public HasTag(QueryTag: string): boolean {
-        return !!this._Tags[QueryTag];
+    public HasTag(QueryTag: string, QueryTagValue?: Tag): boolean {
+        return !!this._Tags[QueryTag] && (!QueryTagValue || this._Tags[QueryTag] === QueryTagValue);
     }
 
     public HasTags(QueryTags: string[]): boolean {
@@ -78,11 +78,13 @@ class BaseObject {
     public Attach(Child: BaseObject): void {
         this._Children.push(Child);
         this._ChildrenMap[Child.ID] = Child;
+        this.OnAttachChild(Child);
     }
 
     public Remove(ChildID: string): void {
         this._Children = this._Children.filter((Child: BaseObject) => Child.ID !== ChildID);
         this._ChildrenMap[ChildID] = undefined;
+        this.OnRemoveChild(ChildID);
     }
 
     public HasChild(ChildID: string): boolean {
@@ -93,18 +95,32 @@ class BaseObject {
         return this._ChildrenMap[ChildID];
     }
 
+    public FindChildrenByType(ObjectType: string): BaseObject[] {
+        return this.Children.filter(Item => Item.Is(ObjectType));
+    }
+
+    public FindChildrenByExactType(ObjectType: string): BaseObject[]  
+    {
+        return this.Children.filter(Item => Item.IsExactly(ObjectType));
+    }
+
+    public FindChildrenByTags(Key: string, Value?: Tag): BaseObject[]
+    {
+        return this.Children.filter(Item => Item.HasTag(Key, Value));
+    }
+
     public OnAttachChild(Child: BaseObject): void {
         // Virtual
     }
 
-    public OnRemoveChild(Child: BaseObject): void{
+    public OnRemoveChild(ChildID: string): void {
         // Virtual
     }
 
     public OnAttachToParent(Parent: BaseObject): void {
         // Virtual
     }
-    
+
     public OnRemoveFromParent(Parent: BaseObject): void {
         // Virtual
     }

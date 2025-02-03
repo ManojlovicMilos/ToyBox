@@ -3,13 +3,11 @@ export {
     EventArguments
 };
 
-import { Game } from "../Game/Game";
 import { Scene } from "../Scene/Scene";
 import * as Core from "./../../Core/Core";
 import * as Math from "./../../Mathematics/Mathematics";
 
-enum MouseButton
-{
+enum MouseButton {
     Left = 0,
     Middle = 1,
     Right = 2

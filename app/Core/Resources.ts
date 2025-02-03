@@ -28,7 +28,7 @@ class Resources {
     }
 
     public New(Key: string): BaseObject {
-        return this._Objects[Key].Copy();
+        return this._Objects[Key].Duplicate();
     }
 
     public Set(Key: string, Data: BaseObject): void {

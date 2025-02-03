@@ -7,6 +7,7 @@ import * as Math from "./../Mathematics/Mathematics"
 enum DrawEngineType {
     ThreeJS = 0
 }
+
 class DrawEngine {
     private _Matrix: Math.MatrixTransformer;
     private _Renderer: any;

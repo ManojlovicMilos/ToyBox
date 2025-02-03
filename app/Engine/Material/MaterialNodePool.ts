@@ -5,16 +5,15 @@ import * as Math from "./../../Mathematics/Mathematics";
 import { MaterialNode } from "./MaterialNode";
 import { MaterialNodeValue, MaterialNodeValueType } from "./MaterialNodeValue";
 
-class MaterialNodePool
-{
+class MaterialNodePool {
     private _Pool: { [key: string]: MaterialNode; };
     public get Pool(): any { return this._Pool; }
-    public constructor()
-    {
+
+    public constructor() {
         this.Init();
     }
-    private Init(): void
-    {
+
+    private Init(): void {
         this._Pool = {};
 
         // Output

@@ -9,22 +9,24 @@ import {
 } from "./BaseObject";
 import { Log } from "./Log";
 
-type SimpleObject = { [key: string]: SimpleObject | string | number | boolean }
-type SerializedBaseObjectData = { [key: string]: SerializedBaseObjectReference | TagCollection | string | number | boolean }
+type SerializedJSObjectData = { [key: string]: SerializedJSObjectData | string | number | boolean };
+type SerializedObjectValueType = SerializedBaseObjectReference | SerializedJSObjectData | string | number | boolean | null;
+type SerializedBaseObjectData = { [key: string]: SerializedBaseObjectReference | TagCollection | SerializedJSObjectData | string | number | boolean };
 type SerializedBaseObjectReference = {
     Type: string,
-    Data: SerializedBaseObjectData
-}
+    Data: SerializedBaseObjectData,
+};
 
 const EDITOR_PREFIX = "EDITOR_";
 const TOYBOX_PREFIX = "TOYBOX_";
-const MESSAGE_GROUP = "Serialization";
 
 class Serialization {
     private static _Factories: { [key: string]: Function } = {};
 
-    public static ValidType(Type: string): boolean {
-        return !!this._Factories[Type];
+    public static ValidSerializedBaseObjectReference(DataObject: Partial<SerializedBaseObjectReference>): boolean {
+        if (!DataObject.Type) return false;
+        if (!DataObject.Data) return false;
+        return !!this._Factories[DataObject.Type];
     }
 
     public static Register(Type: string, Factory: Function): boolean {
@@ -48,8 +50,8 @@ class Serialization {
 
     private static SerializeInstanceData(SO: BaseObject): SerializedBaseObjectData {
         const Data: SerializedBaseObjectData = {};
-        Object.keys(this).forEach(Key => {
-            const Value: SerializedBaseObjectReference | string | number | boolean | null = this.SerializeInstanceDataValue(this[Key]);
+        Object.keys(SO).forEach(Key => {
+            const Value: SerializedObjectValueType | null = this.SerializeInstanceDataValue(this[Key]);
             if (Value !== null) {
                 Data[Key] = Value;
             }
@@ -57,12 +59,21 @@ class Serialization {
         return Data;
     }
 
-    private static SerializeInstanceDataValue(SOValue: BaseObject | TagCollection | string | number | boolean): SerializedBaseObjectReference | string | number | boolean | null {
-        if (typeof SOValue !== "function" && typeof SOValue !== "object") return SOValue;
-        else if (typeof SOValue === "object" && (SOValue as object) instanceof BaseObject) {
+    private static SerializeInstanceDataValue(SOValue: BaseObject | TagCollection | object | string | number | boolean): SerializedObjectValueType {
+        if (typeof SOValue !== "function" && typeof SOValue !== "object") {
+            return SOValue;
+        } else if (typeof SOValue === "object" && (SOValue as object) instanceof BaseObject) {
             return Serialization.Serialize(SOValue as BaseObject);
-        }
-        else return null;
+        } else if (typeof SOValue === "object") {
+            let Serialized: SerializedJSObjectData = {};
+            Object.keys(SOValue).forEach(Key => {
+                const Value: SerializedObjectValueType | null = this.SerializeInstanceDataValue(this[Key]);
+                if (Value !== null) {
+                    Serialized[Key] = Value;
+                }
+            });
+            return Serialized;
+        } else return null;
     }
 
     private static FilterTags(SOTags: TagCollection): TagCollection {
@@ -76,16 +87,15 @@ class Serialization {
         return FilteredTags;
     }
 
-    public static Deserialize(DSOData: SerializedBaseObjectReference): BaseObject {
-        let Value: BaseObject;
+    public static Deserialize(DSOData: SerializedBaseObjectReference): BaseObject | null {
+        let Value: BaseObject | null;
         if (!!Serialization._Factories[DSOData.Type]) {
             Value = Serialization._Factories[DSOData.Type]();
+            Serialization.DeserializeInstanceData(Value, DSOData.Data);
         }
         else {
-            Log.Warning("Unable to find factory, falling back to BaseObject.");
-            Value = new BaseObject();
+            Log.Error(`Failed to Deserialize Object of Type: ${DSOData.Type}. Missing registered factory.`);
         }
-        Serialization.DeserializeInstanceData(Value, DSOData.Data);
         return Value;
     }
 
@@ -101,11 +111,11 @@ class Serialization {
     private static DeserializeInstanceDataValue(DSOValue: SerializedBaseObjectReference | string | number | boolean): BaseObject | string | number | boolean | null {
         if (typeof DSOValue !== "object" && typeof DSOValue !== "function") return DSOValue;
         if (typeof DSOValue === "function") {
-            Log.Warning("Invalid json object passed for deserialization. Data cannot contain function");
+            Log.Warning("Invalid json object passed for deserialization. Data cannot contain functions.");
             return null;
         }
         else if (typeof DSOValue === "object") {
-            if (Serialization.ValidType((DSOValue as SerializedBaseObjectReference).Type)) {
+            if (Serialization.ValidSerializedBaseObjectReference(DSOValue)) {
                 return Serialization.Deserialize(DSOValue);
             }
             else {
