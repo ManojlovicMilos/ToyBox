@@ -1,12 +1,10 @@
-export { Uuid };
-
-class Uuid {
+export default class Uuid {
     public static Create(): string {
-        let DT: number = new Date().getTime();
-        let Uuid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (C) => {
-            let R: number = (DT + Math.random() * 16) % 16 | 0;
-            DT = Math.floor(DT / 16);
-            return (C == 'x' ? R : (R & 0x3 | 0x8)).toString(16);
+        let dt: number = new Date().getTime();
+        let Uuid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            let r: number = (dt + Math.random() * 16) % 16 | 0;
+            dt = Math.floor(dt / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
         return Uuid;
     }

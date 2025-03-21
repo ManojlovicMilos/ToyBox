@@ -1,31 +1,24 @@
-import { Log } from "./Log";
-import { Uuid } from "./Uuid";
-import { Settings } from "./Settings";
-import { Superset } from "./Extensions";
-import { Resources } from "./Resources";
-import {
-    Serialization,
+import Log from "./Log";
+import Uuid from "./Uuid";
+import Settings, { SettingsObject } from "./Settings";
+import Resources from "./Resources";
+import Serialization, {
     SerializedBaseObjectData,
     SerializedBaseObjectReference
 } from "./Serialization";
-import {
-    Tag,
-    BaseObject,
-    TagCollection,
-    BaseObjectCollection
-} from "./BaseObject";
+import BaseObject from "./BaseObject";
+import Tag, { TagCollection } from "./Tag";
 
 export {
     Log,
     Tag,
     Uuid,
     Settings,
-    Superset,
     Resources,
     BaseObject,
     Serialization,
     TagCollection,
-    BaseObjectCollection,
+    SettingsObject,
     SerializedBaseObjectData,
     SerializedBaseObjectReference,
 };

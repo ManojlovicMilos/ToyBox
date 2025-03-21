@@ -1,42 +1,47 @@
-export { Log };
+const TOYBOX_PREFIX = 'TBX: ';
+const MESSAGE_TEXT_INFO = 'Info';
+const MESSAGE_TEXT_ERROR = 'Error';
+const MESSAGE_TEXT_WARNING = 'Warning';
+const MESSAGE_TEXT_EVENT = 'Event';
+const MESSAGE_TEXT_DEFAULT = 'Message';
 
-class Log {
-    public static Enabled: { [key: string]: boolean } = {
+export default class Log {
+    public static enabled: { [key: string]: boolean } = {
         Global: true,
         Info: true,
         Error: true,
         Event: true,
     }
 
-    public static RegisterCustomLog(Type: string): void {
-        this.Enabled[Type] = true;
+    public static RegisterCustomLog(type: string): void {
+        this.enabled[type] = true;
     }
 
-    public static Out(Message: string, Data?: any, Type?: string, Method?: () => void): void {
-        if (!this.Enabled.Global) return;
-        if (!this.Enabled[Type]) return;
-        const LogMethod = Method || console.log;
-        LogMethod(" - - - ");
-        if (Type) LogMethod("TBX: " + Type);
-        else LogMethod("TBX: Message");
-        LogMethod(Message);
-        if (Data) LogMethod(Data);
-        LogMethod(" - - - ");
+    public static Out(message: string, data?: any, type?: string, method?: () => void): void {
+        if (!this.enabled.Global) return;
+        if (!this.enabled[type]) return;
+        const logMethod = method || console.log;
+        logMethod(" - - - ");
+        if (type) logMethod(TOYBOX_PREFIX + type);
+        else logMethod(TOYBOX_PREFIX + MESSAGE_TEXT_DEFAULT);
+        logMethod(message);
+        if (data) logMethod(data);
+        logMethod(" - - - ");
     };
 
-    public static Info(Message: string, Data?: any): void {
-        this.Out(Message, Data, 'Info', console.info);
+    public static Info(message: string, data?: any): void {
+        this.Out(message, data, MESSAGE_TEXT_INFO, console.info);
     };
 
-    public static Error(Message: string, Data?: any): void {
-        this.Out(Message, Data, 'Error', console.error);
+    public static Error(message: string, data?: any): void {
+        this.Out(message, data, MESSAGE_TEXT_ERROR, console.error);
     };
 
-    public static Warning(Message: string, Data?: any): void {
-        this.Out(Message, Data, 'Warning', console.warn);
+    public static Warning(message: string, data?: any): void {
+        this.Out(message, data, MESSAGE_TEXT_WARNING, console.warn);
     };
 
-    public static Event(Message: string, Data?: any): void {
-        this.Out(Message, Data, 'Event', console.info);
+    public static Event(message: string, data?: any): void {
+        this.Out(message, data, MESSAGE_TEXT_EVENT, console.info);
     };
 }

@@ -1,4 +1,4 @@
-import { HTTP } from "./Http";
-import { Reader } from "./Reader";
+import HTTP from "./Http";
+import Reader from "./Reader";
 
 export  { HTTP, Reader };

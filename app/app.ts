@@ -26,14 +26,14 @@ import { Scene2D } from "./Engine/Scene/Scene2D";
 import { SceneObjectType, SceneObject } from "./Engine/Scene/SceneObject";
 import { SoundObject } from "./Engine/Scene/SoundObject";
 import { Settings, Quality } from "./Engine/Settings";
-import { Axis, Vertex } from "./Mathematics/Vertex";
-import { Transformation } from "./Mathematics/Transformation"
-import { MatrixMode, Matrix, MatrixTransformer } from "./Mathematics/MatrixTransformer"
-import { Color } from "./Mathematics/Color"
-import { Random } from "./Mathematics/Functions"
-import { CollisionResult } from "./Mathematics/CollisionResult";
-import { CollisionType, CollisionValue } from "./Mathematics/CollisionValue";
-import { Collision, ColliderObject } from "./Mathematics/Collision"
+import { Axis, Vertex } from "./Mathematics/Structures/Vertex";
+import { Transformation } from "./Mathematics/Structures/Transformation"
+import { MatrixMode, Matrix, MatrixTransformer } from "./Mathematics/Util/MatrixTransformer"
+import { Color } from "./Mathematics/Structures/Color"
+import { Random } from "./Mathematics/Util/Random"
+import { CollisionResult } from "./Mathematics/Collision/CollisionResult";
+import { CollisionType, CollisionValue } from "./Mathematics/Collision/CollisionValue";
+import { Collision, ColliderObject } from "./Mathematics/Collision/Collision"
 import { Convert } from "./Util/Converter";
 import { CollisionUtil } from "./Util/Collision";
 import { SceneObjectUtil } from "./Util/SceneObject";

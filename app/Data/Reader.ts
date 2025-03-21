@@ -1,9 +1,7 @@
-export { Reader }
+import HTTP from "./Http";
 
-import { HTTP } from "./Http";
-
-class Reader {
-    public static Read(Path: string): Promise<any> {
-        return HTTP.Get(Path);
+export default class Reader {
+    public static Read(path: string): Promise<any> {
+        return HTTP.Get(path).then()
     }
 }

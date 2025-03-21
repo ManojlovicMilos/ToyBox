@@ -1,17 +1,15 @@
-export { Resources };
+import BaseObject from "./BaseObject";
 
-import { BaseObject, BaseObjectCollection } from "./BaseObject";
+export default class Resources {
+    private _objects: { [key: string]: BaseObject }
+    private _objectsPerType: { [type: string]: BaseObject[] };
 
-class Resources {
-    private _Objects: BaseObjectCollection
-    private _ObjectsPerType: { [type: string]: BaseObject[] };
-
-    public constructor(Old?: Resources) {
-        if (Old != null) {
-            this._Objects = { ...Old._Objects };
+    public constructor(old?: Resources) {
+        if (old != null) {
+            this._objects = { ...old._objects };
         }
         else {
-            this._Objects = {};
+            this._objects = {};
         }
     }
 
@@ -19,28 +17,28 @@ class Resources {
         return new Resources(this);
     }
 
-    public Get(Key: string): BaseObject {
-        return this._Objects[Key];
+    public Get(key: string): BaseObject {
+        return this._objects[key];
     }
 
-    public GetPerType(Type: string): BaseObject[] {
-        return this._ObjectsPerType[Type];
+    public GetPerType(type: string): BaseObject[] {
+        return this._objectsPerType[type];
     }
 
-    public New(Key: string): BaseObject {
-        return this._Objects[Key].Duplicate();
+    public New(key: string): BaseObject {
+        return this._objects[key].Duplicate();
     }
 
-    public Set(Key: string, Data: BaseObject): void {
-        if (this._Objects[Key]) {
+    public Set(key: string, data: BaseObject): void {
+        if (this._objects[key]) {
             return;
         }
-        Data.ResourceKey = Key;
-        this._Objects[Key] = Data;
-        this._ObjectsPerType[Data.Type].push(Data);
+        data.resourceKey = key;
+        this._objects[key] = data;
+        this._objectsPerType[data.type].push(data);
     }
     
-    public Exists(Key: string): boolean {
-        return this._Objects[Key] != null;
+    public Exists(key: string): boolean {
+        return this._objects[key] != null;
     }
 }

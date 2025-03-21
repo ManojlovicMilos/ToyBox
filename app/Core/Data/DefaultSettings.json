@@ -1,0 +1,21 @@
+{
+    "version": "0.3.0",
+    "resources": {
+        "url": "Resources/"
+    },
+    "math": {
+        "collision": {
+            "additionalSideCheck": true
+        }
+    },
+    "graphics": {
+        "quality": "High"
+    },
+    "ui": {
+        "ignoreCSS": true,
+        "globalFontFamily": "Arial",
+        "globalFontScale": 1.0,
+        "globalFontScaleItchScale": 0.65,
+        "globalFontScaleItchException": true
+    }
+}
