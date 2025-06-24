@@ -1,119 +1,123 @@
-import Uuid from "./Uuid";
-import Tag, { TagCollection } from "./Tag";
+import Uuid from './Uuid';
+import Tag, { TagCollection } from './Tag';
+import inject from './InjectionManager';
+import { SerializedObject } from './SerializedDataTypes';
+
+const OBJECT_TYPE = 'BaseObject';
 
 export default abstract class BaseObject {
-    protected _id: string;
+    public id: string;
+    public types: string[];
+    public tags: TagCollection;
+    public children: BaseObject[];
     protected _name: string;
-    protected _resourceKey: string;
-    protected _types: string[];
-    protected _tags: TagCollection;
-    protected _children: BaseObject[];
-    protected _childrenMap: { [key: string]: BaseObject }
-    public get id(): string { return this._id; }
-    public get name(): string { return this._name; }
-    public set name(value: string) { this._name = value; }
-    public get resourceKey(): string { return this._resourceKey; }
-    public set resourceKey(value: string) { this._resourceKey = value; }
-    public get type(): string { return this._types[this._types.length - 1]; }
-    public get tags(): TagCollection { return this._tags; }
-    public get children(): BaseObject[] { return this._children; }
+    protected childrenMap: { [key: string]: BaseObject }
+
+    protected uuid: Uuid;
+    
+    public get name() { return this._name; }
+    public set name(value: string) { this.name = value; }
+    public get type(): string { return this.types[this.types.length - 1]; }
 
     public constructor(old?: BaseObject) {
-        this._types = ['BaseObject'];
-        if (old) {
-            this._id = Uuid.Create();
-            this._name = old._name;
-            this._resourceKey = old._resourceKey;
-            this._tags = { ...old._tags };
-            this._children = old._children.map((Child: BaseObject) => Child.Duplicate());
-        }
-        else {
-            this._id = Uuid.Create();
-            this._tags = {};
-            this._name = this._id;
-            this._children = [];
-        }
+        this.types = [OBJECT_TYPE];
+        this.uuid = inject(Uuid);
+        this.id = this.uuid.create();
+        this.tags = old ? { ...old.tags } : {};
+        this.name = old?.name || this.id;
+        this.children = old ? old.children.map((child: BaseObject) => child.duplicate()) : [];
     }
 
-    public Duplicate(): BaseObject {
-        return this; // new BaseObject(this) for non-abstract
+    // virtual
+    public duplicate(): BaseObject {
+        return this;
     }
 
-    public Is(type: string): boolean {
-        return this._types.indexOf(type) != -1;
+    public is(type: string): boolean {
+        return this.types.indexOf(type) != -1;
     }
 
-    public IsExactly(type: string): boolean {
+    public isExactly(type: string): boolean {
         return this.type === type;
     }
 
-    public IsAnyOf(types: string[]): boolean {
+    public isAnyOf(types: string[]): boolean {
         for (let i in types) {
-            if (this._types.indexOf(types[i]) != -1) return true;
+            if (this.types.indexOf(types[i]) != -1) return true;
         }
         return false;
     }
 
-    public HasTag(queryTag: string, queryTagValue?: Tag): boolean {
-        return !!this._tags[queryTag] && (!queryTagValue || this._tags[queryTag] === queryTagValue);
+    public hasTag(queryTag: string, queryTagValue?: Tag): boolean {
+        return !!this.tags[queryTag] && (!queryTagValue || this.tags[queryTag] === queryTagValue);
     }
 
-    public HasTags(queryTags: string[]): boolean {
+    public hasTags(queryTags: string[]): boolean {
         for (let i in queryTags) {
-            if (this._tags[queryTags[i]] != null) return true;
+            if (this.tags[queryTags[i]] != null) return true;
         }
         return false;
     }
 
-    public Attach(child: BaseObject): void {
-        this._children.push(child);
-        this._childrenMap[child.id] = child;
-        this.OnAttachChild(child);
+    public attach(child: BaseObject): void {
+        this.children.push(child);
+        this.childrenMap[child.id] = child;
+        this.onAttachChild(child);
     }
 
-    public Remove(childId: string): void {
-        this._children = this._children.filter((child: BaseObject) => child.id !== childId);
-        this._childrenMap[childId] = undefined;
-        this.OnRemoveChild(childId);
+    public remove(childId: string): void {
+        this.children = this.children.filter((child: BaseObject) => child.id !== childId);
+        this.childrenMap[childId] = undefined;
+        this.onRemoveChild(childId);
     }
 
-    public HasChild(childId: string): boolean {
-        return !!this._childrenMap[childId]
+    public hasChild(childId: string): boolean {
+        return !!this.childrenMap[childId]
     }
 
-    public FindChild(childId: string): BaseObject | undefined {
-        return this._childrenMap[childId];
+    public findChild(childId: string): BaseObject | undefined {
+        return this.childrenMap[childId];
     }
 
-    public FindChildrenByType(objectType: string): BaseObject[] {
-        return this.children.filter(item => item.Is(objectType));
+    public findChildrenByType(objectType: string): BaseObject[] {
+        return this.children.filter(item => item.is(objectType));
     }
 
-    public FindChildrenByExactType(objectType: string): BaseObject[] {
-        return this.children.filter(item => item.IsExactly(objectType));
+    public findChildrenByExactType(objectType: string): BaseObject[] {
+        return this.children.filter(item => item.isExactly(objectType));
     }
 
-    public FindChildrenByTags(key: string, value?: Tag): BaseObject[] {
-        return this.children.filter(item => item.HasTag(key, value));
+    public findChildrenByTags(key: string, value?: Tag): BaseObject[] {
+        return this.children.filter(item => item.hasTag(key, value));
     }
 
-    public OnAttachChild(Child: BaseObject): void {
-        // Virtual
+    // virtual
+    public onAttachChild(child: BaseObject): void {}
+
+    // virtual
+    public onRemoveChild(childID: string): void {}
+
+    // virtual
+    public onAttachToParent(parent: BaseObject): void {}
+
+    // virtual
+    public onRemoveFromParent(parent: BaseObject): void {}
+
+    // virtual
+    public onSerialize(serialized: SerializedObject): SerializedObject {
+        return serialized;
     }
 
-    public OnRemoveChild(ChildID: string): void {
-        // Virtual
+    // virtual
+    public onDeserialize(serialized: SerializedObject): void {}
+
+    // virtual
+    public skipSerializeKeys(): string[] {
+        return [];
     }
 
-    public OnAttachToParent(Parent: BaseObject): void {
-        // Virtual
-    }
-
-    public OnRemoveFromParent(Parent: BaseObject): void {
-        // Virtual
-    }
-
-    protected RegisterType(type: string): void {
-        this._types.push(type);
+    protected registerType(type: typeof BaseObject): void {
+        this.types.push(type.name);
+        // add creating factories
     }
 }

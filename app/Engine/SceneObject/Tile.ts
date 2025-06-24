@@ -1,7 +1,7 @@
 export  { Tile };
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Data from "../../Data/Data";
+import * as Math from "../../Mathematics/Mathematics";
 
 import { ImageObject } from "./ImageObject";
 import { ImageCollection } from "./Collections/ImageCollection";

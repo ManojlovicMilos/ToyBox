@@ -1,6 +1,6 @@
 export { Light, LightType, LightAttenuation };
 
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Math from "../../Mathematics/Mathematics";
 
 import { DrawObject } from "./DrawObject";
 
@@ -32,7 +32,7 @@ class Light extends DrawObject
     public constructor(Old?: Light)
     {
         super(Old);
-        this.RegisterType(Light.name);
+        this.registerType(Light);
         if (Old != null)
         {
             this._Radius = Old._Radius;

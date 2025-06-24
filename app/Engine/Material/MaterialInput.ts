@@ -10,25 +10,15 @@ enum MaterialInputType {
 }
 
 class MaterialInput {
-    private _ID: string;
-    private _Type: MaterialInputType;
-    public get ID(): string { return this._ID; }
-    public get Type(): MaterialInputType { return this._Type; }
+    public id: string;
+    public type: MaterialInputType;
 
-    public constructor(Old?: MaterialInput, ID?: string, Type?: MaterialInputType) {
-        if (Old) {
-            this._ID = Old._ID;
-            this._Type = Old._Type;
-        }
-        else {
-            this._ID = "";
-            if (ID) this._ID = ID;
-            this._Type = MaterialInputType.Vector4;
-            if (Type) this._Type = Type;
-        }
+    public constructor(old?: MaterialInput, id?: string, type?: MaterialInputType) {
+        this.id = old?.id || id || '';
+        this.type = old?.type || type || MaterialInputType.Vector4;
     }
 
-    public Copy(): MaterialInput {
+    public duplicate(): MaterialInput {
         return new MaterialInput(this);
     }
 }

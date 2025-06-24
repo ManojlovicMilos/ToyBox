@@ -4,10 +4,10 @@ import * as Core from "./../../Core/Core";
 import * as Util from "./../../Util/Util";
 import * as Math from "./../../Mathematics/Mathematics";
 
-import { Light } from "./Light";
-import { DrawObject, TBX_DRAW_OBJECT_TYPE } from "./DrawObject";
-import { SceneObject } from "./SceneObject";
-import { SoundObject } from "./SoundObject";
+import { Light } from "../SceneObject/Light";
+import { DrawObject, TBX_DRAW_OBJECT_TYPE } from "../SceneObject/DrawObject";
+import { SceneObject } from "../SceneObject/SceneObject";
+import { SoundObject } from "../SceneObject/SoundObject";
 import { EventArguments } from "../Events/EventArguments";
 import { SceneEventPackage } from "./../Events/SceneEventPackage";
 
@@ -17,25 +17,13 @@ enum SceneType {
 }
 
 class Scene extends Core.BaseObject {
-    protected _Active: boolean;
-    private _BackColor: Math.Color;
-    private _Events: SceneEventPackage;
+    protected active: boolean;
+    private backColor: Math.Color;
+    private events: SceneEventPackage;
     public get BackColor(): Math.Color { return this._BackColor; }
     public set BackColor(value: Math.Color) { this._BackColor = value; }
     public get Events(): SceneEventPackage { return this._Events; }
     public get Active(): boolean { return this._Active; }
-    public get DrawnObjects(): DrawObject[] {
-        return <DrawObject[]>this.FindByType(DrawObject.name);
-    }
-    public get SoundObjects(): SoundObject[] {
-        return <SoundObject[]>this.FindByType(SoundObject.name);
-    }
-    public get Lights(): Light[] {
-        return <Light[]>this.FindByDrawType(Light.name);
-    }
-    public get ActiveLights(): Light[] {
-        return <Light[]>this.FindActiveByDrawType(Light.name);
-    }
 
     public constructor(Old?: Scene) {
         super(Old);

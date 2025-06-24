@@ -1,40 +1,43 @@
+import * as Core from '../Core/Core';
+
 enum RequestType {
-    Get = "GET",
-    Post = "POST",
-    Update = "PUT",
-    Delete = "DELETE"
+    Get = 'GET',
+    Post = 'POST',
+    Update = 'PUT',
+    Delete = 'DELETE'
 }
 
-export default class HTTP {
-    public static Get<T>(url: string): Promise<T> {
-        return HTTP.Request<T>(RequestType.Get, url);
+export type HTTPContentBody = { [key: string]: string | number | boolean | object };
+
+export default class HTTP extends Core.Service {
+    private serialization: Core.Serialization;
+
+    public constructor() {
+        super();
+        this.serialization = Core.inject(Core.Serialization);
     }
 
-    public static Delete(url: string): Promise<boolean> {
-        return HTTP.Request<boolean>(RequestType.Delete, url);
+    public get<T>(url: string): Promise<T> {
+        return this.request<T>(RequestType.Get, url);
     }
 
-    public static Post<T>(url: string, body?: Object): Promise<T> {
-        return HTTP.Request<T>(RequestType.Post, url, body as Object);
+    public delete(url: string): Promise<boolean> {
+        return this.request<boolean>(RequestType.Delete, url);
     }
 
-    public static Update<T>(url: string, body?: Partial<T>): Promise<T> {
-        return HTTP.Request<T>(RequestType.Update, url, body as Object);
+    public post<T>(url: string, body?: Core.BaseObject): Promise<T> {
+        return this.request<T>(RequestType.Post, url, body);
+    }
+
+    public update<T>(url: string, body?: Partial<T>): Promise<T> {
+        return this.request<T>(RequestType.Update, url, body as unknown as Core.BaseObject);
     }
     
-    private static Request<T>(type: RequestType, url: string, body?: Object): Promise<T> {
-        return new Promise((Resolve: Function, Reject: Function) => {
-            let Request: XMLHttpRequest = new XMLHttpRequest();
-            Request.open(<string>type, url, false);
-            Request.onreadystatechange = function () {
-                if (Request.readyState === 4) {
-                    if (Request.status === 200 || Request.status == 0) {
-                        Resolve(Request.responseText);
-                    }
-                    else Reject({ Status: Request.status });
-                }
-            }.bind(this);
-            Request.send(body as Document);
-        });
+    private request<T>(type: RequestType, url: string, body?: Core.BaseObject): Promise<T> {
+        return fetch(url, {
+            method: type,
+            body: this.serialization.json(body),
+        })
+        .then((response: Response) => response.json());
     }
 }

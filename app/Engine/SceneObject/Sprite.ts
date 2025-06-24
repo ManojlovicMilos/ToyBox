@@ -1,7 +1,7 @@
 export  { Sprite, SpriteSet };
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Data from "../../Data/Data";
+import * as Math from "../../Mathematics/Mathematics";
 
 import { SpriteSet } from "./Collections/SpriteSet";
 import { SpriteSetCollection } from "./SpriteSetCollection";

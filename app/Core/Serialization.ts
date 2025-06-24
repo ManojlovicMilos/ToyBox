@@ -2,9 +2,11 @@ export {
     SerializedBaseObjectData,
     SerializedBaseObjectReference
 }
-import Log from "./Log";
-import BaseObject from "./BaseObject";
-import { TagCollection } from "./Tag";
+import Log from './Log';
+import Utility from './Service';
+import BaseObject from './BaseObject';
+import { TagCollection } from './Tag';
+import inject from './InjectionManager';
 
 type SerializedJSONbjectData = { [key: string]: SerializedJSONbjectData | string | number | boolean };
 type SerializedObjectValueType = SerializedBaseObjectReference | SerializedJSONbjectData | string | number | boolean | null;
@@ -14,41 +16,51 @@ type SerializedBaseObjectReference = {
     data: SerializedBaseObjectData,
 };
 
-const EDITOR_PREFIX = "EDITOR_";
-const TOYBOX_PREFIX = "TOYBOX_";
+const EDITOR_PREFIX = 'EDITOR_';
+const TOYBOX_PREFIX = 'TOYBOX_';
 
-export default class Serialization {
-    private static _Factories: { [key: string]: Function } = {};
+export default class Serialization extends Utility {
+    private log: Log;
+    private factories: { [key: string]: Function } = {};
 
-    public static ValidSerializedBaseObjectReference(DataObject: Partial<SerializedBaseObjectReference>): boolean {
-        if (!DataObject.type) return false;
-        if (!DataObject.data) return false;
-        return !!this._Factories[DataObject.type];
+    public constructor() {
+        super();
+        this.log = inject(Log);
     }
 
-    public static Register(type: string, Factory: Function): boolean {
-        if (Serialization._Factories[type]) {
-            Log.Warning("Unable to register factory, already registered.");
+    public validSerializedBaseObjectReference(DataObject: Partial<SerializedBaseObjectReference>): boolean {
+        if (!DataObject.type) return false;
+        if (!DataObject.data) return false;
+        return !!this.factories[DataObject.type];
+    }
+
+    public register(type: string, Factory: Function): boolean {
+        if (this.factories[type]) {
+            this.log.warning('Unable to register factory, already registered.');
             return false;
         }
-        Serialization._Factories[type] = Factory;
+        this.factories[type] = Factory;
         return true;
     }
 
-    public static Serialize(serialized: BaseObject): SerializedBaseObjectReference {
+    public serialize(serialized: BaseObject): SerializedBaseObjectReference {
         return {
             type: serialized.type,
             data: {
-                ...Serialization.SerializeInstanceData(serialized),
-                Tags: Serialization.FilterTags(serialized.tags)
+                ...this.serializeInstanceData(serialized),
+                Tags: this.filterTags(serialized.tags)
             }
         };
     }
 
-    private static SerializeInstanceData(serialized: BaseObject): SerializedBaseObjectData {
+    public json(serialized: BaseObject): string {
+        return JSON.stringify(this.serialize(serialized));
+    }
+
+    private serializeInstanceData(serialized: BaseObject): SerializedBaseObjectData {
         const Data: SerializedBaseObjectData = {};
         Object.keys(serialized).forEach(key => {
-            const value: SerializedObjectValueType | null = this.SerializeInstanceDataValue(this[key]);
+            const value: SerializedObjectValueType | null = this.serializeInstanceDataValue(this[key]);
             if (value !== null) {
                 Data[key] = value;
             }
@@ -56,15 +68,15 @@ export default class Serialization {
         return Data;
     }
 
-    private static SerializeInstanceDataValue(serializedValue: BaseObject | TagCollection | object | string | number | boolean): SerializedObjectValueType {
-        if (typeof serializedValue !== "function" && typeof serializedValue !== "object") {
+    private serializeInstanceDataValue(serializedValue: BaseObject | TagCollection | object | string | number | boolean): SerializedObjectValueType {
+        if (typeof serializedValue !== 'function' && typeof serializedValue !== 'object') {
             return serializedValue;
-        } else if (typeof serializedValue === "object" && (serializedValue as object) instanceof BaseObject) {
-            return Serialization.Serialize(serializedValue as BaseObject);
-        } else if (typeof serializedValue === "object") {
+        } else if (typeof serializedValue === 'object' && (serializedValue as object) instanceof BaseObject) {
+            return this.serialize(serializedValue as BaseObject);
+        } else if (typeof serializedValue === 'object') {
             let Serialized: SerializedJSONbjectData = {};
             Object.keys(serializedValue).forEach(key => {
-                const value: SerializedObjectValueType | null = this.SerializeInstanceDataValue(this[key]);
+                const value: SerializedObjectValueType | null = this.serializeInstanceDataValue(this[key]);
                 if (value !== null) {
                     Serialized[key] = value;
                 }
@@ -73,7 +85,7 @@ export default class Serialization {
         } else return null;
     }
 
-    private static FilterTags(serializedTags: TagCollection): TagCollection {
+    private filterTags(serializedTags: TagCollection): TagCollection {
         const FilteredTags: TagCollection = {};
         Object.keys(serializedTags).forEach(key => {
             if (!key.startsWith(EDITOR_PREFIX)
@@ -84,36 +96,36 @@ export default class Serialization {
         return FilteredTags;
     }
 
-    public static Deserialize(deserializedData: SerializedBaseObjectReference): BaseObject | null {
+    public deserialize(deserializedData: SerializedBaseObjectReference): BaseObject | null {
         let value: BaseObject | null;
-        if (!!Serialization._Factories[deserializedData.type]) {
-            value = Serialization._Factories[deserializedData.type]();
-            Serialization.DeserializeInstanceData(value, deserializedData.data);
+        if (!!this.factories[deserializedData.type]) {
+            value = this.factories[deserializedData.type]();
+            this.deserializeInstanceData(value, deserializedData.data);
         }
         else {
-            Log.Error(`Failed to Deserialize Object of Type: ${deserializedData.type}. Missing registered factory.`);
+            this.log.error(`Failed to Deserialize Object of Type: ${deserializedData.type}. Missing registered factory.`);
         }
         return value;
     }
 
-    private static DeserializeInstanceData(deserialized: BaseObject, deserializedData: SerializedBaseObjectData): void {
+    private deserializeInstanceData(deserialized: BaseObject, deserializedData: SerializedBaseObjectData): void {
         Object.keys(deserializedData).forEach(key => {
-            const value: BaseObject | object | string | number | boolean | null = Serialization.DeserializeInstanceDataValue(deserialized[key]);
+            const value: BaseObject | object | string | number | boolean | null = this.deserializeInstanceDataValue(deserialized[key]);
             if (value !== null) {
                 deserialized[key] = value;
             }
         });
     }
 
-    private static DeserializeInstanceDataValue(deserializedValue: SerializedBaseObjectReference | string | number | boolean): BaseObject | string | number | boolean | null {
-        if (typeof deserializedValue !== "object" && typeof deserializedValue !== "function") return deserializedValue;
-        if (typeof deserializedValue === "function") {
-            Log.Warning("Invalid json object passed for deserialization. Data cannot contain functions.");
+    private deserializeInstanceDataValue(deserializedValue: SerializedBaseObjectReference | string | number | boolean): BaseObject | string | number | boolean | null {
+        if (typeof deserializedValue !== 'object' && typeof deserializedValue !== 'function') return deserializedValue;
+        if (typeof deserializedValue === 'function') {
+            this.log.warning('Invalid json object passed for deserialization. Data cannot contain functions.');
             return null;
         }
-        else if (typeof deserializedValue === "object") {
-            if (Serialization.ValidSerializedBaseObjectReference(deserializedValue)) {
-                return Serialization.Deserialize(deserializedValue);
+        else if (typeof deserializedValue === 'object') {
+            if (this.validSerializedBaseObjectReference(deserializedValue)) {
+                return this.deserialize(deserializedValue);
             }
             else {
                 return null;

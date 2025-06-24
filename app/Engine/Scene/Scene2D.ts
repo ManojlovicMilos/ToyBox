@@ -3,10 +3,10 @@ export  { Scene2D };
 import * as Math from "./../../Mathematics/Mathematics";
 
 import { SceneType, Scene } from "./Scene";
-import { SceneObjectType, SceneObject } from "./SceneObject";
-import { DrawObjectType, DrawObject } from "./../Scene/DrawObject";
-import { Sprite } from "./Sprite";
-import { Tile } from "./Tile";
+import { SceneObjectType, SceneObject } from "../SceneObject/SceneObject";
+import { DrawObjectType, DrawObject } from "../SceneObject/DrawObject";
+import { Sprite } from "../SceneObject/Sprite";
+import { Tile } from "../SceneObject/Tile";
 
 class Scene2D extends Scene
 {

@@ -1,22 +1,23 @@
 export { ImageObject }
 
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Math from "../../Mathematics/Mathematics";
 
 import { DrawObject } from "./DrawObject";
-import { Material } from "./../Material/Material";
+import { Material } from "../Material/Material";
 import { ImageCollection } from "./Collections/ImageCollection";
-import { ImageObjectEventPackage } from "./../Events/ImageObjectEventPackage";
+import { ImageObjectEventPackage } from "../Events/ImageObjectEventPackage";
 
+// abstract
 class ImageObject extends DrawObject
 {
-    // Abstract
-    private _FlipX: boolean;
-    private _FlipY: boolean;
-    private _RepeatX: number;
-    private _RepeatY: number;
-    private _AmbientColor: Math.Color;
-    private _Material: Material;
-    private _CustomShader: any;
+    public flipX: boolean;
+    public flipY: boolean;
+    public repeatX: number;
+    public repeatY: number;
+
+    public get index(): number { /*virtual*/ return -1; }
+    public set index(value: number) { /*virtual*/ }
+
     protected _Collection: ImageCollection;
     protected _NormalCollection: ImageCollection;
     protected _SpecularCollection: ImageCollection;
@@ -25,31 +26,23 @@ class ImageObject extends DrawObject
     public get Images(): string[] { /* Virtual */ return this._Collection.Images; }
     public get NormalMaps(): string[] { /* Virtual */ return this._NormalCollection.Images; }
     public get SpecularMaps(): string[] { /* Virtual */ return this._SpecularCollection.Images; }
-    public get FlipX(): boolean { return this._FlipX; }
-    public set FlipX(value: boolean) { this._FlipX = value; this.Modified = true; }
-    public get FlipY(): boolean { return this._FlipY; }
-    public set FlipY(value: boolean) { this._FlipY = value; this.Modified = true; }
-    public get RepeatX(): number { return this._RepeatX; }
-    public set RepeatX(value: number) { this._RepeatX = value; this.Modified = true; }
-    public get RepeatY(): number { return this._RepeatY; }
-    public set RepeatY(value: number) { this._RepeatY = value; this.Modified = true; }
-    public get AmbientColor(): Math.Color { return this._AmbientColor; }
-    public set AmbientColor(value: Math.Color) { this._AmbientColor = value; }
-    public get Material(): Material { return this._Material; }
-    public set Material(value: Material) { this._Material = value; }
-    public get CustomShader(): any { return this._CustomShader; }
-    public set CustomShader(value: any) { this._CustomShader = value; }
     public get Collection(): ImageCollection { return this._Collection; }
     public set Collection(value: ImageCollection) { this._Collection = value; }
     public get NormalCollection(): ImageCollection { return this._NormalCollection; }
     public set NormalCollection(value: ImageCollection) { this._NormalCollection = value; }
     public get SpecularCollection(): ImageCollection { return this._SpecularCollection; }
     public set SpecularCollection(value: ImageCollection) { this._SpecularCollection = value; }
-    public get Events(): ImageObjectEventPackage { return <ImageObjectEventPackage>this._Events; }
-    public constructor(Old?: ImageObject)
-    {
-        super(Old);
-        this.RegisterType(ImageObject.name);
+    public get Events(): ImageObjectEventPackage { return this.events as ImageObjectEventPackage; }
+
+    public constructor(old?: ImageObject) {
+        super(old);
+        this.registerType(ImageObject);
+        this.flipX = old?.flipX || false;
+        this.flipY = old?.flipY || false;
+        this.repeatX = old?.repeatX || 1;
+        this.repeatY = old?.repeatY || 1;
+
+
         if (Old != null)
         {
             this._FlipX = Old._FlipX;
@@ -76,8 +69,8 @@ class ImageObject extends DrawObject
             this._SpecularCollection = new ImageCollection();
         }
     }
-    public Copy(): ImageObject
-    {
+
+    public override duplicate(): ImageObject {
         return new ImageObject(this);
     }
 }

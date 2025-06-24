@@ -1,35 +1,30 @@
-import BaseObject from "./BaseObject";
+import BaseObject from './BaseObject';
 
 export default class Resources {
     private _objects: { [key: string]: BaseObject }
     private _objectsPerType: { [type: string]: BaseObject[] };
 
     public constructor(old?: Resources) {
-        if (old != null) {
-            this._objects = { ...old._objects };
-        }
-        else {
-            this._objects = {};
-        }
+        this._objects = old ? { ...old._objects } : {};
     }
 
-    public Copy(): Resources {
+    public copy(): Resources {
         return new Resources(this);
     }
 
-    public Get(key: string): BaseObject {
+    public get(key: string): BaseObject {
         return this._objects[key];
     }
 
-    public GetPerType(type: string): BaseObject[] {
+    public getPerType(type: string): BaseObject[] {
         return this._objectsPerType[type];
     }
 
-    public New(key: string): BaseObject {
-        return this._objects[key].Duplicate();
+    public new(key: string): BaseObject {
+        return this._objects[key].duplicate();
     }
 
-    public Set(key: string, data: BaseObject): void {
+    public set(key: string, data: BaseObject): void {
         if (this._objects[key]) {
             return;
         }
@@ -38,7 +33,7 @@ export default class Resources {
         this._objectsPerType[data.type].push(data);
     }
     
-    public Exists(key: string): boolean {
+    public exists(key: string): boolean {
         return this._objects[key] != null;
     }
 }

@@ -1,40 +1,38 @@
 export { Game };
 
-import { BaseObject } from "../../Core/BaseObject";
-// import * as Core from "./../../Core/Core";
-import { Scene } from "./../Scene/Scene";
-import { SceneObject } from "./../Scene/SceneObject";
+import * as Core from './../../Core/Core';
+import { Scene } from './../Scene/Scene';
+import { SceneObject } from '../SceneObject/SceneObject';
 
-const DEFAULT_GAME_NAME = "ToyBox Game";
+const TITLE_ELEMENT = 'title';
+const DEFAULT_GAME_NAME = 'ToyBox Game';
 
-class Game extends BaseObject {
+class Game extends Core.BaseObject {
     private _Scenes: Scene[];
     private _Assets: SceneObject[];
-    public set Name(value: string) { this._Name = value; this.UpdateName(); }
+    public set name(value: string) { this.name = value; this.updateName(); }
     public get Scenes(): Scene[] { return this._Scenes; }
     public set Scenes(value: Scene[]) { this._Scenes = value; }
     public get Assets(): SceneObject[] { return this._Assets; }
     public set Assets(value: SceneObject[]) { this._Assets = value; }
 
-    public constructor(Old?: Game, Name?: string) {
-        super(Old);
-        this._Name = Name || DEFAULT_GAME_NAME;
+    public constructor(old?: Game, name?: string) {
+        super(old);
+        this.name = name || DEFAULT_GAME_NAME;
         this._Scenes = [];
         this.UpdateName();
     }
 
-    public override Duplicate(): Game {
+    public override duplicate(): Game {
         let New: Game = new Game();
         New._Name = this._Name;
         return New;
     }
 
-    private UpdateName(): void {
-        let Title: HTMLElement = document.getElementById("title") as HTMLElement;
-        Title.innerHTML = this._Name;
-    }
+    
 
-    public Attach(Scene: Scene): void {
+    public override attach(Scene: Core.BaseObject): void {
+        if ()
         this._Children.push(Scene);
     }
 
@@ -48,16 +46,21 @@ class Game extends BaseObject {
         this.Data[SceneName] = null;
     }
 
-    public FindByData(Key: string, Data?: any): any[] {
+    public findByData(key: string, data?: any): any[] {
         let Objects: any[] = [];
         for (let i = 0; i < this._Scenes.length; i++) {
-            if (this._Scenes[i].Data[Key]) {
-                if (Data) {
-                    if (this._Scenes[i].Data[Key] == Data) Objects.push(this._Scenes[i]);
+            if (this._Scenes[i].data[key]) {
+                if (data) {
+                    if (this._Scenes[i].data[key] == data) Objects.push(this._Scenes[i]);
                 }
                 else Objects.push(this._Scenes[i]);
             }
         }
         return Objects;
+    }
+
+    private updateName(): void {
+        let Title: HTMLElement = document.getElementById(TITLE_ELEMENT) as HTMLElement;
+        Title.innerHTML = this.name;
     }
 }

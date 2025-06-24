@@ -12,47 +12,47 @@ export default class Vertex {
         else this.z = 0;
     }
 
-    public Copy(): Vertex {
+    public duplicate(): Vertex {
         return new Vertex(this.x, this.y, this.z);
     }
 
-    public Translate(v: Vertex): Vertex {
+    public translate(v: Vertex): Vertex {
         this.x += v.x;
         this.y += v.y;
         this.z += v.z;
         return this;
     }
 
-    public Add(v: Vertex): Vertex {
-        return this.Translate(v);
+    public add(v: Vertex): Vertex {
+        return this.translate(v);
     }
 
-    public Substract(v: Vertex): Vertex {
+    public substract(v: Vertex): Vertex {
         this.x -= v.x;
         this.y -= v.y;
         this.z -= v.z;
         return this;
     }
 
-    public Scale(v: Vertex): Vertex {
+    public scale(v: Vertex): Vertex {
         this.x *= v.x;
         this.y *= v.y;
         this.z *= v.z;
         return this;
     }
 
-    public Scalar(value: number): Vertex {
+    public scalar(value: number): Vertex {
         this.x *= value;
         this.y *= value;
         this.z *= value;
         return this;
     }
 
-    public Rotate(angle: number): Vertex {
-        return this.RotateZ(angle);
+    public rotate(angle: number): Vertex {
+        return this.rotateZ(angle);
     }
 
-    public RotateX(angle: number): Vertex {
+    public rotateX(angle: number): Vertex {
         let oy: number = this.y;
         let oz: number = this.z;
         this.y = Math.cos((angle / 180) * Math.PI) * oy - Math.sin((angle / 180) * Math.PI) * oz;
@@ -60,7 +60,7 @@ export default class Vertex {
         return this;
     }
 
-    public RotateY(angle: number): Vertex {
+    public rotateY(angle: number): Vertex {
         let ox: number = this.x;
         let oz: number = this.z;
         this.x = Math.cos((angle / 180) * Math.PI) * ox + Math.sin((angle / 180) * Math.PI) * oz;
@@ -68,7 +68,7 @@ export default class Vertex {
         return this;
     }
 
-    public RotateZ(angle: number): Vertex {
+    public rotateZ(angle: number): Vertex {
         let ox: number = this.x;
         let oy: number = this.y;
         this.x = Math.cos((angle / 180) * Math.PI) * ox - Math.sin((angle / 180) * Math.PI) * oy;
@@ -76,60 +76,46 @@ export default class Vertex {
         return this;
     }
 
-    public Length(): number {
+    public length(): number {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    public Normalize(): Vertex {
-        let divider: number = 1.0 / this.Length();
-        this.Scalar(divider);
+    public normalize(): Vertex {
+        let divider: number = 1.0 / this.length();
+        this.scalar(divider);
         return this;
     }
 
-    public Absolute(): Vertex {
+    public absolute(): Vertex {
         this.x = Math.abs(this.x);
         this.y = Math.abs(this.y);
         this.z = Math.abs(this.z);
         return this;
     }
 
-    public ToArray(): number[] {
+    public toArray(): number[] {
         return [this.x, this.y, this.z];
     }
 
-    public ToQuattroArray(w: number): number[] {
+    public toQuattroArray(w: number): number[] {
         return [this.x, this.y, this.z, w];
     }
 
-    public Deserialize(data: any): void {
-        this.x = data.x;
-        this.y = data.y;
-        this.z = data.z;
-    }
-
-    public Serialize(): any {
-        return {
-            x: this.x,
-            y: this.y,
-            z: this.z
-        };
-    }
-
     // Static
-    public static FromRGB(r: number, g: number, b: number): Vertex {
+    public static fromRGB(r: number, g: number, b: number): Vertex {
         return new Vertex((r * 1.0 + 1) / 256, (g * 1.0 + 1) / 256, (b * 1.0 + 1) / 256);
     }
 
-    public static Cross(left: Vertex, right: Vertex): Vertex {
+    public static cross(left: Vertex, right: Vertex): Vertex {
         return new Vertex(left.y * right.z - left.z * right.y, left.z * right.x - left.x * right.z, left.x * right.y - left.y * right.x);
     }
 
-    public static Distance(v1: Vertex, v2: Vertex): number {
+    public static distance(v1: Vertex, v2: Vertex): number {
         let v: Vertex = new Vertex(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
-        return v.Length();
+        return v.length();
     }
 
-    private static CalculateAngle(v1: Vertex, v2: Vertex): number {
+    private static calculateAngle(v1: Vertex, v2: Vertex): number {
         let v1V: number = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
         let v2V: number = Math.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
         let up: number = (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
@@ -141,7 +127,7 @@ export default class Vertex {
         return angle;
     }
 
-    public static Angle(v1: Vertex, v2: Vertex): number {
-        return Vertex.CalculateAngle(new Vertex(0, 1, 0), new Vertex(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z));
+    public static angle(v1: Vertex, v2: Vertex): number {
+        return Vertex.calculateAngle(new Vertex(0, 1, 0), new Vertex(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z));
     }
 }

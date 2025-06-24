@@ -1,5 +1,6 @@
 export { Settings, Quality };
 import DefaultSettings from './Data/DefaultSettings.json';
+import Utility from './Service';
 
 enum Quality {
     Low = 'Low',
@@ -29,10 +30,10 @@ export type SettingsObject = {
     },
 }
 
-export default class Settings {
-    public static active: SettingsObject = DefaultSettings as SettingsObject;
+export default class Settings extends Utility {
+    public active: SettingsObject = DefaultSettings as SettingsObject;
 
-    public static Apply(customSettings: Partial<SettingsObject>): void {
+    public apply(customSettings: Partial<SettingsObject>): void {
         if (this.active.version === customSettings.version) {
             this.active = {
                 version: this.active.version,

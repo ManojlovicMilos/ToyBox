@@ -16,11 +16,11 @@ export default class Color {
         this.a = COLOR_VALUE_MAX;
     }
 
-    public Copy(): Color {
+    public duplicate(): Color {
         return Color.FromRGBA(this.r, this.g, this.b, this.a);
     }
 
-    public Lighten(amount: number = MODIFY_DEFAULT_AMOUNT): Color {
+    public lighten(amount: number = MODIFY_DEFAULT_AMOUNT): Color {
         this.r += amount;
         if (this.r > COLOR_VALUE_MAX) this.r = COLOR_VALUE_MAX;
         this.g += amount;
@@ -30,7 +30,7 @@ export default class Color {
         return this;
     }
 
-    public Darken(amount: number = MODIFY_DEFAULT_AMOUNT): Color {
+    public darken(amount: number = MODIFY_DEFAULT_AMOUNT): Color {
         this.r -= amount;
         if (this.r < COLOR_VALUE_MIN) this.r = COLOR_VALUE_MIN;
         this.g -= amount;
@@ -40,7 +40,7 @@ export default class Color {
         return this;
     }
 
-    public ToArray(): number[] {
+    public toArray(): number[] {
         return [
             (this.r * 1.0 + 1) / COLOR_VALUE_RANGE,
             (this.g * 1.0 + 1) / COLOR_VALUE_RANGE,
@@ -49,25 +49,8 @@ export default class Color {
         ];
     }
 
-    public ToString(): string {
+    public toString(): string {
         return "rgba(" + this.r + "," + this.g + "," + this.b + "," + ((this.a * 1.0 + 1) / COLOR_VALUE_RANGE) + ")";
-    }
-
-    public Serialize(): any {
-        let c: any = {
-            r: this.r,
-            g: this.g,
-            b: this.b,
-            a: this.a
-        };
-        return c;
-    }
-
-    public Deserialize(data: any): void {
-        this.r = data.r;
-        this.g = data.g;
-        this.b = data.b;
-        this.a = data.a;
     }
 
     // Static

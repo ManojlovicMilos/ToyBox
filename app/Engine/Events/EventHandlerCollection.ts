@@ -1,36 +1,43 @@
+import BaseObject from '../../Core/BaseObject';
+
 export { EventHandlerCollection };
 
-import { EventArguments } from "./EventArguments";
+type HandlerFunctionType<T> = (args: T, invoker: BaseObject) => {};
 
-class EventHandlerCollection {
-    private _Handlers: Function[];
+class EventHandlerCollection<T> {
+    public stop: boolean;
+    private handlers: (HandlerFunctionType<T>)[];
 
-    public constructor(Old?: EventHandlerCollection) {
-        this._Handlers = Old ? Old._Handlers : [];
+    public constructor(Old?: EventHandlerCollection<T>) {
+        this.stop = false;
+        this.handlers = Old ? Old.handlers : [];
     }
 
-    public Copy(): EventHandlerCollection {
+    public duplicate(): EventHandlerCollection<T> {
         return new EventHandlerCollection(this);
     }
 
-    public Add(Handler: Function): void {
-        this._Handlers.push(Handler);
+    public add(handler: HandlerFunctionType<T>): void {
+        this.handlers.push(handler);
     }
 
-    public Remove(Handler: Function): void {
-        this._Handlers = this._Handlers.filter(Entry => Entry != Handler);
+    public remove(handler: HandlerFunctionType<T>): void {
+        this.handlers = this.handlers.filter(entry => entry != handler);
     }
 
-    public Clear(): void {
-        this._Handlers = [];
+    public clear(): void {
+        this.handlers = [];
     }
     
-    public Invoke(Args: EventArguments): boolean {
-        if (this._Handlers.length == 0) return false;
-        let Handled: boolean = false;
-        for (let Handler of this._Handlers) {
-            Handled = Handled || Handler(Args);
+    public invoke(args: T, invoker: BaseObject): boolean {
+        if (this.stop) return false;
+        if (this.handlers.length === 0) return false;
+        let handled: boolean = false;
+        for (let handler of this.handlers) {
+            const exists = !!this.handlers;
+            if (exists) handler(args, invoker)
+            handled = handled || exists;
         }
-        return Handled;
+        return handled;
     }
 }

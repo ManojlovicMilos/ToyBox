@@ -9,13 +9,13 @@ import { SceneEventPackage } from "./Events/SceneEventPackage";
 import { SpriteEventPackage } from "./Events/SpriteEventPackage";
 import { ImageObjectEventPackage } from "./Events/ImageObjectEventPackage";
 
-import { DrawObjectType, DrawObject } from "./Scene/DrawObject";
-import { ImageObject } from "./Scene/ImageObject";
-import { SpriteSet } from "./Scene/Collections/SpriteSet";
+import { DrawObjectType, DrawObject } from "./SceneObject/DrawObject";
+import { ImageObject } from "./SceneObject/ImageObject";
+import { SpriteSet } from "./SceneObject/Collections/SpriteSet";
 import { SpriteSetCollection } from "./Scene/SpriteSetCollection";
-import { Sprite } from "./Scene/Sprite";
-import { ImageCollection } from "./Scene/Collections/ImageCollection";
-import { Tile } from "./Scene/Tile";
+import { Sprite } from "./SceneObject/Sprite";
+import { ImageCollection } from "./SceneObject/Collections/ImageCollection";
+import { Tile } from "./SceneObject/Tile";
 
 
 
@@ -23,9 +23,9 @@ import { Tile } from "./Scene/Tile";
 import { Game } from "./Game/Game";
 import { SceneType, Scene } from "./Scene/Scene";
 import { Scene2D } from "./Scene/Scene2D";
-import { SceneObjectType, SceneObject } from "./Scene/SceneObject";
-import { SoundObject } from "./Scene/SoundObject";
-import { Light, LightType, LightAttenuation } from "./Scene/Light";
+import { SceneObjectType, SceneObject } from "./SceneObject/SceneObject";
+import { SoundObject } from "./SceneObject/SoundObject";
+import { Light, LightType, LightAttenuation } from "./SceneObject/Light";
 import { SpotLight } from "./Scene/SpotLight";
 import { DirectionalLight } from "./Scene/DirectionalLight";
 import { MaterialNodeValue, MaterialNodeValueType } from "./Material/MaterialNodeValue";

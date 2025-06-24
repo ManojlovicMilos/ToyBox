@@ -128,7 +128,7 @@ class ThreeMaterialGenerator {
             else Material = this.GenerateMaterial(Drawn, [Textures[Index]]);
             this.RegisterLitMaterial(Material);
         }
-        return Material
+        return Material;
     }
 
     public LoadObjectMaterial(Drawn: Engine.ImageObject): any {
