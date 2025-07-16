@@ -1,8 +1,8 @@
 export { Game };
 
 import * as Core from './../../Core/Core';
-import { Scene } from './../Scene/Scene';
-import { SceneObject } from '../SceneObject/SceneObject';
+import { Scene } from '../Scenes/Scene/Scene';
+import { SceneObject } from '../Objects/SceneObject/SceneObject';
 
 const TITLE_ELEMENT = 'title';
 const DEFAULT_GAME_NAME = 'ToyBox Game';

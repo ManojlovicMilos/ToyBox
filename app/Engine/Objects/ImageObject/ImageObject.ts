@@ -1,11 +1,11 @@
 export { ImageObject }
 
-import * as Math from "../../Mathematics/Mathematics";
+import * as Math from "../../../Mathematics/Mathematics";
 
-import { DrawObject } from "./DrawObject";
-import { Material } from "../Material/Material";
-import { ImageCollection } from "./Collections/ImageCollection";
-import { ImageObjectEventPackage } from "../Events/ImageObjectEventPackage";
+import { DrawObject } from "../DrawObject/DrawObject";
+import { Material } from "../../Material/Material";
+import { ImageCollection } from "../../Resources/ImageCollection/ImageCollection";
+import { ImageObjectEventPackage } from "./ImageObjectEventPackage";
 
 // abstract
 class ImageObject extends DrawObject

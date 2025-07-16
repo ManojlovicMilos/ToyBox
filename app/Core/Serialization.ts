@@ -3,10 +3,10 @@ export {
     SerializedBaseObjectReference
 }
 import Log from './Log';
-import Utility from './Service';
 import BaseObject from './BaseObject';
 import { TagCollection } from './Tag';
-import inject from './InjectionManager';
+import Utility from './Services/Service';
+import inject from './Services/InjectionManager';
 
 type SerializedJSONbjectData = { [key: string]: SerializedJSONbjectData | string | number | boolean };
 type SerializedObjectValueType = SerializedBaseObjectReference | SerializedJSONbjectData | string | number | boolean | null;

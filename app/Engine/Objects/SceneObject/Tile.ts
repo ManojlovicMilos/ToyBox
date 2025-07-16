@@ -1,11 +1,11 @@
 export  { Tile };
 
-import * as Data from "../../Data/Data";
-import * as Math from "../../Mathematics/Mathematics";
+import * as Data from "../../../Data/Data";
+import * as Math from "../../../Mathematics/Mathematics";
 
-import { ImageObject } from "./ImageObject";
-import { ImageCollection } from "./Collections/ImageCollection";
-import { DrawObject, DrawObjectType } from "./DrawObject";
+import { ImageObject } from "../ImageObject/ImageObject";
+import { ImageCollection } from "../../Resources/ImageCollection/ImageCollection";
+import { DrawObject, DrawObjectType } from "../DrawObject/DrawObject";
 
 class Tile extends ImageObject
 {

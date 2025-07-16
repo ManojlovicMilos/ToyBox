@@ -1,12 +1,12 @@
 export  { Scene2D };
 
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Math from "../../../Mathematics/Mathematics";
 
-import { SceneType, Scene } from "./Scene";
-import { SceneObjectType, SceneObject } from "../SceneObject/SceneObject";
-import { DrawObjectType, DrawObject } from "../SceneObject/DrawObject";
-import { Sprite } from "../SceneObject/Sprite";
-import { Tile } from "../SceneObject/Tile";
+import { SceneType, Scene } from "../Scene/Scene";
+import { SceneObjectType, SceneObject } from "../../Objects/SceneObject/SceneObject";
+import { DrawObjectType, DrawObject } from "../../Objects/DrawObject/DrawObject";
+import { Sprite } from "../../Objects/Sprite/Sprite";
+import { Tile } from "../../Objects/SceneObject/Tile";
 
 class Scene2D extends Scene
 {

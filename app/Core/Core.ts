@@ -8,11 +8,11 @@ import Serialization, {
 import {
     SerializedObject
 } from './SerializedDataTypes';
-import Resources from './Resources';
+import Resources from './Resources/ResourceService';
 import BaseObject from './BaseObject';
 import Tag, { TagCollection } from './Tag';
 import Settings, { SettingsObject } from './Settings';
-import inject, { InjectionManager } from './InjectionManager';
+import inject, { InjectionManager } from './Services/InjectionManager';
 
 export {
     Log,

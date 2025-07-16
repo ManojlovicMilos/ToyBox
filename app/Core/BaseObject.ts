@@ -1,6 +1,6 @@
 import Uuid from './Uuid';
 import Tag, { TagCollection } from './Tag';
-import inject from './InjectionManager';
+import inject from './Services/InjectionManager';
 import { SerializedObject } from './SerializedDataTypes';
 
 const OBJECT_TYPE = 'BaseObject';

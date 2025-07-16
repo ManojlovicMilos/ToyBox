@@ -1,13 +1,13 @@
 export  { Sprite, SpriteSet };
 
-import * as Data from "../../Data/Data";
-import * as Math from "../../Mathematics/Mathematics";
+import * as Data from "../../../Data/Data";
+import * as Math from "../../../Mathematics/Mathematics";
 
-import { SpriteSet } from "./Collections/SpriteSet";
+import { SpriteSet } from "../SceneObject/Collections/SpriteSet";
 import { SpriteSetCollection } from "./SpriteSetCollection";
-import { ImageObject } from "./ImageObject";
-import { DrawObject, DrawObjectType } from "./DrawObject";
-import { SpriteEventPackage } from "../Events/SpriteEventPackage";
+import { ImageObject } from "../ImageObject/ImageObject";
+import { DrawObject, DrawObjectType } from "../DrawObject/DrawObject";
+import { SpriteEventPackage } from "./SpriteEventPackage";
 
 class Sprite extends ImageObject
 {

@@ -31,13 +31,10 @@ class EventHandlerCollection<T> {
     
     public invoke(args: T, invoker: BaseObject): boolean {
         if (this.stop) return false;
-        if (this.handlers.length === 0) return false;
-        let handled: boolean = false;
+        if (this.handlers && this.handlers.length === 0) return false;
         for (let handler of this.handlers) {
-            const exists = !!this.handlers;
-            if (exists) handler(args, invoker)
-            handled = handled || exists;
+            handler(args, invoker);
         }
-        return handled;
+        return true;
     }
 }

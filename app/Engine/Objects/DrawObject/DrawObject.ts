@@ -1,14 +1,15 @@
 export { DrawObject };
 
-import * as Math from "../../Mathematics/Mathematics";
+import * as Math from "../../../Mathematics/Mathematics";
 
-import { Material } from '../Engine';
-import { SceneObject } from "./SceneObject";
+import { Material } from '../../Engine';
+import { SceneObject } from "../SceneObject/SceneObject";
 
 abstract class DrawObject extends SceneObject {
     public fixed: boolean;
     public modified: boolean;
     public resourceKey: string;
+    public trans: Math.Transformation;
     private material: Material;
     
     public get color(): Math.Color { return this.material.color; }
@@ -24,6 +25,7 @@ abstract class DrawObject extends SceneObject {
         this.fixed = !!old.fixed;
         this.modified = false;
         this.resourceKey = old?.resourceKey || this.uuid.create();
+        this.trans = old?.trans.duplicate() || new Math.Transformation();
         this.material = old?.material.duplicate() || new Material();
     }
 

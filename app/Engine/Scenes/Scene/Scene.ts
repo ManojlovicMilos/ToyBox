@@ -1,15 +1,15 @@
 export { SceneType, Scene };
 
-import * as Core from "./../../Core/Core";
-import * as Util from "./../../Util/Util";
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Core from "../../../Core/Core";
+import * as Util from "../../../Util/Util";
+import * as Math from "../../../Mathematics/Mathematics";
 
-import { Light } from "../SceneObject/Light";
-import { DrawObject, TBX_DRAW_OBJECT_TYPE } from "../SceneObject/DrawObject";
-import { SceneObject } from "../SceneObject/SceneObject";
-import { SoundObject } from "../SceneObject/SoundObject";
+import { Light } from "../../Objects/Light/Light";
+import { DrawObject, TBX_DRAW_OBJECT_TYPE } from "../../Objects/DrawObject/DrawObject";
+import { SceneObject } from "../../Objects/SceneObject/SceneObject";
+import { SoundObject } from "../../Objects/SceneObject/SoundObject";
 import { EventArguments } from "../Events/EventArguments";
-import { SceneEventPackage } from "./../Events/SceneEventPackage";
+import { SceneEventPackage } from "./SceneEventPackage";
 
 enum SceneType {
     Scene2D = "Scene2D",

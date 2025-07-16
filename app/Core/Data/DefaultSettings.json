@@ -8,6 +8,9 @@
             "additionalSideCheck": true
         }
     },
+    "engine": {
+        "useResourceReferenceOnDuplication": true
+    },
     "graphics": {
         "quality": "High"
     },

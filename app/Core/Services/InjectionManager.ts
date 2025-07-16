@@ -1,13 +1,10 @@
-import Service, { InjectionType } from './Service'
+import Service from './Service'
 
 export class InjectionManager {
-    private static rootServices: { [key: string]: object }
+    private static rootServices: { [key: string]: Service }
 
-    public static getService(service: typeof Service): object {
+    public static getService(service: typeof Service): Service {
         const name = service.name;
-        if (service.injectionType === InjectionType.Instance) {
-            return new service();
-        }
         if (!this.rootServices) {
             this.rootServices = {};
         }
@@ -33,8 +30,10 @@ export class InjectionManager {
     }
 }
 
-const inject = <T>(service: typeof Service) => {
-    return InjectionManager.getService(service) as T;
-}
+const inject = <T>(service: typeof Service): T => InjectionManager.getService(service) as T
+
+const register = <T>(service: typeof Service, forAbstract?: typeof Service): boolean => InjectionManager.registerService(service, forAbstract)
+
+export { register }
 
 export default inject;

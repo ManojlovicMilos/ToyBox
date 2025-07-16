@@ -14,11 +14,15 @@ class EventManager {
         }
     }
 
+    public get<T>(key: string): EventHandlerCollection<T> {
+        return this.events[key] as EventHandlerCollection<T>;
+    }
+
     public duplicate(): EventManager {
         return new EventManager(this);
     }
 
-    public invoke(eventName: string, args: unknown, invoker: BaseObject): boolean {
+    public invoke<T>(eventName: string, args: T, invoker: BaseObject): boolean {
         return this.events[eventName].invoke(args, invoker);
     }
 }

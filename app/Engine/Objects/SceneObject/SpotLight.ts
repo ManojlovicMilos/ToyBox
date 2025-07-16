@@ -1,8 +1,8 @@
 export { SpotLight }
 
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Math from "../../../Mathematics/Mathematics";
 
-import { Light, LightType } from "../SceneObject/Light";
+import { Light, LightType } from "../Light/Light";
 
 class SpotLight extends Light
 {

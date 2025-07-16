@@ -5,29 +5,29 @@ import {
     from "./Events/EventArguments";
 import { EventManager } from "./Events/EventManager";
 import { EventHandlerCollection } from "./Events/EventHandlerCollection";
-import { SceneEventPackage } from "./Events/SceneEventPackage";
-import { SpriteEventPackage } from "./Events/SpriteEventPackage";
-import { ImageObjectEventPackage } from "./Events/ImageObjectEventPackage";
+import { SceneEventPackage } from "./Scenes/Scene/SceneEventPackage";
+import { SpriteEventPackage } from "./Objects/Sprite/SpriteEventPackage";
+import { ImageObjectEventPackage } from "./Objects/ImageObject/ImageObjectEventPackage";
 
-import { DrawObjectType, DrawObject } from "./SceneObject/DrawObject";
-import { ImageObject } from "./SceneObject/ImageObject";
-import { SpriteSet } from "./SceneObject/Collections/SpriteSet";
-import { SpriteSetCollection } from "./Scene/SpriteSetCollection";
-import { Sprite } from "./SceneObject/Sprite";
-import { ImageCollection } from "./SceneObject/Collections/ImageCollection";
-import { Tile } from "./SceneObject/Tile";
+import { DrawObjectType, DrawObject } from "./Objects/DrawObject/DrawObject";
+import { ImageObject } from "./Objects/ImageObject/ImageObject";
+import { SpriteSet } from "./Objects/SceneObject/Collections/SpriteSet";
+import { SpriteSetCollection } from "./Scenes/SpriteSetCollection";
+import { Sprite } from "./Objects/Sprite/Sprite";
+import { ImageCollection } from "./Resources/ImageCollection/ImageCollection";
+import { Tile } from "./Objects/SceneObject/Tile";
 
 
 
 
 import { Game } from "./Game/Game";
-import { SceneType, Scene } from "./Scene/Scene";
-import { Scene2D } from "./Scene/Scene2D";
-import { SceneObjectType, SceneObject } from "./SceneObject/SceneObject";
-import { SoundObject } from "./SceneObject/SoundObject";
-import { Light, LightType, LightAttenuation } from "./SceneObject/Light";
-import { SpotLight } from "./Scene/SpotLight";
-import { DirectionalLight } from "./Scene/DirectionalLight";
+import { SceneType, Scene } from "./Scenes/Scene/Scene";
+import { Scene2D } from "./Scenes/Scene2D/Scene2D";
+import { SceneObjectType, SceneObject } from "./Objects/SceneObject/SceneObject";
+import { SoundObject } from "./Objects/SceneObject/SoundObject";
+import { Light, LightType, LightAttenuation } from "./Objects/Light/Light";
+import { SpotLight } from "./Scenes/SpotLight";
+import { DirectionalLight } from "./Objects/DirectionalLight/DirectionalLight";
 import { MaterialNodeValue, MaterialNodeValueType } from "./Material/MaterialNodeValue";
 import { MaterialNodePool } from "./Material/MaterialNodePool";
 import { MaterialNode } from "./Material/MaterialNode";

@@ -1,4 +1,4 @@
-import Utility from "./Service";
+import Service from "./Services/Service";
 
 const TOYBOX_PREFIX = 'TBX: ';
 const MESSAGE_TEXT_INFO = 'Info';
@@ -7,7 +7,7 @@ const MESSAGE_TEXT_EVENT = 'Event';
 const MESSAGE_TEXT_WARNING = 'Warning';
 const MESSAGE_TEXT_DEFAULT = 'Message';
 
-export default class Log extends Utility {
+export default class LogService extends Service {
     public enabled: { [key: string]: boolean } = {
         global: true,
         info: true,

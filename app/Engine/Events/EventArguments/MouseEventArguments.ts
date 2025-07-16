@@ -6,9 +6,11 @@ export enum MouseButton {
     Right = 2
 }
 
-export type MouseEventArguments = {
+type MouseEventArguments = {
     delta?: number;
     mouseButton?: MouseButton;
     location?: Math.Vertex;
-    unscaledLocation?: Math.Vertex;
+    viewportLocation?: Math.Vertex;
 }
+
+export default MouseEventArguments;

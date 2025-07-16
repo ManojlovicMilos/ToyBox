@@ -1,6 +1,6 @@
 export { Settings, Quality };
+import Service from './Services/Service';
 import DefaultSettings from './Data/DefaultSettings.json';
-import Utility from './Service';
 
 enum Quality {
     Low = 'Low',
@@ -21,6 +21,9 @@ export type SettingsObject = {
     graphics: {
         quality: Quality,
     },
+    engine: {
+        useResourceReferenceOnDuplication: boolean,
+    },
     ui: {
         ignoreCSS: boolean,
         globalFontFamily: string,
@@ -30,8 +33,12 @@ export type SettingsObject = {
     },
 }
 
-export default class Settings extends Utility {
+export default class Settings extends Service {
     public active: SettingsObject = DefaultSettings as SettingsObject;
+
+    public constructor() {
+        super();
+    }
 
     public apply(customSettings: Partial<SettingsObject>): void {
         if (this.active.version === customSettings.version) {
@@ -44,6 +51,10 @@ export default class Settings extends Utility {
                 math: {
                     ...this.active.math,
                     ...customSettings.math,
+                },
+                engine: {
+                    ...this.active.engine,
+                    ...customSettings.engine,
                 },
                 graphics: {
                     ...this.active.graphics,
