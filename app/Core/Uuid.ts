@@ -1,6 +1,6 @@
-import Utility from './Service';
+import Service from './Services/Service';
 
-export default class Uuid extends Utility {
+export default class UuidService extends Service {
     public create(): string {
         let dt: number = new Date().getTime();
         let Uuid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {

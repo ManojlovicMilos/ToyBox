@@ -1,11 +1,8 @@
-export { SceneEventPackage }
-
-import { Scene } from "../../Engine";
+import SceneEventArgs from "./SceneEventArgs";
 import { EventManager } from "../../Events/EventManager";
 import { EventHandlerCollection } from "../../Events/EventHandlerCollection";
-import SceneEventArgs from "./SceneEventArgs";
+import MouseEventArguments from "../../Events/EventArguments/MouseEventArguments";
 import KeyboardEventArguments from "../../Events/EventArguments/KeyboardEventArguments";
-import { MouseEventArguments } from "../../Events/EventArguments/MouseEventArguments";
 
 enum SceneEventTypes {
     Load = "Load",
@@ -58,3 +55,7 @@ class SceneEventPackage extends EventManager {
         return new SceneEventPackage(this);
     }
 }
+
+export { SceneEventTypes };
+
+export default SceneEventPackage;

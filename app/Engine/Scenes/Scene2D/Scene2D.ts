@@ -1,12 +1,6 @@
-export  { Scene2D };
-
 import * as Math from "../../../Mathematics/Mathematics";
 
-import { SceneType, Scene } from "../Scene/Scene";
-import { SceneObjectType, SceneObject } from "../../Objects/SceneObject/SceneObject";
-import { DrawObjectType, DrawObject } from "../../Objects/DrawObject/DrawObject";
-import { Sprite } from "../../Objects/Sprite/Sprite";
-import { Tile } from "../../Objects/SceneObject/Tile";
+import Scene from "../Scene/Scene";
 
 class Scene2D extends Scene
 {
@@ -89,3 +83,5 @@ class Scene2D extends Scene
         this._Trans.Deserialize(Data.Transformations);
     }
 }
+
+export default Scene2D;

@@ -2,61 +2,44 @@ export { Game };
 
 import * as Core from './../../Core/Core';
 import { Scene } from '../Scenes/Scene/Scene';
-import { SceneObject } from '../Objects/SceneObject/SceneObject';
 
 const TITLE_ELEMENT = 'title';
 const DEFAULT_GAME_NAME = 'ToyBox Game';
+const SCENE_NOT_FOUND = 'Could not find scene by name: ';
+const SCENE_WRONG_TYPE_MESSAGE = 'Cannot add scene, wrong type.';
 
 class Game extends Core.BaseObject {
-    private _Scenes: Scene[];
-    private _Assets: SceneObject[];
-    public set name(value: string) { this.name = value; this.updateName(); }
-    public get Scenes(): Scene[] { return this._Scenes; }
-    public set Scenes(value: Scene[]) { this._Scenes = value; }
-    public get Assets(): SceneObject[] { return this._Assets; }
-    public set Assets(value: SceneObject[]) { this._Assets = value; }
 
-    public constructor(old?: Game, name?: string) {
-        super(old);
+    public set name(value: string) { this.name = value; this.updateName(); }
+    public get scenes(): Scene[] { return this.children as Scene[]; }
+    public set Scenes(value: Scene[]) { this.children = value; }
+
+    public constructor(name?: string) {
+        super();
         this.name = name || DEFAULT_GAME_NAME;
-        this._Scenes = [];
-        this.UpdateName();
+        this.children = [];
+        this.updateName();
     }
 
     public override duplicate(): Game {
-        let New: Game = new Game();
-        New._Name = this._Name;
-        return New;
+        return new Game(this.name);
     }
 
-    
-
-    public override attach(Scene: Core.BaseObject): void {
-        if ()
-        this._Children.push(Scene);
-    }
-
-    public Remove(Scene: Scene): void {
-        this.Data[Scene.Name] = null;
-        this._Scenes.splice(this._Scenes.indexOf(Scene), 1);
-    }
-
-    public RemoveByName(SceneName: string): void {
-        this._Scenes.splice(this.Data[SceneName], 1);
-        this.Data[SceneName] = null;
-    }
-
-    public findByData(key: string, data?: any): any[] {
-        let Objects: any[] = [];
-        for (let i = 0; i < this._Scenes.length; i++) {
-            if (this._Scenes[i].data[key]) {
-                if (data) {
-                    if (this._Scenes[i].data[key] == data) Objects.push(this._Scenes[i]);
-                }
-                else Objects.push(this._Scenes[i]);
-            }
+    public override attach(scene: Scene): void {
+        if (scene.is(Scene)) {
+            this.scenes.push(scene);
+        } else {
+            this.log.warning(SCENE_WRONG_TYPE_MESSAGE);
         }
-        return Objects;
+    }
+
+    public removeSceneByName(name: string): void {
+        const scene: Scene = this.findChildByName(name) as Scene;
+        if (scene) {
+            this.remove(scene.id);
+        } else {
+            this.log.warning(SCENE_NOT_FOUND + name);
+        }
     }
 
     private updateName(): void {

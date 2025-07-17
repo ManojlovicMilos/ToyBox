@@ -1,6 +1,6 @@
 export { SpotLight }
 
-import * as Math from "../../../Mathematics/Mathematics";
+import * as Math from "../../../../Mathematics/Mathematics";
 
 import { Light, LightType } from "../Light/Light";
 

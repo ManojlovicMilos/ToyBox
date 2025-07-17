@@ -1,8 +1,9 @@
 import SpriteSet from "./SpriteSet";
-import ImageCollection from "../ImageCollection/ImageCollection";
+import SpriteSetCollection from "./SpriteSetCollection";
 
-class SpriteSetCollection extends ImageCollection {
-    public spriteSets: SpriteSet[];
+class LitSpriteSetCollection extends SpriteSetCollection {
+    public normalMapSets: SpriteSet[];
+    public specularMapSets: SpriteSet[];
     public override get images(): string[] { return this.packImages(); }
 
     public constructor(old?: SpriteSetCollection, spriteSets?: SpriteSet[]) {
@@ -23,5 +24,3 @@ class SpriteSetCollection extends ImageCollection {
         return images;
     }
 }
-
-export default SpriteSetCollection;

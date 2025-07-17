@@ -9,12 +9,9 @@ import { ImageObject } from "../ImageObject/ImageObject";
 import { DrawObject, DrawObjectType } from "../DrawObject/DrawObject";
 import { SpriteEventPackage } from "./SpriteEventPackage";
 
-class Sprite extends ImageObject
-{
-    private _CurrentIndex:number;
-    private _CurrentSpriteSet:number;
-    private _BackUpSpriteSet:number;
-    private _SubSprites:Sprite[];
+class Sprite extends ImageObject {
+    public spriteSetIndex: number;
+    public nextSpriteSetIndex: number;
     public get Index() : number { /* Override */ return this.GetIndex(); }
     public get Images() : string[] { /* Override */ return this.Collection.Images }
     public get NormalMaps() : string[] { /* Override */ return this.NormalCollection.Images }

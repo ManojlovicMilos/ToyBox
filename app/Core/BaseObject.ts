@@ -1,11 +1,10 @@
-import Uuid from './Uuid';
+import UuidService from './Uuid';
+import LogService from './Log';
 import Tag, { TagCollection } from './Tag';
 import inject from './Services/InjectionManager';
 import { SerializedObject } from './SerializedDataTypes';
 
-const OBJECT_TYPE = 'BaseObject';
-
-export default abstract class BaseObject {
+abstract class BaseObject {
     public id: string;
     public types: string[];
     public tags: TagCollection;
@@ -13,15 +12,17 @@ export default abstract class BaseObject {
     protected _name: string;
     protected childrenMap: { [key: string]: BaseObject }
 
-    protected uuid: Uuid;
+    protected log: LogService;
+    protected uuid: UuidService;
     
     public get name() { return this._name; }
     public set name(value: string) { this.name = value; }
     public get type(): string { return this.types[this.types.length - 1]; }
 
     public constructor(old?: BaseObject) {
-        this.types = [OBJECT_TYPE];
-        this.uuid = inject(Uuid);
+        this.types = [BaseObject.name];
+        this.log = inject(LogService);
+        this.uuid = inject(UuidService);
         this.id = this.uuid.create();
         this.tags = old ? { ...old.tags } : {};
         this.name = old?.name || this.id;
@@ -33,19 +34,24 @@ export default abstract class BaseObject {
         return this;
     }
 
-    public is(type: string): boolean {
-        return this.types.indexOf(type) != -1;
+    public is(type: string): boolean
+    public is(type: typeof BaseObject): boolean
+    public is(type: string | typeof BaseObject): boolean {
+        const typeName = typeof type === 'string' ? type : type.name;
+        return this.types.includes(typeName);
     }
 
-    public isExactly(type: string): boolean {
-        return this.type === type;
+    public isExactly(type: string): boolean
+    public isExactly(type: typeof BaseObject): boolean
+    public isExactly(type: string | typeof BaseObject): boolean {
+        const typeName = typeof type === 'string' ? type : type.name;
+        return this.type === typeName;
     }
 
-    public isAnyOf(types: string[]): boolean {
-        for (let i in types) {
-            if (this.types.indexOf(types[i]) != -1) return true;
-        }
-        return false;
+    public isAnyOf(types: string[]): boolean
+    public isAnyOf(types: (typeof BaseObject)[]): boolean
+    public isAnyOf(types: string[] | (typeof BaseObject)[]): boolean {
+        return types.find((type: string | typeof BaseObject) => this.is(type as string)).length > 0;
     }
 
     public hasTag(queryTag: string, queryTagValue?: Tag): boolean {
@@ -63,9 +69,16 @@ export default abstract class BaseObject {
         this.children.push(child);
         this.childrenMap[child.id] = child;
         this.onAttachChild(child);
+        child.onAttachToParent(this);
     }
 
-    public remove(childId: string): void {
+    public remove(child: string): void
+    public remove(child: BaseObject): void
+    public remove(child: string | BaseObject): void {
+        const childId = typeof child === 'string' ? child : child.id;
+        if (this.childrenMap[childId]) {
+            this.childrenMap[childId].onRemoveFromParent(this);
+        }
         this.children = this.children.filter((child: BaseObject) => child.id !== childId);
         this.childrenMap[childId] = undefined;
         this.onRemoveChild(childId);
@@ -75,20 +88,26 @@ export default abstract class BaseObject {
         return !!this.childrenMap[childId]
     }
 
-    public findChild(childId: string): BaseObject | undefined {
-        return this.childrenMap[childId];
+    public findChild<T extends BaseObject>(childId: string): T | undefined {
+        return this.childrenMap[childId] as T;
     }
 
-    public findChildrenByType(objectType: string): BaseObject[] {
-        return this.children.filter(item => item.is(objectType));
+    public findChildByName<T extends BaseObject>(name: string): T | undefined {
+        return this.children.find((child: BaseObject) => child.name === name) as T;
     }
 
-    public findChildrenByExactType(objectType: string): BaseObject[] {
-        return this.children.filter(item => item.isExactly(objectType));
+    public findChildrenByType<T extends BaseObject>(type: string | typeof BaseObject): T[] {
+        const typeName = typeof type === 'string' ? type : type.name;
+        return this.children.filter(item => item.is(typeName)) as T[];
     }
 
-    public findChildrenByTags(key: string, value?: Tag): BaseObject[] {
-        return this.children.filter(item => item.hasTag(key, value));
+    public findChildrenByExactType<T extends BaseObject>(type: string | typeof BaseObject): T[] {
+        const typeName = typeof type === 'string' ? type : type.name;
+        return this.children.filter(item => item.isExactly(typeName)) as T[];
+    }
+
+    public findChildrenByTags<T extends BaseObject>(key: string, value?: Tag): T[] {
+        return this.children.filter(item => item.hasTag(key, value)) as T[];
     }
 
     // virtual
@@ -121,3 +140,5 @@ export default abstract class BaseObject {
         // add creating factories
     }
 }
+
+export default BaseObject;

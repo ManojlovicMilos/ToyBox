@@ -1,28 +1,23 @@
-import Log from './Log';
-import Uuid from './Uuid';
-import Service from './Service';
-import Serialization, {
-    SerializedBaseObjectData,
-    SerializedBaseObjectReference
-} from './Serialization';
-import {
-    SerializedObject
-} from './SerializedDataTypes';
-import Resources from './Resources/ResourceService';
+import LogService from './Log';
+import UuidService from './Uuid';
 import BaseObject from './BaseObject';
+import Service from './Services/Service';
+import Resource from './Resources/Resource';
 import Tag, { TagCollection } from './Tag';
-import Settings, { SettingsObject } from './Settings';
+import Serialization from './Serialization';
+import { SerializedObject } from './SerializedDataTypes';
+import Settings, { SettingsObject } from './Settings/Settings';
 import inject, { InjectionManager } from './Services/InjectionManager';
 
 export {
-    Log,
     Tag,
-    Uuid,
     inject,
     Service, 
     Settings,
-    Resources,
+    Resource,
     BaseObject,
+    LogService,
+    UuidService,
     Serialization,
     TagCollection,
     SettingsObject,

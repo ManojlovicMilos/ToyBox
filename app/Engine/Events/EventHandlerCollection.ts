@@ -1,7 +1,5 @@
 import BaseObject from '../../Core/BaseObject';
 
-export { EventHandlerCollection };
-
 type HandlerFunctionType<T> = (args: T, invoker: BaseObject) => {};
 
 class EventHandlerCollection<T> {
@@ -38,3 +36,5 @@ class EventHandlerCollection<T> {
         return true;
     }
 }
+
+export default EventHandlerCollection;

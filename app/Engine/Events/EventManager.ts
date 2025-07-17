@@ -1,6 +1,5 @@
-export { EventManager };
 import BaseObject from '../../Core/BaseObject';
-import { EventHandlerCollection } from './EventHandlerCollection';
+import EventHandlerCollection from './EventHandlerCollection';
 
 class EventManager {
     protected events: { [key: string]: EventHandlerCollection<unknown> };
@@ -26,3 +25,5 @@ class EventManager {
         return this.events[eventName].invoke(args, invoker);
     }
 }
+
+export default EventManager;

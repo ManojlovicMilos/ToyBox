@@ -1,7 +1,7 @@
 export { SpriteEventPackage }
 
 import { EventHandlerCollection } from "../../Events/EventHandlerCollection";
-import { ImageObjectEventPackage } from "../ImageObject/ImageObjectEventPackage";
+import { ImageObjectEventPackage } from "../ImageObject/ImageObjectEventManager";
 
 enum SpriteEventTypes {
     SetComplete = "SetComplete"

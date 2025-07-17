@@ -1,6 +1,6 @@
 export { DirectionalLight }
 
-import * as Math from "../../../Mathematics/Mathematics";
+import * as Math from "../../../../Mathematics/Mathematics";
 
 import { Light, LightType } from "../Light/Light";
 
@@ -8,7 +8,7 @@ class DirectionalLight extends Light {
 
     public constructor(Old?: DirectionalLight) {
         super(Old);
-        this.RegisterType(DirectionalLight.name);
+        this.registerType(DirectionalLight);
         if (Old != null) {
         }
         else {

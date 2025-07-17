@@ -9,12 +9,12 @@ import { MaterialType, Material, TextureSamplingType } from "./Engine/Material/M
 import { DrawEngineType, DrawEngine } from "./Draw/DrawEngine";
 import { DrawObjectType, DrawObject } from "./Engine/Objects/DrawObject/DrawObject";
 import { ImageObject } from "./Engine/Objects/ImageObject/ImageObject";
-import { Light, LightAttenuation } from "./Engine/Objects/Light/Light";
+import { Light, LightAttenuation } from "./Engine/Objects/Lights/Light/Light";
 import { SpriteSet } from "./Engine/Objects/SceneObject/Collections/SpriteSet";
 import { SpriteSetCollection } from "./Engine/Objects/SceneObject/Collections/SpriteSetCollection";
 import { Sprite } from "./Engine/Objects/Sprite/Sprite";
 import { ImageCollection } from "./Engine/Resources/ImageCollection/ImageCollection";
-import { Tile } from "./Engine/Objects/SceneObject/Tile";
+import { Tile } from "./Engine/Objects/Drawn/Tile/Tile";
 import { EventPackage } from "./Engine/Events/EventManager";
 import { SceneEventPackage } from "./Engine/Scenes/Scene/SceneEventPackage";
 import { ImageObjectEventPackage } from "./Engine/Objects/ImageObject/ImageObjectEventPackage";
@@ -24,7 +24,7 @@ import { Game } from "./Engine/Game/Game";
 import { SceneType, Scene } from "./Engine/Scenes/Scene/Scene";
 import { Scene2D } from "./Engine/Scenes/Scene2D/Scene2D";
 import { SceneObjectType, SceneObject } from "./Engine/Objects/SceneObject/SceneObject";
-import { SoundObject } from "./Engine/Objects/SceneObject/SoundObject";
+import { SoundObject } from "./Engine/Objects/Sound/SoundObject";
 import { Settings, Quality } from "./Engine/Settings";
 import { Axis, Vertex } from "./Mathematics/Structures/Vertex";
 import { Transformation } from "./Mathematics/Structures/Transformation"

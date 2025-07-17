@@ -1,8 +1,8 @@
 export { Light, LightType, LightAttenuation };
 
-import * as Math from "../../../Mathematics/Mathematics";
+import * as Math from "../../../../Mathematics/Mathematics";
 
-import { DrawObject } from "../DrawObject/DrawObject";
+import { DrawObject } from "../../DrawObject/DrawObject";
 
 enum LightType
 {

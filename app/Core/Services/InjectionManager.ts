@@ -30,10 +30,10 @@ export class InjectionManager {
     }
 }
 
-const inject = <T>(service: typeof Service): T => InjectionManager.getService(service) as T
+const inject = <T>(service: typeof Service): T => InjectionManager.getService(service) as T;
 
-const register = <T>(service: typeof Service, forAbstract?: typeof Service): boolean => InjectionManager.registerService(service, forAbstract)
+const registerService = <T>(service: typeof Service, forAbstract?: typeof Service): boolean => InjectionManager.registerService(service, forAbstract);
 
-export { register }
+export { registerService }
 
 export default inject;

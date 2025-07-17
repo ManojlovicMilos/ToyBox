@@ -5,7 +5,7 @@ export {
 import Log from './Log';
 import BaseObject from './BaseObject';
 import { TagCollection } from './Tag';
-import Utility from './Services/Service';
+import Service from './Services/Service';
 import inject from './Services/InjectionManager';
 
 type SerializedJSONbjectData = { [key: string]: SerializedJSONbjectData | string | number | boolean };
@@ -19,7 +19,7 @@ type SerializedBaseObjectReference = {
 const EDITOR_PREFIX = 'EDITOR_';
 const TOYBOX_PREFIX = 'TOYBOX_';
 
-export default class Serialization extends Utility {
+export default class SerializationService extends Service {
     private log: Log;
     private factories: { [key: string]: Function } = {};
 

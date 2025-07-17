@@ -1,6 +1,6 @@
 export { Settings, Quality };
-import Service from './Services/Service';
-import DefaultSettings from './Data/DefaultSettings.json';
+import Service from '../Services/Service';
+import DefaultSettings from './DefaultSettings.json';
 
 enum Quality {
     Low = 'Low',

@@ -2,7 +2,7 @@ import * as Howler from "howler";
 
 export { SoundObject };
 
-import { SceneObject } from "./SceneObject";
+import { SceneObject } from "../SceneObject/SceneObject";
 
 class SoundObject extends SceneObject
 {
