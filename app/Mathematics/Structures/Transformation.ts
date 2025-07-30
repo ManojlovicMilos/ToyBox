@@ -22,10 +22,4 @@ export default class Transformation {
         let New: Transformation = new Transformation(this);
         return New;
     }
-
-    public composite(trans: Transformation): void {
-        this.translation.translate(trans.translation);
-        this.scale.scale(trans.scale);
-        this.rotation.translate(trans.rotation);
-    }
 }

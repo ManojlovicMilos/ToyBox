@@ -1,7 +1,7 @@
 export { MaterialNodeValue, MaterialNodeValueType }
 
-import * as Core from './../../Core/Core';
-import * as Math from '../../Mathematics/Mathematics';
+import * as Core from './../../../../Core/Core';
+import * as Math from '../../../../Mathematics/Mathematics';
 
 enum MaterialNodeValueType {
     Int = 'int',

@@ -1,6 +1,4 @@
-export  { Tile };
-
-import { ImageObject } from "../ImageObject/ImageObject";
+import ImageObject from "../ImageObject/ImageObject";
 
 class Tile extends ImageObject {
     public override set index(value:number) {
@@ -18,3 +16,5 @@ class Tile extends ImageObject {
         return new Tile(this);
     }
 }
+
+export default Tile;

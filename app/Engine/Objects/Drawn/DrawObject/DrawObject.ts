@@ -1,8 +1,9 @@
 import * as Math from "../../../../Mathematics/Mathematics";
 
 import SceneObject from "../../SceneObject/SceneObject";
-import { Material } from "../../../Resources/Material/Material";
+import Material from "../../../Resources/Materials/Material/Material";
 import SceneEventArgs from "../../../Scenes/Scene/SceneEventArgs";
+import SceneResizeEventArgumants from "../../../Scenes/Scene/SceneResizeEventArguments";
 
 abstract class DrawObject extends SceneObject {
     public modified: boolean
@@ -30,7 +31,7 @@ abstract class DrawObject extends SceneObject {
     public onToggle(value: boolean): void {}
 
     // virtual
-    public onResize(args: SceneEventArgs): void {}
+    public onResize(args: SceneEventArgs & SceneResizeEventArgumants): void {}
 }
 
 export default DrawObject;

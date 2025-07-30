@@ -15,7 +15,7 @@ export default class MatrixTransformer {
     public set modelViewMatrix(value: Matrix) { this._modelViewMatrix = value; }
 
     public constructor() {
-        this._matrixMode = 0;
+        this._matrixMode = MatrixMode.Projection;
         this._modelViewMatrix = new Matrix();
         this._projectionMatrix = new Matrix();
         this._pushedModelViewMatrix = new Matrix();

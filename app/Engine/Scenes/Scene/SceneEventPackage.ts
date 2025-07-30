@@ -1,6 +1,7 @@
 import SceneEventArgs from "./SceneEventArgs";
-import { EventManager } from "../../Events/EventManager";
-import { EventHandlerCollection } from "../../Events/EventHandlerCollection";
+import EventManager from "../../Events/EventManager";
+import SceneResizeEventArgumants from "./SceneResizeEventArguments";
+import EventHandlerCollection from "../../Events/EventHandlerCollection";
 import MouseEventArguments from "../../Events/EventArguments/MouseEventArguments";
 import KeyboardEventArguments from "../../Events/EventArguments/KeyboardEventArguments";
 
@@ -30,8 +31,8 @@ class SceneEventPackage extends EventManager {
     public get Load() : EventHandlerCollection<SceneEventArgs> { return this.get(SceneEventTypes.Load); }
     public get Leave() : EventHandlerCollection<SceneEventArgs> { return this.get(SceneEventTypes.Leave); }
     public get Switch() : EventHandlerCollection<SceneEventArgs> { return this.get(SceneEventTypes.Switch); }
-    public get Resize() : EventHandlerCollection<SceneEventArgs> { return this.get(SceneEventTypes.Resize); }
     public get Update() : EventHandlerCollection<SceneEventArgs> { return this.get(SceneEventTypes.Update); }
+    public get Resize() : EventHandlerCollection<SceneEventArgs & SceneResizeEventArgumants> { return this.get(SceneEventTypes.Resize); }
     public get KeyUp() : EventHandlerCollection<SceneEventArgs & KeyboardEventArguments> { return this.get(SceneEventTypes.KeyUp); }
     public get KeyDown() : EventHandlerCollection<SceneEventArgs & KeyboardEventArguments> { return this.get(SceneEventTypes.KeyDown); }
     public get KeyPress() : EventHandlerCollection<SceneEventArgs & KeyboardEventArguments> { return this.get(SceneEventTypes.KeyPress); }

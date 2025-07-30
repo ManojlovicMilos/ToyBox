@@ -21,7 +21,7 @@ import { Tile } from "./Objects/Drawn/Tile/Tile";
 
 
 import { Game } from "./Game/Game";
-import { SceneType, Scene } from "./Scenes/Scene/Scene";
+import Scene from "./Scenes/Scene/Scene";
 import { Scene2D } from "./Scenes/Scene2D/Scene2D";
 import { SceneObjectType, SceneObject } from "./Objects/SceneObject/SceneObject";
 import { SoundObject } from "./Objects/Sound/SoundObject";
@@ -33,6 +33,8 @@ import { MaterialNodePool } from "./Material/MaterialNodePool";
 import { MaterialNode } from "./Material/MaterialNode";
 import { MaterialInput, MaterialInputType } from "./Material/MaterialInput";
 import { Material, MaterialType, TextureSamplingType } from "./Material/Material";
+import Camera from "./Objects/Cameras/Camera";
+import Scene2DCamera from "./Objects/Cameras/Scene2DCamera";
 
 export {
     // Events
@@ -55,7 +57,6 @@ export {
     Tile,
     ImageCollection,
     Game,
-    SceneType,
     Scene,
     Scene2D,
     SceneObjectType,
@@ -73,5 +74,7 @@ export {
     MaterialInput,
     MaterialInputType,
     MaterialType,
-    Material
+    Material,
+    Camera,
+    Scene2DCamera
 };

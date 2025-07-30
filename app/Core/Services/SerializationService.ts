@@ -1,12 +1,10 @@
-export {
-    SerializedBaseObjectData,
-    SerializedBaseObjectReference
-}
-import Log from './Log';
-import BaseObject from './BaseObject';
-import { TagCollection } from './Tag';
-import Service from './Services/Service';
-import inject from './Services/InjectionManager';
+
+import LogService from './Log';
+import Service from './Service';
+import BaseObject from '../BaseObject';
+import { TagCollection } from '../Tag';
+import inject from './InjectionManager';
+import FactoryService from './FactoryService';
 
 type SerializedJSONbjectData = { [key: string]: SerializedJSONbjectData | string | number | boolean };
 type SerializedObjectValueType = SerializedBaseObjectReference | SerializedJSONbjectData | string | number | boolean | null;
@@ -16,31 +14,19 @@ type SerializedBaseObjectReference = {
     data: SerializedBaseObjectData,
 };
 
-const EDITOR_PREFIX = 'EDITOR_';
-const TOYBOX_PREFIX = 'TOYBOX_';
-
-export default class SerializationService extends Service {
-    private log: Log;
-    private factories: { [key: string]: Function } = {};
+class SerializationService extends Service {
+    private logService: LogService;
+    private factoryService: FactoryService;
 
     public constructor() {
         super();
-        this.log = inject(Log);
+        this.logService = inject(LogService);
     }
 
     public validSerializedBaseObjectReference(DataObject: Partial<SerializedBaseObjectReference>): boolean {
         if (!DataObject.type) return false;
         if (!DataObject.data) return false;
-        return !!this.factories[DataObject.type];
-    }
-
-    public register(type: string, Factory: Function): boolean {
-        if (this.factories[type]) {
-            this.log.warning('Unable to register factory, already registered.');
-            return false;
-        }
-        this.factories[type] = Factory;
-        return true;
+        return this.factoryService.exists(DataObject.type);
     }
 
     public serialize(serialized: BaseObject): SerializedBaseObjectReference {
@@ -48,7 +34,6 @@ export default class SerializationService extends Service {
             type: serialized.type,
             data: {
                 ...this.serializeInstanceData(serialized),
-                Tags: this.filterTags(serialized.tags)
             }
         };
     }
@@ -85,25 +70,14 @@ export default class SerializationService extends Service {
         } else return null;
     }
 
-    private filterTags(serializedTags: TagCollection): TagCollection {
-        const FilteredTags: TagCollection = {};
-        Object.keys(serializedTags).forEach(key => {
-            if (!key.startsWith(EDITOR_PREFIX)
-                && !key.startsWith(TOYBOX_PREFIX)) {
-                FilteredTags[key] = serializedTags[key];
-            }
-        });
-        return FilteredTags;
-    }
-
     public deserialize(deserializedData: SerializedBaseObjectReference): BaseObject | null {
         let value: BaseObject | null;
-        if (!!this.factories[deserializedData.type]) {
-            value = this.factories[deserializedData.type]();
+        if (this.factoryService.exists(deserializedData.type)) {
+            value = this.factoryService.create(deserializedData.type);
             this.deserializeInstanceData(value, deserializedData.data);
         }
         else {
-            this.log.error(`Failed to Deserialize Object of Type: ${deserializedData.type}. Missing registered factory.`);
+            this.logService.error(`Failed to Deserialize Object of Type: ${deserializedData.type}. Missing registered factory.`);
         }
         return value;
     }
@@ -120,7 +94,7 @@ export default class SerializationService extends Service {
     private deserializeInstanceDataValue(deserializedValue: SerializedBaseObjectReference | string | number | boolean): BaseObject | string | number | boolean | null {
         if (typeof deserializedValue !== 'object' && typeof deserializedValue !== 'function') return deserializedValue;
         if (typeof deserializedValue === 'function') {
-            this.log.warning('Invalid json object passed for deserialization. Data cannot contain functions.');
+            this.logService.warning('Invalid json object passed for deserialization. Data cannot contain functions.');
             return null;
         }
         else if (typeof deserializedValue === 'object') {
@@ -134,3 +108,22 @@ export default class SerializationService extends Service {
         else return null;
     }
 }
+
+const serialize = (serialized: BaseObject): SerializedBaseObjectReference => {
+    let service = inject<SerializationService>(SerializationService);
+    return service.serialize(serialized);
+};
+
+const deserialize = (deserializedData: SerializedBaseObjectReference): BaseObject | null => {
+    let service = inject<SerializationService>(SerializationService);
+    return service.deserialize(deserializedData);
+};
+
+export {
+    serialize,
+    deserialize,
+    SerializedBaseObjectData,
+    SerializedBaseObjectReference
+}
+
+export default SerializationService;

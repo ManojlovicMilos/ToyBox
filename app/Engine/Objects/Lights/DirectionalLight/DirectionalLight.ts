@@ -1,34 +1,19 @@
-export { DirectionalLight }
-
 import * as Math from "../../../../Mathematics/Mathematics";
 
-import { Light, LightType } from "../Light/Light";
+import Light from "../Light/Light";
 
 class DirectionalLight extends Light {
+    public direction: Math.Vertex;
 
-    public constructor(Old?: DirectionalLight) {
-        super(Old);
+    public constructor(old?: DirectionalLight) {
+        super(old);
         this.registerType(DirectionalLight);
-        if (Old != null) {
-        }
-        else {
-            this.LightType = LightType.Directional;
-            this.Direction = new Math.Vertex(0, 1, 0);
-        }
+        this.direction = old?.direction || new Math.Vertex(0, 1, 0);
     }
 
-    public Copy(): DirectionalLight {
+    public override duplicate(): DirectionalLight {
         return new DirectionalLight(this);
     }
-
-    public Serialize(): any {
-        // Override
-        let DL = super.Serialize();
-        return DL;
-    }
-
-    public Deserialize(Data: any): void {
-        // Override
-        super.Deserialize(Data);
-    }
 }
+
+export default DirectionalLight;

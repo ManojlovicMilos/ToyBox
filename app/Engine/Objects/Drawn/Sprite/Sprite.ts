@@ -1,162 +1,96 @@
-export  { Sprite, SpriteSet };
+import * as Core from "../../../../Core/Core";
 
-import * as Data from "../../../Data/Data";
-import * as Math from "../../../Mathematics/Mathematics";
-
-import { SpriteSet } from "../SceneObject/Collections/SpriteSet";
-import { SpriteSetCollection } from "./SpriteSetCollection";
-import { ImageObject } from "../ImageObject/ImageObject";
-import { DrawObject, DrawObjectType } from "../DrawObject/DrawObject";
-import { SpriteEventPackage } from "./SpriteEventPackage";
+import ImageObject from "../ImageObject/ImageObject";
+import SpriteSet from "../../../Resources/SpriteSet/SpriteSet";
+import SpriteEventPackage, { SpriteEventTypes } from "./SpriteEventPackage";
+import SpriteSetCollection from "../../../Resources/SpriteSet/SpriteSetCollection";
+import LitSpriteSetCollection from "../../../Resources/SpriteSet/LitSpriteSetCollection";
 
 class Sprite extends ImageObject {
     public spriteSetIndex: number;
     public nextSpriteSetIndex: number;
-    public get Index() : number { /* Override */ return this.GetIndex(); }
-    public get Images() : string[] { /* Override */ return this.Collection.Images }
-    public get NormalMaps() : string[] { /* Override */ return this.NormalCollection.Images }
-    public get SpecularMaps() : string[] { /* Override */ return this.SpecularCollection.Images }
-    public get BackUpSpriteSet():number { return this._BackUpSpriteSet; }
-    public set BackUpSpriteSet(value:number) { this._BackUpSpriteSet = value; }
-    public get CurrentIndex():number { return this._CurrentIndex; }
-    public get CurrentSpriteSet():number { return this._CurrentSpriteSet; }
-    public get Collection():SpriteSetCollection { return <SpriteSetCollection>this._Collection; }
-    public set Collection(value:SpriteSetCollection) { this._Collection = value; }
-    public get NormalCollection():SpriteSetCollection { return <SpriteSetCollection>this._NormalCollection; }
-    public set NormalCollection(value:SpriteSetCollection) { this._NormalCollection = value; }
-    public get SpecularCollection():SpriteSetCollection { return <SpriteSetCollection>this._SpecularCollection; }
-    public set SpecularCollection(value:SpriteSetCollection) { this._SpecularCollection = value; }
-    public get SpriteSets():SpriteSet[] { return (<SpriteSetCollection>this._Collection).SpriteSets; }
-    public set SpriteSets(value:SpriteSet[]) { (<SpriteSetCollection>this._Collection).SpriteSets = value; }
-    public get NormalSets():SpriteSet[] { return (<SpriteSetCollection>this._NormalCollection).SpriteSets; }
-    public set NormalSets(value:SpriteSet[]) { (<SpriteSetCollection>this._NormalCollection).SpriteSets = value; }
-    public get SpecularSets():SpriteSet[] { return (<SpriteSetCollection>this._SpecularCollection).SpriteSets; }
-    public set SpecularSets(value:SpriteSet[]) { (<SpriteSetCollection>this._SpecularCollection).SpriteSets = value; }
-    public get SubSprites():Sprite[] { return this._SubSprites; }
-    public set SubSprites(value:Sprite[]) { this._SubSprites = value; }
-    public get Events():SpriteEventPackage { return <SpriteEventPackage>this._Events; }
-    public constructor(Old?:Sprite)
-    {
-        super(Old);
-        this.DrawType = DrawObjectType.Sprite;
-        this._CurrentIndex = 0;
-        this._CurrentSpriteSet = 0;
-        this._BackUpSpriteSet = -1;
-        if(Old != null)
-        {
-            this._SubSprites = [];
-            for(let i = 0; i < Old._SubSprites.length; i++) this._SubSprites.push(Old._SubSprites[i].Copy());
-            this.Trans.Scale = Old.Trans.Scale.Copy();
-        }
-        else
-        {
-            this._Events = new SpriteEventPackage();
-            this._SubSprites = [];
-            this.Trans.Scale = new Math.Vertex(100, 100, 1);
-            this._Collection = new SpriteSetCollection();
-            this._NormalCollection = new SpriteSetCollection();
-            this._SpecularCollection = new SpriteSetCollection();
-        }
+
+    public override set index(value: number) { this.setIndex(value); }
+    public override get collection(): SpriteSetCollection { return <SpriteSetCollection>this.collection; }
+    public override set collection(value: SpriteSetCollection) { this.collection = value; }
+    public override get events(): SpriteEventPackage { return this.events as SpriteEventPackage; }
+
+    public get spriteSets(): SpriteSet[] { return this.collection.spriteSets; }
+    public set spriteSets(value: SpriteSet[]) { this.collection.spriteSets = value; }
+
+    public constructor(old?: Sprite) {
+        super(old);
+        this.registerType(Sprite);
+        this._index = 0;
+        this.spriteSetIndex = 0;
+        this.nextSpriteSetIndex = -1;
+
+        this._events = new SpriteEventPackage();
+        this.imageCollection = new SpriteSetCollection();
     }
-    public Copy() : Sprite
-    {
-        let New:Sprite = new Sprite(this);
-        return New;
+
+    public override duplicate(): Sprite {
+        return new Sprite(this);
     }
-    private GetIndex() : number
-    {
-        // Override
-        let Index:number = 0;
-        for(let i = 0; i < this._CurrentSpriteSet; i++)
-        {
-            Index += this.SpriteSets[i].Images.length;
+
+    public getImageIndex(): number {
+        let index: number = 0;
+        for (let i = 0; i < this.spriteSetIndex; i++) {
+            index += this.spriteSets[i].images.length;
         }
-        Index += this._CurrentIndex;
-        return Index;
+        index += this.index;
+        return index;
     }
-    public CollectiveList() : string[]
-    {
-        let List:string[] = [];
-        for(let i = 0; i < this.SpriteSets.length; i++)
-        {
-            for(let j = 0; j < this.SpriteSets[i].Images.length; j++)
-            {
-                List.push(this.SpriteSets[i].Images[j]);
+
+    public raiseIndex(): void {
+        this.setIndex(this.index + 1);
+    }
+
+    public setIndex(value: number): void {
+        this.index = value;
+        if (this.spriteSets.length <= 0) this.index = -1;
+        else if (this.index >= this.spriteSets[this.spriteSetIndex].images.length) {
+            this.events.invoke(
+                SpriteEventTypes.SpriteSetComplete,
+                { currentSpriteSet: this.spriteSetIndex, nextSpriteSet: ((this.nextSpriteSetIndex !== -1) ? this.nextSpriteSetIndex : this.spriteSetIndex) },
+                this,
+            );
+            if (this.nextSpriteSetIndex != -1) {
+                this.spriteSetIndex = this.nextSpriteSetIndex;
+                this.nextSpriteSetIndex = -1;
             }
-        }
-        return List;
-    }
-    public RaiseIndex() : void
-    {
-        this._CurrentIndex++;
-        if (this.SpriteSets.length <= 0) this._CurrentIndex = -1;
-        else if (this._CurrentIndex >= this.SpriteSets[this._CurrentSpriteSet].Images.length)
-        {
-            this.Events.Invoke("SetComplete", null, {CurrentSpriteSet:this._CurrentSpriteSet, NextSpriteSet:((this._BackUpSpriteSet!=-1)?this._BackUpSpriteSet:this._CurrentSpriteSet)});
-            if (this._BackUpSpriteSet != -1)
-            {
-                this._CurrentSpriteSet = this._BackUpSpriteSet;
-                this._BackUpSpriteSet = -1;
-            }
-            this._CurrentIndex = 0;
+            this.index = 0;
         }
     }
-    public SetSpriteSet(Index:number) : void
-    {
-        if (Index >= this.SpriteSets.length) return;
-        this._CurrentSpriteSet = Index;
-        this._CurrentIndex = 0;
+
+    public isActiveSpriteSet(name: string): boolean {
+        return this.spriteSetIndex === this.collection.findChildIndexByName(name);
     }
-    public UpdateSpriteSet(Index:number) : void
-    {
-        if(Index != this._CurrentSpriteSet) this.SetSpriteSet(Index);
-    }
-    public SetSpriteSetByName(Name:string) : void
-    {
-        for(let i = 0; i < this.SpriteSets.length; i++)
-        {
-            if(this.SpriteSets[i].Name == Name) this.SetSpriteSet(i);
+
+    public setSpriteSet(name: string): void {
+        const index = this.collection.findChildIndexByName(name);
+        if (index != -1 && !this.isActiveSpriteSet(name)) {
+            this.spriteSetIndex = index;
+            this.index = 0;
         }
     }
-    public UpdateSpriteSetByName(Name:string) : void
-    {
-        for(let i = 0; i < this.SpriteSets.length; i++)
-        {
-            if(this.SpriteSets[i].Name == Name) this.UpdateSpriteSet(i);
-        }
+
+    public getSprites(set: number): string[] {
+        return this.collection.spriteSets.length > set
+            ? this.collection.spriteSets[set].images
+            : [];
     }
-    public GetSprites(Set:number) : string[]
-    {
-        if(this.SpriteSets.length == 0) return [];
-        return this.SpriteSets[Set].Images;
+
+    public getNormalSprites(set: number): string[] {
+        return this.collection.is(LitSpriteSetCollection) && (this.collection as LitSpriteSetCollection).normalMapSets.length > set
+            ? (this.collection as LitSpriteSetCollection).normalMapSets[set].images
+            : [];
     }
-    public GetNormalSprites(Set:number) : string[]
-    {
-        if(this.NormalSets.length == 0) return [];
-        return this.NormalSets[Set].Images;
-    }
-    public Serialize() : any
-    {
-        // Override
-        let S = super.Serialize();
-        S.Index = this._CurrentSpriteSet;
-        S.SubSprites = [];
-        for(let i in this._SubSprites)
-        {
-            S.SubSprites.push(this._SubSprites[i].Serialize());
-        }
-        return S;
-    }
-    public Deserialize(Data:any) : void
-    {
-        // Override
-        super.Deserialize(Data);
-        this._CurrentSpriteSet = Data.Index;
-        for(let i in Data.SubSprites)
-        {
-            let SS:Sprite = new Sprite();
-            SS.Deserialize(Data.SubSprites[i]);
-            this._SubSprites.push(SS);
-        }
+
+    protected override registerType(type: typeof Sprite): void {
+        super.registerType(type);
+        
     }
 }
+
+export default Sprite;

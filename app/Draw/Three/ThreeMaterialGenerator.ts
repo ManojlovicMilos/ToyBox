@@ -1,37 +1,22 @@
-export { ThreeMaterialGenerator }
-
 import * as Three from 'three';
-import * as Math from "./../../Mathematics/Mathematics";
+import * as Core from "./../../Core/Core";
 import * as Engine from "./../../Engine/Engine";
+import * as Math from "./../../Mathematics/Mathematics";
+
 
 import { ThreeBasicShaders } from "./ThreeBasicShaders";
 import { ThreeShaderGenerator } from "./ThreeShaderGenerator";
 
 const TOYBOX_MAX_LIGHTS = 8;
 
-class ThreeMaterialGenerator {
-    private _Metadata: any;
-    private _Scene: Engine.Scene;
-    private _Loader: Three.TextureLoader;
+class ThreeJSMaterialGenerator extends Core.Service {
+    private loader: Three.TextureLoader;
 
-    public constructor(Old?: ThreeMaterialGenerator, Metadata?: any, Scene?: Engine.Scene) {
-        if (Old) {
-            this._Scene = Old._Scene;
-            this._Metadata = Old._Metadata;
-            this._Loader = Old._Loader;
-        }
-        else {
-            this._Scene = Scene;
-            this._Metadata = Metadata;
-            this._Loader = new Three.TextureLoader();
-        }
+    public constructor() {
+        super();
     }
 
-    public Copy(): ThreeMaterialGenerator {
-        return new ThreeMaterialGenerator(this);
-    }
-
-    private GenerateMaterial(Drawn: Engine.ImageObject, Textures: Three.Texture[]): Three.ShaderMaterial {
+    private generateMaterial(Drawn: Engine.ImageObject, Textures: Three.Texture[]): Three.ShaderMaterial {
         let Index: number = Drawn.Index;
         let Uniforms: any =
         {
@@ -188,7 +173,7 @@ class ThreeMaterialGenerator {
         let Materials: Three.ShaderMaterial[] = this._Metadata["TOYBOX_LIT_OBJECT_MATERIALS"];
         let LightsPack: any = this.Pack2DLights();
         for (let i in Materials) {
-            Materials[i]["uniforms"].radii.value = LightsPack.Radii.value;
+            Materials[i].uniforms.radii.value = LightsPack.Radii.value;
             Materials[i]["uniforms"].locations.value = LightsPack.Locations.value;
             Materials[i]["uniforms"].intensities.value = LightsPack.Intensities.value;
             Materials[i]["uniforms"].attenuations.value = LightsPack.Attenuations.value;
@@ -299,3 +284,5 @@ class TMGUtil {
         return NewVector;
     }
 }
+
+export default ThreeJSMaterialGenerator;

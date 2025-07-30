@@ -7,8 +7,8 @@ class EventManager {
     public constructor(old?: EventManager) {
         this.events = {};
         if (old) {
-            Object.keys(old.events).forEach(Key => {
-                this.events[Key] = old.events[Key].duplicate();
+            Object.keys(old.events).forEach(key => {
+                this.events[key] = old.events[key].duplicate();
             });
         }
     }

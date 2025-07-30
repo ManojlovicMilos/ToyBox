@@ -1,86 +1,42 @@
 import * as Math from "../../../Mathematics/Mathematics";
 
 import Scene from "../Scene/Scene";
+import Tile from "../../Objects/Drawn/Tile/Tile";
+import Light from "../../Objects/Lights/Light/Light";
+import Sprite from "../../Objects/Drawn/Sprite/Sprite";
+import SceneObject from "../../Objects/SceneObject/SceneObject";
+import DrawObject from "../../Objects/Drawn/DrawObject/DrawObject";
 
-class Scene2D extends Scene
-{
-    private _Trans:Math.Transformation;
-    public get Trans() : Math.Transformation { return this._Trans; }
-    public set Trans(value:Math.Transformation) { this._Trans = value; }
-    public get Sprites() : Sprite[]
-    {
-        return <Sprite[]>this.FindByDrawType(DrawObjectType.Sprite);
+class Scene2D extends Scene {
+    public get tiles(): Tile[] { return this.findChildrenByType(Tile); }
+    public get sprites(): Sprite[] { return this.findChildrenByType(Sprite); }
+
+    public constructor(old?: Scene2D) {
+        super(old);
     }
-    public get Tiles() : Tile[]
-    {
-        return <Tile[]>this.FindByDrawType(DrawObjectType.Tile);
-    }   
-    public constructor(Old?:Scene2D)
-    {
-        if(Old != null)
-        {
-            super(Old);
-            this._Trans = Old._Trans.Copy();
-        }
-        else
-        {
-            super();
-            this.Type = SceneType.Scene2D;
-            this._Trans = new Math.Transformation();
+
+    public override duplicate(): Scene2D {
+        return new Scene2D(this);
+    }
+
+    public override attach(sceneObject: SceneObject): void {
+        if (!sceneObject.is(DrawObject) || sceneObject.isAnyOf([Tile, Sprite, Light])) {
+            super.attach(sceneObject);
         }
     }
-    public Copy() : Scene2D
-    {
-        let New:Scene2D = new Scene2D(this);
-        return New;
-    }
-    public Attach(Object:SceneObject) : void
-    {
-        // Override
-        if(Object.Type == SceneObjectType.Drawn)
-        {
-            if((<DrawObject>Object).DrawType == DrawObjectType.Sprite || (<DrawObject>Object).DrawType == DrawObjectType.Tile || (<DrawObject>Object).DrawType == DrawObjectType.Light)
-            {
-                super.Attach(Object);
-            }
-        }
-        else if(Object.Type == SceneObjectType.Sound || Object.Type == SceneObjectType.Control)
-        {
-            super.Attach(Object);
-        }
-    }
-    public Composite(Chunk:Scene) : boolean
-    {
-        // Override
-        if(Chunk.Type != SceneType.Scene2D) return false
-        for(let i in Chunk.Objects)
-        {
-            if(Chunk.Objects[i].Type == SceneObjectType.Sound)
-            {
-                this.Objects.push(Chunk.Objects[i].Copy());
-            }
-            else if(Chunk.Objects[i].Type == SceneObjectType.Drawn)
-            {
-                let Drawn = <DrawObject> Chunk.Objects[i].Copy();
-                let Chunk2D = <Scene2D> Chunk;
-                Drawn.Trans.Composite(Chunk2D.Trans);
-                this.Objects.push(Drawn);
+
+    public override loadChunk(chunk: Scene, offset: Math.Vertex): boolean {
+        if (chunk.is(Scene2D)) return false;
+        for (let sceneObject of chunk.children) {
+            if (sceneObject.is(DrawObject)) {
+                const newObject = sceneObject.duplicate() as DrawObject;
+                newObject.transformation.translation.add(offset);
+                this.attach(newObject);
+            } else {
+                this.attach(sceneObject.duplicate() as SceneObject);
             }
         }
         return true;
-    }
-    public Serialize() : any
-    {
-        // Override
-        let S2D = super.Serialize();
-        S2D.Transformations = this._Trans.Serialize();
-        return S2D;
-    }
-    public Deserialize(Data:any) : void
-    {
-        // Override
-        super.Deserialize(Data);
-        this._Trans.Deserialize(Data.Transformations);
     }
 }
 

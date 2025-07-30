@@ -1,8 +1,8 @@
-import UuidService from './Uuid';
-import LogService from './Log';
+import UuidService from './Services/Uuid';
+import LogService from './Services/Log';
 import Tag, { TagCollection } from './Tag';
 import inject from './Services/InjectionManager';
-import { SerializedObject } from './SerializedDataTypes';
+import { SerializedObject } from './Services/SerializedDataTypes';
 
 abstract class BaseObject {
     public id: string;
@@ -108,6 +108,16 @@ abstract class BaseObject {
 
     public findChildrenByTags<T extends BaseObject>(key: string, value?: Tag): T[] {
         return this.children.filter(item => item.hasTag(key, value)) as T[];
+    }
+
+    public findChildIndexByName(name: string): number {
+        let foundIndex = -1;
+        this.children.forEach((entry: BaseObject, index) => {
+            if (entry.name === name) {
+                foundIndex = index;
+            }
+        });
+        return foundIndex;
     }
 
     // virtual

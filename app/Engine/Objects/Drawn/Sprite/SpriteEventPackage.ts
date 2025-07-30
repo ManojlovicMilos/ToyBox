@@ -1,18 +1,23 @@
-export { SpriteEventPackage }
+import SpriteSetEventArguments from "./SpriteSetCompleteEventArguments";
+import EventHandlerCollection from "../../../Events/EventHandlerCollection";
+import ImageObjectEventManager from "../ImageObject/ImageObjectEventManager";
 
-import { EventHandlerCollection } from "../../Events/EventHandlerCollection";
-import { ImageObjectEventPackage } from "../ImageObject/ImageObjectEventManager";
-
-enum SpriteEventTypes {
-    SetComplete = "SetComplete"
+export enum SpriteEventTypes {
+    SpriteSetComplete = "SpriteSetComplete"
 }
 
-class SpriteEventPackage extends ImageObjectEventPackage {
-    public get setComplete(): EventHandlerCollection { return this._Data[SpriteEventTypes.SetComplete]; }
+class SpriteEventPackage extends ImageObjectEventManager {
+    public get spriteSetComplete(): EventHandlerCollection<SpriteSetEventArguments> {
+        return this.events[SpriteEventTypes.SpriteSetComplete] as EventHandlerCollection<SpriteSetEventArguments>;
+    }
+
     public constructor(Old?: SpriteEventPackage) {
         super(Old);
     }
-    public Copy(): SpriteEventPackage {
+
+    public duplicate(): SpriteEventPackage {
         return new SpriteEventPackage(this);
     }
 }
+
+export default SpriteEventPackage;

@@ -1,6 +1,6 @@
 export { MaterialNode }
 
-import * as Core from './../../Core/Core';
+import * as Core from '../../../../Core/Core';
 
 import { MaterialNodeValue } from './MaterialNodeValue';
 

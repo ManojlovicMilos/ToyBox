@@ -1,4 +1,4 @@
-import Service from "./Services/Service";
+import Service from "./Service";
 
 const TOYBOX_PREFIX = 'TBX: ';
 const MESSAGE_TEXT_INFO = 'Info';

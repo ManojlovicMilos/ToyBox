@@ -1,4 +1,4 @@
-import Service from './Services/Service';
+import Service from './Service';
 
 export default class UuidService extends Service {
     public create(): string {

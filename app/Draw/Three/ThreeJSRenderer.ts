@@ -1,61 +1,109 @@
-export { ThreeDrawEngine };
+import * as ThreeJS from 'three';
+import * as Core from "../../Core/Core";
+import * as Engine from "../../Engine/Engine";
+import * as Math from "../../Mathematics/Mathematics";
 
-import * as Three from 'three';
-import * as Mathematics from "./../../Mathematics/Mathematics";
-import * as Engine from "./../../Engine/Engine";
+import Renderer from "../Renderer";
+import ThreeJSMaterialGenerator from "./ThreeMaterialGenerator";
 
-import { ThreeMaterialGenerator } from "./ThreeMaterialGenerator";
-import { ThreeGridManager } from "./ThreeGridManager";
-import { DrawEngine } from "./../DrawEngine";
+const CAMERA_Z_OFFSET = 5;
 
-class ThreeDrawEngine extends DrawEngine {
-    private _Loaded: boolean;
+enum ThreeJSTypes {
+    Mesh = 'Mesh',
+    Camera = 'Camera',
+}
+
+type RenderedObject = {
+    used: boolean;
+    tbxObject: Engine.SceneObject;
+    threeJSType: ThreeJSTypes;
+    threeJSObject: ThreeJS.Object3D;
+};
+
+class ThreeJSRenderer extends Renderer {
     private _Preload: boolean;
     private _Checked: string[];
-    private _Camera: Three.Camera;
-    private _Scene: Three.Scene;
-    private _PreloadScene: Three.Scene;
+    private _Camera: ThreeJS.Camera;
+    private _PreloadScene: ThreeJS.Scene;
     private _ToyBoxScene: Engine.Scene2D;
     private _ToyBoxPreloadScene: Engine.Scene2D;
-    private _Generator: ThreeMaterialGenerator;
 
-    public constructor(Old?: ThreeDrawEngine, Resolution?: Mathematics.Vertex) {
-        super(Old);
-        this._Preload = false;
-        this._Scene = new Three.Scene();
-        this._GlobalScale = new Mathematics.Vertex(1, 1, 1);
-        this._GlobalOffset = new Mathematics.Vertex(0, 0, 0);
-        if (Resolution) this._Resolution = Resolution;
-        else this._Resolution = new Mathematics.Vertex(1920, 1080, 1);
-        this._Target = document.getElementById("canvas");
-        this._Parent = document.getElementById("canvas-parent");
-        this.Renderer = new Three.WebGLRenderer({ canvas: this._Target });
-        this.Renderer.setPixelRatio(window.devicePixelRatio);
-        this.Resize();
+    protected renderScene: ThreeJS.Scene;
+    protected renderCamera: ThreeJS.Camera;
+    protected renderer: ThreeJS.WebGLRenderer;
+    protected renderObjects: { [key: string]: RenderedObject }
+    protected threeJSMaterialGenerator: ThreeJSMaterialGenerator;
+
+    public override set resolution(value: Math.Vertex) { this._resolution = value; this.resize(); }
+
+    public constructor(resolution?: Math.Vertex) {
+        super();
+        this._resolution = resolution || this._resolution;
+        this.renderScene = new ThreeJS.Scene();
+        this.renderer = new ThreeJS.WebGLRenderer({ canvas: this.canvas });
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderObjects = {};
+        this.threeJSMaterialGenerator = Core.inject(ThreeJSMaterialGenerator);
+        this.resize();
     }
 
-    public Resize() {
-        let Width: number = this._Parent.clientWidth;
-        let Height: number = this._Parent.clientHeight;
-        if (!this._FixedSize) {
-            this.Renderer.setSize(Width, Height);
-            this._GlobalScale = new Mathematics.Vertex(this.Resolution.X / Width, this.Resolution.Y / Height, 1);
-            this._Camera = new Three.OrthographicCamera(0, this.Resolution.X * this._GlobalScale.X, 0, this.Resolution.Y * this._GlobalScale.Y, 1, 100);
-            this._Camera.position.z = 5;
+    public override resize(): void {
+        super.resize();
+        let width: number = this.parent.clientWidth;
+        let height: number = this.parent.clientHeight;
+        if (!this.fixedSize) {
+            this.renderer.setSize(width, height);
+            this._globalScale = new Math.Vertex(this.resolution.x / width, this.resolution.y / height, 1);
         }
         else {
-            this.Renderer.setSize(this.Resolution.X, this.Resolution.Y);
-            this._GlobalScale = new Mathematics.Vertex(1, 1, 1);
-            this._Camera = new Three.OrthographicCamera(0, this.Resolution.X, 0, this.Resolution.Y, 1, 100);
-            this._Camera.position.z = 5;
+            this.renderer.setSize(this.resolution.x, this.resolution.y);
+            this._globalScale = new Math.Vertex(1, 1, 1);
         }
-        if (this._ToyBoxScene) this._ToyBoxScene.OnResize({ GlobalScale: this._GlobalScale, Scale: this._ToyBoxScene.Trans.Scale, Ratio: Width / Height });
     }
 
-    public UpdateResolution(Resolution?: Mathematics.Vertex, FixedSize?: boolean) {
-        // Override
-        super.UpdateResolution(Resolution, FixedSize);
-        this.Resize();
+    protected override resizeActiveCamera(): void {
+        const cameraScale = this.fixedSize ? this._resolution : this._resolution.scale(this._globalScale);
+        if (this.renderObjects[this.activeScene.camera.id]) {
+            this.removeRenderedObject(this.activeScene.camera.id);
+        }
+        let newThreeJSCamera;
+        if (this.activeScene.camera.is(Engine.Scene2DCamera)) {
+            newThreeJSCamera = new ThreeJS.OrthographicCamera(0, cameraScale.x, 0, cameraScale.y, 1, 100);
+            newThreeJSCamera.position.z = CAMERA_Z_OFFSET;
+        }
+        this.renderObjects[this.activeScene.camera.id] = {
+            used: true,
+            tbxObject: this.activeScene.camera,
+            threeJSType: ThreeJSTypes.Camera,
+            threeJSObject: newThreeJSCamera,
+        };
+    }
+
+    protected removeRenderedObject(id: string, inScene?: boolean): void {
+        const renderObject = this.renderObjects[id];
+        if (renderObject) {
+            if (inScene) {
+                this.renderScene.remove(renderObject.threeJSObject);
+            }
+            if (renderObject.threeJSType === ThreeJSTypes.Mesh) {
+                const meshObject = renderObject.threeJSObject as ThreeJS.Mesh;
+                meshObject.geometry.dispose();
+                (meshObject.material as ThreeJS.Material).dispose();
+            }
+            delete this.renderObjects[id];
+        }
+    }
+
+    public override render(scene: Engine.Scene): void {
+        const renderObjectsArray = Object.keys(this.renderObjects).map((key: string) => this.renderObjects[key]);
+        renderObjectsArray.forEach((entry: RenderedObject) => entry.used = false);
+        super.render(scene);
+        renderObjectsArray.forEach((entry: RenderedObject) => {
+            if (!entry.used) {
+                this.removeRenderedObject(entry.tbxObject.id, true);
+            }
+        });
+        this.renderer.render(this.renderScene, this.renderCamera);
     }
 
     public Load2DScene(Scene: Engine.Scene2D): void {
@@ -250,3 +298,5 @@ class ThreeDrawEngine extends DrawEngine {
         this.Data["TOYBOX_" + Drawn.ID + "_Light"] = LoadData.Generator.PrepLightLoc(TransLoc, this.Resolution);
     }
 }
+
+export default ThreeJSRenderer;

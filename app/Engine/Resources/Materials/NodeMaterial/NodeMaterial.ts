@@ -1,12 +1,15 @@
-export { Material, MaterialType, TextureSamplingType }
+export { Material, MaterialType }
 
-import * as Core from "./../../Core/Core";
-import * as Math from "../../Mathematics/Mathematics";
+import * as Core from "../../../../Core/Core";
+import * as Math from "../../../../Mathematics/Mathematics";
 
-import { ShaderCode } from "./ShaderCode";
-import { MaterialNode } from "./MaterialNode";
-import { MaterialNodeValue } from "./MaterialNodeValue";
-import { MaterialInput, MaterialInputType } from "./MaterialInput";
+import Material from "../Material/Material";
+
+import { ShaderCode } from "../ShaderCode";
+import { MaterialNode } from "../MaterialNode";
+import { MaterialNodeValue } from "../MaterialNodeValue";
+import { MaterialInput, MaterialInputType } from "../MaterialInput";
+
 
 enum MaterialType {
     Default = "Default",
@@ -17,26 +20,13 @@ enum MaterialType {
     Shader = "Shader"
 }
 
-enum TextureSamplingType {
-    Linear = "Linear",
-    Nearest = "Nearest"
-}
-
-class Material extends Core.BaseObject {
-    public color: Math.Color;
-    public shaders: ShaderCode;
-    public materialType: MaterialType;
-    public sampling: TextureSamplingType;
+class NodeMaterial extends Material {
     public nodes: MaterialNode[];
     public inputs: MaterialInput[];
 
-    public constructor(old?: Material) {
+    public constructor(old?: NodeMaterial) {
         super(old);
-        this.registerType(Material);
-        this.color = old?.color.duplicate();
-        this.shaders = old?.shaders || new ShaderCode();
-        this.materialType = old?.materialType || MaterialType.Default;
-        this.sampling = old?.sampling || TextureSamplingType.Linear;
+        this.registerType(NodeMaterial);
         this.nodes = old ? old.nodes.map((entry: MaterialNode) => entry.duplicate()) : [];
         this.inputs = old ? old.inputs.map((entry: MaterialInput) => entry.duplicate()) : [];
         if (old) {
@@ -44,8 +34,8 @@ class Material extends Core.BaseObject {
         }
     }
 
-    public duplicate(): Material {
-        return new Material(this);
+    public override duplicate(): NodeMaterial {
+        return new NodeMaterial(this);
     }
 
     public addNode(node: MaterialNode): void {

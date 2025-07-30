@@ -1,4 +1,4 @@
-import { TagCollection } from './Tag';
+import { TagCollection } from '../Tag';
 
 type SerializedObjectFieldType =
     Array<SerializedObjectFieldType> |

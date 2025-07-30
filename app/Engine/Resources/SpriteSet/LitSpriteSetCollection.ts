@@ -4,23 +4,31 @@ import SpriteSetCollection from "./SpriteSetCollection";
 class LitSpriteSetCollection extends SpriteSetCollection {
     public normalMapSets: SpriteSet[];
     public specularMapSets: SpriteSet[];
-    public override get images(): string[] { return this.packImages(); }
+    public get normalMaps(): string[] { return this.packNormalMaps(); }
+    public get specularMaps(): string[] { return this.packSpecularMaps(); }
 
-    public constructor(old?: SpriteSetCollection, spriteSets?: SpriteSet[]) {
+    public constructor(old?: LitSpriteSetCollection) {
         super(old);
-        this.registerType(SpriteSetCollection);
-        this.spriteSets = spriteSets
-            || old?.spriteSets.map((entry: SpriteSet) => entry.duplicate())
-            || [];
+        this.registerType(LitSpriteSetCollection);
+        this.normalMapSets = old?.normalMapSets.map((entry: SpriteSet) => entry.duplicate()) || [];
+        this.specularMapSets = old?.specularMapSets.map((entry: SpriteSet) => entry.duplicate()) || [];
     }
 
-    public duplicate(): SpriteSetCollection {
-        return new SpriteSetCollection(this);
+    public duplicate(): LitSpriteSetCollection {
+        return new LitSpriteSetCollection(this);
     }
 
-    private packImages(): string[] {
+    private packNormalMaps(): string[] {
         let images = [];
-        this.spriteSets.forEach((entry: SpriteSet) => images = [...images, entry.images]);
+        this.normalMapSets.forEach((entry: SpriteSet) => images = [...images, entry.images]);
+        return images;
+    }
+
+    private packSpecularMaps(): string[] {
+        let images = [];
+        this.specularMapSets.forEach((entry: SpriteSet) => images = [...images, entry.images]);
         return images;
     }
 }
+
+export default LitSpriteSetCollection;

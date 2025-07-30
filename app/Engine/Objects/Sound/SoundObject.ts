@@ -1,63 +1,53 @@
 import * as Howler from "howler";
 
-export { SoundObject };
+import SceneObject from "../SceneObject/SceneObject";
 
-import { SceneObject } from "../SceneObject/SceneObject";
+const DEFAULT_VOLUME = 50;
 
-class SoundObject extends SceneObject
-{
-    private _Looped: boolean;
-    private _Autoplay: boolean;
-    private _Volume: number;
-    private _Url: string;
-    private _Sound: Howl;
-    public get Autoplay(): boolean { return this._Autoplay; }
-    public set Autoplay(value: boolean) { this._Autoplay = value; this.GenerateSound(); }
-    public get Looped(): boolean { return this._Looped; }
-    public set Looped(value: boolean) { this._Looped = value; this.GenerateSound(); }
-    public get Volume(): number { return this._Volume; }
-    public set Volume(value: number) { this._Volume = value; this._Sound.volume(this._Volume); }
-    public get Url(): string { return this._Url; }
-    public set Url(value: string) { this._Url = value; this.GenerateSound(); }
-    public get Sound(): Howl { return this._Sound; }
-    public constructor(Url: string, Old?: SoundObject)
-    {
-        super(Old);
-        if (Old != null)
-        {
-            this._Autoplay = Old._Autoplay;
-            this._Looped = Old._Looped;
-            this._Volume = Old._Volume;
-            this._Url = Old._Url;
-        }
-        else
-        {
-            this._Autoplay = false;
-            this._Looped = false;
-            this._Volume = 50;
-            this._Url = Url;
-        }
-        this.GenerateSound();
+class SoundObject extends SceneObject {
+    private _sound: Howl;
+    private _url: string;
+    private _volume: number;
+    private _looped: boolean;
+    private _autoplay: boolean;
+
+    public get autoplay(): boolean { return this._autoplay; }
+    public set autoplay(value: boolean) { this._autoplay = value; this.generateSound(); }
+    public get looped(): boolean { return this._looped; }
+    public set looped(value: boolean) { this._looped = value; this.generateSound(); }
+    public get volume(): number { return this._volume; }
+    public set volume(value: number) { this._volume = value; this._sound.volume(this._volume); }
+    public get url(): string { return this._url; }
+    public set url(value: string) { this._url = value; this.generateSound(); }
+    public get sound(): Howl { return this._sound; }
+
+    public constructor(old?: SoundObject, url?: string) {
+        super(old);
+        this._url = url || old._url;
+        this._volume = old._volume || DEFAULT_VOLUME;
+        this._looped = old._looped || false;
+        this._autoplay = old._autoplay || false;
+        this.generateSound();
     }
-    public Copy(): SceneObject
-    {
-        return new SceneObject(this);
+
+    public override duplicate(): SoundObject {
+        return new SoundObject(this);
     }
-    private GenerateSound(): void
-    {
-        if (this._Sound) this._Sound.unload();
-        this._Sound = new Howler.Howl(
-            {
-                src: this._Url,
-                autoplay: this._Autoplay,
-                loop: this._Looped,
-                volume: this._Volume / 100.0,
-                preload: true
-            }
-        )
+
+    private generateSound(): void {
+        if (this._sound) this._sound.unload();
+        this._sound = new Howler.Howl({
+            src: this._url,
+            autoplay: this._autoplay,
+            loop: this._looped,
+            volume: this._volume / 100.0,
+            preload: true,
+        });
     }
-    public Play(): void
-    {
-        this._Sound.play();
+
+    public play(): void {
+        this._sound.play();
     }
 }
+
+export default SoundObject;

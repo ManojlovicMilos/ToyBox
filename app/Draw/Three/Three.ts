@@ -1,3 +1,3 @@
-import { ThreeDrawEngine } from './ThreeDrawEngine';
+import { ThreeDrawEngine } from './ThreeJSRenderer';
 
 export { ThreeDrawEngine };

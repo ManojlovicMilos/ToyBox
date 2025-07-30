@@ -6,7 +6,7 @@ import { MaterialNodeValue, MaterialNodeValueType } from "./Engine/Material/Mate
 import { MaterialNodePool } from "./Engine/Material/MaterialNodePool";
 import { MaterialNode } from "./Engine/Material/MaterialNode";
 import { MaterialType, Material, TextureSamplingType } from "./Engine/Material/Material";
-import { DrawEngineType, DrawEngine } from "./Draw/DrawEngine";
+import { DrawEngineType, DrawEngine } from "./Draw/Renderer";
 import { DrawObjectType, DrawObject } from "./Engine/Objects/DrawObject/DrawObject";
 import { ImageObject } from "./Engine/Objects/ImageObject/ImageObject";
 import { Light, LightAttenuation } from "./Engine/Objects/Lights/Light/Light";

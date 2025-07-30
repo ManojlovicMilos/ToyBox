@@ -1,7 +1,7 @@
 import * as Core from "../../../Core/Core";
 
 class ImageCollection extends Core.Resource {
-    public _images: string[];
+    protected _images: string[];
     public get images(): string[] { return this._images; }
     public set images(value: string[]) { this._images = value; }
 

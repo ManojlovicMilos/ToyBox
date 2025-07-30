@@ -21,6 +21,14 @@ abstract class SceneObject extends Core.BaseObject {
 
     // virtual
     public onToggle(value: boolean): void {}
+
+    // virtual
+    public generateResourceList(): Core.Resource[] {
+        let resourceList = [];
+        this.findChildrenByType(SceneObject)
+            .forEach((entry: SceneObject) => resourceList = [...resourceList, ...entry.generateResourceList()]);
+        return resourceList;
+    }
 }
 
 export default SceneObject;

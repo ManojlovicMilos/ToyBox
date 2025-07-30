@@ -2,16 +2,22 @@ import * as Core from "../../../Core/Core";
 import * as Math from "../../../Mathematics/Mathematics";
 
 import SceneEventArgs from "./SceneEventArgs";
+import Camera from "../../Objects/Cameras/Camera";
 import SceneEventPackage from "./SceneEventPackage";
 import SceneObject from "../../Objects/SceneObject/SceneObject";
 import DrawObject from "../../Objects/Drawn/DrawObject/DrawObject";
+import SceneResizeEventArgumants from "./SceneResizeEventArguments";
 
+const HTML_UI_PARENT = 'ui-parent';
 const SCENE_OBJECT_WRONG_TYPE_MESSAGE = 'Cannot add SceneObject, wrong type.';
 
 class Scene extends Core.BaseObject {
     public active: boolean;
     public backColor: Math.Color;
     public events: SceneEventPackage;
+    protected activeCamera?: Camera;
+
+    public get camera(): Camera { return this.activeCamera }
 
     public constructor(old?: Scene) {
         super(old);
@@ -43,12 +49,22 @@ class Scene extends Core.BaseObject {
     }
 
     // virtual
+    public setCamera(camera: Camera | string): boolean {
+        const newActiveCamera = typeof camera === 'string' ? this.findChild<Camera>(camera) : camera;
+        if (!newActiveCamera) {
+            return false;
+        }
+        this.activeCamera = newActiveCamera;
+        return true;
+    }
+
+    // virtual
     public findColliders(): Core.BaseObject[] {
         return [];
     }
 
     // virtual
-    public composite(chunk: Scene): boolean {
+    public loadChunk(chunk: Scene, offset: Math.Vertex): boolean {
         return false;
     }
 
@@ -66,13 +82,20 @@ class Scene extends Core.BaseObject {
     }
 
     // virtual
-    public onResize(args: SceneEventArgs): void {
+    public onResize(args: SceneEventArgs & SceneResizeEventArgumants): void {
         this.findChildrenByType<DrawObject>(DrawObject)
             .forEach((entry: DrawObject) => entry.onResize(args));
     }
 
+    // virtual
+    public generateResourceList(): Core.Resource[] {
+        let resourceList = [];
+        this.children.forEach((entry: SceneObject) => resourceList = [...resourceList, ...entry.generateResourceList()]);
+        return resourceList;
+    }
+
     private resetUIParent(): void {
-        let UIParent: HTMLElement = document.getElementById('ui-parent');
+        let UIParent: HTMLElement = document.getElementById(HTML_UI_PARENT);
         if (UIParent) UIParent.innerHTML = '';
     }
 }
