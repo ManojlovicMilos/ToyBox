@@ -1,9 +1,8 @@
 import Loader from "./Loader";
 import BaseObject from "../BaseObject";
 import Service from "../Services/Service";
-import inject from "../Services/InjectionManager";
 
-class LoaderService extends Service {
+abstract class LoaderService extends Service {
     private loaders: { [key: string]: Loader }
 
     public constructor() {
@@ -36,17 +35,5 @@ class LoaderService extends Service {
         return null;
     }
 }
-
-const load = <T extends BaseObject>(resource: T): Promise<T> => {
-    let service = inject<LoaderService>(LoaderService);
-    return service.load(resource);
-};
-
-const registerLoader = <T>(resourceType: typeof BaseObject, loader: Loader): void => {
-    let service = inject<LoaderService>(LoaderService);
-    service.register(resourceType, loader);
-};
-
-export { load, registerLoader };
 
 export default LoaderService;
