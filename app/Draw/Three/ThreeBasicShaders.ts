@@ -44,7 +44,7 @@ class ThreeBasicShaders
     public static Fragment2D : string = `
         uniform int index;
         uniform vec4 color;
-        uniform sampler2D texture;
+        uniform sampler2D tex;
         varying vec2 vUv;
         void main()
         {
@@ -54,14 +54,14 @@ class ThreeBasicShaders
             }
             else
             {
-                gl_FragColor = color * texture2D(texture, vUv);
+                gl_FragColor = color * texture(tex, vUv);
             }
         }
         `;
     public static DefaultHeader : string = `
         uniform int index;
         uniform vec4 color;
-        uniform sampler2D texture;
+        uniform sampler2D tex;
         uniform sampler2D normalMap;
         uniform float radii[8];
         uniform float intensities[8];
@@ -89,7 +89,7 @@ class ThreeBasicShaders
             vec4 finalColor = color;
             if(index != -1)
             {
-                finalColor = color * texture2D(texture, vUv);
+                finalColor = color * texture(tex, vUv);
             }
         `;
     public static LightCalculation : string = `
@@ -127,7 +127,7 @@ class ThreeBasicShaders
                     float currentAttenuation = 1.0 / (attenuations[i].x + attenuations[i].y * distanceToLight + attenuations[i].z * distanceToLight * distanceToLight);
                     currentAttenuation = currentAttenuation * 5.0;
                     if(distanceToLight > radii[i]) currentAttenuation = 0.0;
-                    vec4 normalCoded = texture2D(normalMap, vUv);
+                    vec4 normalCoded = texture(normalMap, vUv);
                     vec3 normal = normalize(vec3(normalCoded.x * 2.0 - 1.0, normalCoded.y * 2.0 - 1.0, normalCoded.z * 2.0 - 1.0));
                     float shot = max(min(dot(normal, lightDir) + 0.5, 1.0), 0.0);
                     currentAttenuation = intensities[i] * currentAttenuation * shot;
@@ -152,7 +152,7 @@ class ThreeBasicShaders
                     float currentAttenuation = 1.0 / (attenuations[i].x + attenuations[i].y * distanceToLight + attenuations[i].z * distanceToLight * distanceToLight);
                     currentAttenuation = currentAttenuation * 5.0;
                     if(distanceToLight > radii[i]) currentAttenuation = 0.0;
-                    vec4 normalCoded = texture2D(normalMap, vUv);
+                    vec4 normalCoded = texture(normalMap, vUv);
                     vec3 normal = normalize(vec3(normalCoded.x * 2.0 - 1.0, normalCoded.y * 2.0 - 1.0, normalCoded.z * 2.0 - 1.0));
                     float shot = max(min(dot(normal, lightDir) + 0.5, 1.0), 0.0);
                     finalLight = intensities[i] * currentAttenuation * shot * shot * shot;

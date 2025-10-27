@@ -1,17 +1,17 @@
-var path = require("path");
+const path = require('path');
+
 module.exports = {
-  entry: {
-    app: ["./playground/App.ts"]
-  },
+  mode: 'development',
+  entry: './app/app.ts',
   output: {
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, 'dist'),
     library: "ToyBox",
     libraryTarget: "umd",
-    filename: "toybox.js",
+    filename: 'toybox.js',
     publicPath: "/resources/"
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.js']
   },
   module: {
     rules: [

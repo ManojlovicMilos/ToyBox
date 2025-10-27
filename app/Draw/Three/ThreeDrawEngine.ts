@@ -221,7 +221,7 @@ class ThreeDrawEngine extends DrawEngine
             this.Data["TOYBOX_" + Drawn.ID + "_CurrentSet"] = Drawn.CurrentSpriteSet;
             this.Data["TOYBOX_" + Drawn.ID + "_CurrentIndex"] = Drawn.Index;
             let SpriteMaterial = LoadData.Generator.LoadObjectMaterial(Drawn);
-            let Sprite:Three.Mesh = new Three.Mesh( new Three.CubeGeometry(1,1,1), SpriteMaterial );
+            let Sprite:Three.Mesh = new Three.Mesh( new Three.BoxGeometry(1,1,1), SpriteMaterial );
             this.Data["TOYBOX_" + Drawn.ID] = Sprite;
             this.DrawObjectValueCheck(Sprite, Drawn);
             LoadData.Scene.add(Sprite);
@@ -259,7 +259,7 @@ class ThreeDrawEngine extends DrawEngine
         {
             Drawn.Modified = false;
             let TileMaterial = LoadData.Generator.LoadObjectMaterial(Drawn);
-            let Tile:Three.Mesh = new Three.Mesh( new Three.CubeGeometry(1,1,1), TileMaterial );
+            let Tile:Three.Mesh = new Three.Mesh( new Three.BoxGeometry(1,1,1), TileMaterial );
             this.Data["TOYBOX_" + Drawn.ID] = Tile;
             this.DrawObjectValueCheck(Tile, Drawn);
             LoadData.Scene.add(Tile);

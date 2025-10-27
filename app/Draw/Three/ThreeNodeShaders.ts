@@ -36,7 +36,7 @@ class ThreeNodeShaders
         this._Pool["FragmentHeader"] = `
         uniform int index;
         uniform vec4 color;
-        uniform sampler2D texture;
+        uniform sampler2D tex;
         uniform sampler2D normalMap;
         uniform float intensities[8];
         uniform vec3 locations[8];
@@ -73,11 +73,11 @@ class ThreeNodeShaders
         `;
 
         this._Pool["Texture"] = `
-        vec4 <OUTPUT> = texture2D(texture, vUv);
+        vec4 <OUTPUT> = texture(tex, vUv);
         `;
 
         this._Pool["NormalMap"] = `
-        vec4 <OUTPUT> = texture2D(normalMap, vUv);
+        vec4 <OUTPUT> = texture(normalMap, vUv);
         `;
 
         this._Pool["Light"] = `
@@ -113,7 +113,7 @@ class ThreeNodeShaders
                 float currentAttenuation = 1.0 / (attenuations[i].x + attenuations[i].y * distanceToLight + attenuations[i].z * distanceToLight * distanceToLight);
                 currentAttenuation = currentAttenuation * 5.0;
                 if(distanceToLight > radii[i]) currentAttenuation = 0.0;
-                vec4 normalCoded = texture2D(normalMap, vUv);
+                vec4 normalCoded = texture(normalMap, vUv);
                 vec3 normal = normalize(vec3(normalCoded.x * 2.0 - 1.0, normalCoded.y * 2.0 - 1.0, normalCoded.z * 2.0 - 1.0));
                 float shot = max(min(dot(normal, lightDir) + 0.5, 1.0), 0.0);
                 currentAttenuation = intensities[i] * currentAttenuation * shot;
