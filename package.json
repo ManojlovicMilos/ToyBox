@@ -1,7 +1,7 @@
 {
   "name": "toybox-engine",
   "type": "module",
-  "version": "0.2.3",
+  "version": "0.2.3-beta.3",
   "description": "Toybox Engine",
   "main": "build/toybox.js",
   "types": "build/toybox.d.ts",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ManojlovicMilos/ToyBox"
+    "url": "git+https://github.com/ManojlovicMilos/ToyBox.git"
   },
   "keywords": [
     "toybox-engine",
