@@ -240,7 +240,7 @@ class ThreeDrawEngine extends DrawEngine
             {
                 this.Data["TOYBOX_" + Drawn.ID + "_CurrentIndex"] = Drawn.Index;
                 let Textures : Three.Texture[] = this.Data["TOYBOX_" + Drawn.Collection.ID + "_Tex"];
-                Sprite.material["uniforms"].texture.value = Textures[Drawn.Index];
+                Sprite.material["uniforms"].tex.value = Textures[Drawn.Index];
                 if(Drawn.Material.Type == Engine.MaterialType.Phong || Drawn.Material.Type == Engine.MaterialType.Custom || Drawn.Material.Type == Engine.MaterialType.Shader)
                 {
                     let Normals : Three.Texture[] = this.Data["TOYBOX_" + Drawn.NormalCollection.ID + "_Normal"];
