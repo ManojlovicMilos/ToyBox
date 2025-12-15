@@ -1,8 +1,9 @@
-export { Border }
+export { BorderStyle }
 
-import * as Math from "./../Mathematics/Mathematics";
+import { Control } from "../Control";
+import * as Math from "../../Mathematics/Mathematics";
 
-class Border
+class BorderStyle
 {
     private _Width:number;
     private _Radius:number;
@@ -13,7 +14,7 @@ class Border
     public set Radius(value:number) { this._Radius = value; }
     public get Color():Math.Color { return this._Color; }
     public set Color(value:Math.Color) { this._Color = value; }
-    public constructor(Old?:Border, Width?:number, Color?:Math.Color)
+    public constructor(Old?:BorderStyle, Width?:number, Color?:Math.Color)
     {
         if(Old)
         {
@@ -30,14 +31,14 @@ class Border
             this._Radius = 0;
         }
     }
-    public Copy() : Border
+    public Copy() : BorderStyle
     {
-        return new Border(this);
+        return new BorderStyle(this);
     }
-    public Apply(Element:HTMLElement)
+    public Apply(Element:HTMLElement, Scale: Math.Vertex) : void
     {
         Element.style.borderStyle = "solid";
-        Element.style.borderWidth = this._Width + "px";
+        Element.style.borderWidth = this._Width * Scale.Y + "px";
         Element.style.borderRadius = this._Radius + "px";
         Element.style.borderColor = this._Color.ToString();
     }

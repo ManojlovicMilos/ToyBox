@@ -48,7 +48,7 @@ npm -7zip -pack
 ```
 ## Versions
 
-Current version is 0.2.0
+Current version is 0.2.3
 
 Versions 0.1.X and older are no longer supported.
 

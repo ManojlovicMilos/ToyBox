@@ -1,0 +1,9 @@
+/.git
+/app
+/node_modules
+/tscompiled
+index.html
+README.md
+tsconfig.json
+webpack.config.js
+package-lock.json
