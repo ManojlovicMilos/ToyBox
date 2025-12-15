@@ -43,7 +43,7 @@ class ThreeMaterialGenerator
             flipx: { type:"i", value: (Drawn.FlipX)?1:0 },
             flipy: { type:"i", value: (Drawn.FlipY)?1:0 },
             color: { type:"v4", value: Drawn.Paint.ToArray() },
-            texture: { type:"tv", value: (Textures) ? Textures[0] : null },
+            tex: { type:"tv", value: (Textures) ? Textures[0] : null },
             repeatx: { type:"f", value: Drawn.RepeatX },
             repeaty: { type:"f", value: Drawn.RepeatY }
         };
@@ -202,6 +202,11 @@ class ThreeMaterialGenerator
         {
             NewTexture.magFilter = Three.NearestFilter;
             NewTexture.minFilter = Three.NearestMipMapNearestFilter;
+        }
+        else if(Drawn.Material.Sampling == Engine.TextureSamplingType.Linear)
+        {
+            NewTexture.magFilter = Three.LinearFilter;
+            NewTexture.minFilter = Three.LinearMipMapLinearFilter;
         }
         return NewTexture;
     }

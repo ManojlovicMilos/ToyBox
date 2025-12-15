@@ -179,6 +179,7 @@ export class ColliderObject
 
 export class Collision
 {
+    static AdditionalSideCheck:boolean;
     static FocusOffset:number;
     static Check(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult
     static CheckRadius2DToRadius2D(Collider1:ColliderObject, Collider2:ColliderObject) : CollisionResult

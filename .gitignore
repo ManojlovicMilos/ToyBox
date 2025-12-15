@@ -1,4 +1,5 @@
 /node_modules
-/build/resources
+/dist/toybox.mjs
+/dist/toybox.mjs.LICENSE.txt
 /tscompiled
 package-lock.json

@@ -13,7 +13,7 @@ class ThreeJSShaders
     public static Fragment2D : string = `
         uniform int index;
         uniform vec4 color;
-        uniform sampler2D texture;
+        uniform sampler2D tex;
         varying vec2 vUv;
         void main()
         {
@@ -23,7 +23,7 @@ class ThreeJSShaders
             }
             else
             {
-                gl_FragColor = color * texture2D(texture, vUv);
+                gl_FragColor = color * texture(tex, vUv);
             }
         }
         `;

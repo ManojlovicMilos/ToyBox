@@ -1,17 +1,25 @@
-var path = require("path");
-module.exports = {
-  entry: {
-    app: ["./app/app.ts"]
-  },
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
+  mode: 'production',
+  entry: './app/app.ts',
   output: {
-    path: path.resolve(__dirname, "build"),
-    library: "ToyBox",
-    libraryTarget: "umd",
-    filename: "toybox.js",
-    publicPath: "/resources/"
+    filename: 'toybox.mjs',
+    path: path.resolve(__dirname, 'dist'),
+    library: {
+      type: "module"
+    },
+    publicPath: "/resources/",
+  },
+  experiments: {
+    outputModule: true
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.js']
   },
   module: {
     rules: [

@@ -1,6 +1,5 @@
 export { Panel }
 
-import { Settings } from "./../Engine/Settings";
 import { Control } from "./Control";
 
 class Panel extends Control
@@ -29,41 +28,58 @@ class Panel extends Control
     }
     public Update() : void
     {
+        // Override
         super.Update();
         if(!this.Element) return;
         for(let i in this._Children)
         {
+            this._Children[i].Check();
+            if(!this._Children[i].Data["AppendedTo" + this.ID])
+            {
+                this.Element.appendChild(this._Children[i].Element);
+                this._Children[i].Data["AppendedTo" + this.ID] = true;
+            }
             this._Children[i].Offset = this.Position;
             this._Children[i].Update();
         }
     }
     protected Create() : void
     {
+        // Override
         super.Create();
         this.Element.className += " panel";
         for(let i in this._Children)
         {
+            this._Children[i].Check();
             this._Children[i].Update();
             this.Element.appendChild(this._Children[i].Element);
+            this._Children[i].Data["AppendedTo" + this.ID] = true;
         }
     }
     public Attach(Child:Control) : void
     {
+        Child.OnAttach({ Parent: this });
+        Child.Scale = this.Scale;
         this._Children.push(Child);
     }
-    public OnAttach(Args:any) : void
+    public Remove(Child:Control) : void
     {
-        // Override
-        for(let i in this._Children) Args.Scene.Attach(this._Children[i]);
+        Child.OnRemove({ Parent: this });
+        this._Children.splice(this._Children.indexOf(Child), 1);
     }
-    public OnRemove(Args:any) : void
+    public OnResize(Args:any) : void
     {
         // Override
-        for(let i in this._Children) Args.Scene.Remove(this._Children[i]);
+        this._Children.forEach(Entry => Entry.OnResize(Args));
+        super.OnResize(Args);
     }
-    public OnToggle(Value:boolean) : void
+    public RemoveAll() : void
     {
-        // Override
-        for(let i in this._Children) this._Children[i].Active = Value;
+        this._Children
+        .forEach(Entry =>
+        {
+            Entry.OnRemove({ Parent: this });
+        });
+        this._Children = [];
     }
 }

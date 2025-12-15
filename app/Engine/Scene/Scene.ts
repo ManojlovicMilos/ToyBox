@@ -77,23 +77,23 @@ class Scene
     {
         return new Scene(this);
     }
-    public Attach(Object:SceneObject) : void
+    public Attach(SO: SceneObject) : void
     {
         // Virtual
-        this.Data[Object.ID] = Object;
-        this._Objects.push(Object);
-        Object.OnAttach({Scene:this});
+        this.Data[SO.ID] = SO;
+        this._Objects.push(SO);
+        SO.OnAttach({Scene:this});
     }
-    public Remove(Object:SceneObject) : void
+    public Remove(SO: SceneObject) : void
     {
         // Virtual
-        let Index:number = this._Objects.indexOf(Object);
+        let Index:number = this._Objects.indexOf(SO);
         if(Index != -1)
         {
-            Object.OnRemove({Scene:this});
+            SO.OnRemove({Scene:this});
             this._Objects.splice(Index, 1);
         }
-        else Util.Log.Warning("Object " + Object.Name + "/" + Object.ID + " does not exist in scene " + this.Name + "/" + this.ID, {Objects:this._Objects, Object});
+        else Util.Log.Warning("Object " + SO.Name + " / " +SO.ID + " does not exist in scene " + this.Name + " / " + this.ID, {Objects:this._Objects, Object});
     }
     public FindByData(Key:string, Data?:any) : SceneObject[]
     {
