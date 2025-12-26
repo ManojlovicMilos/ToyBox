@@ -1,13 +1,11 @@
-export  { SceneObjectType, SceneObject };
+export { SceneObjectType, SceneObject };
 
+import * as Core from "./../../Core/Core";
 import * as Data from "./../../Data/Data";
-import * as Mathematics from "./../../Mathematics/Mathematics";
 
-import { EventPackage } from "./../Events/EventPackage";
-import { Serialization } from "./../../Data/Serialization";
+import EventPackage from "./../Events/EventPackage";
 
-enum SceneObjectType
-{
+enum SceneObjectType {
     Undefined = "Undefined",
     Drawn = "Drawn",
     Script = "Script",
@@ -15,75 +13,75 @@ enum SceneObjectType
     Control = "Control",
     Other = "Other"
 }
-class SceneObject
-{
+
+class SceneObject {
     // Abstract
-    private _ID:string;
-    private _Name:string;
-    private _Type:SceneObjectType;
-    protected _Events:EventPackage;
-    public get ID():string { return this._ID; }
-    public get Name():string { return this._Name; }
-    public set Name(value:string) { this._Name = value; }
-    public get Type():SceneObjectType { return this._Type; }
-    public set Type(value:SceneObjectType) { this._Type = value; }
-    public get Events():EventPackage { return this._Events; }
-    public Data: { [key: string]:any; } = {};
-    public constructor(Old?:SceneObject)
-    {
-        if(Old != null)
-        {
-            this._ID = Data.Uuid.Create();
+    private _ID: string;
+    private _Name: string;
+    private _Type: SceneObjectType;
+    protected _Events: EventPackage;
+
+    public get ID(): string { return this._ID; }
+    public get Name(): string { return this._Name; }
+    public set Name(value: string) { this._Name = value; }
+    public get Type(): SceneObjectType { return this._Type; }
+    public set Type(value: SceneObjectType) { this._Type = value; }
+    public get Events(): EventPackage { return this._Events; }
+    public Data: { [key: string]: any; } = {};
+
+    public constructor(Old?: SceneObject) {
+        if (Old != null) {
+            this._ID = Core.CreateUuid();
             this._Name = Old._Name;
             this._Type = Old._Type
             this._Events = Old._Events.Copy();
         }
-        else
-        {
-            this._ID = Data.Uuid.Create();
+        else {
+            this._ID = Core.CreateUuid();
             this._Name = this.constructor.name;
             this._Type = SceneObjectType.Undefined;
             this._Events = new EventPackage();
         }
     }
-    public Copy() : SceneObject
-    {
+
+    public Copy(): SceneObject {
         return new SceneObject(this);
     }
-    public Serialize() : any
-    {
+
+    public Serialize(): any {
         // Virtual
+        const Serialization = Core.Inject<Data.SerializationService>(Data.SerializationService);
         let SO =
         {
             ID: this._ID,
             Name: this._Name,
-            Type: <string> this._Type,
+            Type: <string>this._Type,
             Data: Serialization.CleanData(this.Data)
         };
         return SO;
     }
-    public Deserialize(Data:any) : void
-    {
+
+    public Deserialize(Data: any): void {
         // Virtual
         this._ID = Data.ID;
         this._Name = Data.Name;
         this._Type = <SceneObjectType>Data.Type;
         this.Data = Data.Data;
     }
-    public OnAttach(Args:any) : void
-    {
+
+    public OnAttach(Args: any): void {
         // Virtual
     }
-    public OnRemove(Args:any) : void
-    {
+
+    public OnRemove(Args: any): void {
         // Virtual
     }
-    public OnSwitch() : void
-    {
+
+    public OnSwitch(): void {
         // Virtual
     }
-    public OnResize(Args:any) : void
-    {
+
+    public OnResize(Args: any): void {
         // Virtual
     }
 }

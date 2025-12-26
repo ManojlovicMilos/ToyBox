@@ -1,34 +1,30 @@
-export { Label  }
+export { Label }
 
 import { Text } from "./Text";
 
-class Label extends Text
-{
-    public constructor(Old?:Label, Text?:string)
-    {
+class Label extends Text {
+    public constructor(Old?: Label, Text?: string) {
         super(Old, Text);
-        if(Old)
-        {
+        if (Old) {
 
         }
-        else
-        {
+        else {
 
         }
     }
-    public Copy() : Label
-    {
+
+    public Copy(): Label {
         return new Label(this);
     }
-    public Update() : void
-    {
+
+    public Update(): void {
         // Override
         super.Update();
-        if(!this.Element) return;
+        if (!this.Element) return;
         this._TextElement.innerText = this._Text;
     }
-    protected Create() : void
-    {
+
+    protected Create(): void {
         // Override
         super.Create();
         this.Element.className += " label";

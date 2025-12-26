@@ -1,6 +1,9 @@
-import { Uuid } from "./Uuid";
-import { HTTP } from "./Http";
-import { Reader } from "./Reader";
-import { Serialization} from "./Serialization";
+import LogService from './Services/LogService';
+import HTTPService from './Services/HttpService';
+import SerializationService from './Services/SerializationService';
 
-export  { HTTP, Reader, Uuid, Serialization };
+export  {
+    LogService,
+    HTTPService,
+    SerializationService,
+};

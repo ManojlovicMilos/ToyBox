@@ -355,7 +355,7 @@ export class Scene
     Serialize() : any
     Deserialize(Data:any) : void
     OnSwitch() : void
-    OnLeave() : void
+    OnLeave() : void 
     OnResize(Args:any) : void
 }
 
@@ -380,24 +380,6 @@ export class Game
     Remove(Scene:Scene) : void
     RemoveByName(SceneName:string) : void
     GetScenesWithData(Key:string, Data?:any) : any[]
-}
-
-export enum Quality
-{
-    Low = 1,
-    Medium = 2,
-    High = 4,
-}
-
-export class Settings
-{
-    static Version:string;
-    static LibPath:string;
-    static Graphics:Quality;
-    static EngineUIStyle:boolean;
-    static GlobalFontScale:number;
-    static GlobalFontFamily:string;
-    static GlobalLineHeightFactor:number;
 }
 
 export as namespace Engine;

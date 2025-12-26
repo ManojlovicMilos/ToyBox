@@ -1,41 +1,37 @@
-export  { DPad };
+import * as Core from "../../Core/Core";
+import * as Engine from "../../Engine/Engine";
+import * as Math from "../../Mathematics/Mathematics";
 
-import * as Data from "./../Data/Data";
-import * as Engine from "./../Engine/Engine";
-import * as Math from "./../Mathematics/Mathematics";
+class DPadControl extends Engine.Tile {
+    private _Touch: boolean;
+    private _TouchID: number;
+    private _Up: Engine.Tile;
+    private _Right: Engine.Tile;
+    private _Down: Engine.Tile;
+    private _Left: Engine.Tile;
+    private _Press: Function[];
+    private _CollisionService: Math.CollisionService;
 
-class DPad extends Engine.Tile
-{
-    private _Touch:boolean;
-    private _TouchID:number;
-    public static All:DPad[] = [];
-    private _Up:Engine.Tile;
-    private _Right:Engine.Tile;
-    private _Down:Engine.Tile;
-    private _Left:Engine.Tile;
-    private _Press:Function[];
-    public get Press():Function[] { return this._Press; }
-    public constructor(Old?:DPad, Position?:Math.Vertex, Size?:Math.Vertex)
-    {
+    public get Press(): Function[] { return this._Press; }
+
+    public constructor(Old?: DPadControl, Position?: Math.Vertex, Size?: Math.Vertex) {
         super(Old);
         this._Touch = false;
         this._Press = [];
-        if(Old)
-        {
+        this._CollisionService = Core.Inject(Math.CollisionService);
+        if (Old) {
             this._Up = Old._Up.Copy();
             this._Right = Old._Right.Copy();
             this._Down = Old._Down.Copy();
         }
-        else
-        {
+        else {
             this.Update(Position, Size);
             this.Init();
         }
-        DPad.All.push(this);
     }
-    private Init()
-    {
-        let DPadCollection = new Engine.ImageCollection(null, ["Resources/ToyBox/DPad/DPad.png", "Resources/ToyBox/DPad/Up.png", "Resources/ToyBox/DPad/Right.png", "Resources/ToyBox/DPad/Down.png", "Resources/ToyBox/DPad/Left.png"]);
+
+    private Init() {
+        let DPadCollection = new Engine.ImageCollection(null, ["public/tbx/dPad/dPad.png", "public/tbx/dPad/up.png", "public/tbx/dPad/right.png", "public/tbx/dPad/down.png", "public/tbx/dPad/left.png"]);
         this.Name = "DPad";
         this.Collection = DPadCollection;
         this.Index = 0;
@@ -45,9 +41,9 @@ class DPad extends Engine.Tile
         this._Left = this.CreateDirection(4);
         this.Fixed = true;
     }
-    private CreateDirection(Index:number) : Engine.Tile
-    {
-        let Direction:Engine.Tile = new Engine.Tile();
+
+    private CreateDirection(Index: number): Engine.Tile {
+        let Direction: Engine.Tile = new Engine.Tile();
         Direction.Name = "DPad Direction " + Index;
         Direction.Trans = this.Trans.Copy();
         Direction.Collection = this.Collection;
@@ -56,26 +52,26 @@ class DPad extends Engine.Tile
         Direction.Fixed = true;
         return Direction;
     }
-    public Update(Position:Math.Vertex, Size:Math.Vertex) : void
-    {
+
+    public Update(Position: Math.Vertex, Size: Math.Vertex): void {
         if (Position) this.Trans.Translation = Position.Copy();
         if (Size) this.Trans.Scale = Size.Copy();
     }
-    public SetColors(DPad:Math.Color, Directions:Math.Color) : void
-    {
+
+    public SetColors(DPad: Math.Color, Directions: Math.Color): void {
         this.Paint = DPad;
         this._Up.Paint = Directions;
         this._Right.Paint = Directions;
         this._Down.Paint = Directions;
         this._Left.Paint = Directions;
     }
-    public OnAttach(Args:any) : void
-    {
+
+    public OnAttach(Args: any): void {
         // Override
         this.InitEvents(Args.Scene);
     }
-    private InitEvents(Scene:Engine.Scene) : void
-    {
+
+    private InitEvents(Scene: Engine.Scene): void {
         Scene.Attach(this._Up);
         Scene.Attach(this._Right);
         Scene.Attach(this._Left);
@@ -84,49 +80,49 @@ class DPad extends Engine.Tile
         this.Events.TouchEnd.push(this.TouchEnd.bind(this));
         Scene.Events.TouchMove.push(this.TouchMove.bind(this));
     }
-    private TouchStart(G:Engine.Game, Args:any) : void
-    {
+
+    private TouchStart(G: Engine.Game, Args: any): void {
         this._Touch = true;
         this._TouchID = Args.ID;
     }
-    private TouchEnd() : void
-    {
+
+    private TouchEnd(): void {
         this.OnPress({});
         this._Touch = false;
     }
-    private TouchMove(G:Engine.Game, Args:any) : boolean
-    {
-        if(this._TouchID != Args.ID) return;
-        if(!this._Touch) return false;
-        if(Math.Vertex.Distance(Args.Location, this.Trans.Translation) > this.Trans.Scale.X / 2)
-        {
+
+    private TouchMove(G: Engine.Game, Args: any): boolean {
+        if (this._TouchID != Args.ID) return;
+        if (!this._Touch) return false;
+        if (Math.Vertex.Distance(Args.Location, this.Trans.Translation) > this.Trans.Scale.X / 2) {
             this.OnPress({});
             this._Touch = false;
             return false;
         }
-        let CollisionResult:Math.CollisionResult = Math.Collision.GetCollision8Way(this.Trans.Translation, Args.Location);
+        let CollisionResult: Math.CollisionResult = this._CollisionService.GetCollision8Way(this.Trans.Translation, Args.Location);
         let Directions = this.ConvertDirections(CollisionResult);
         this.OnPress(Directions);
         return true;
     }
-    private ConvertDirections(Collision:any) : any
-    {
-        let Direction:any = {};
-        if(Collision.Top != null) Direction.Up = true;
-        if(Collision.Bottom != null) Direction.Down = true;
-        if(Collision.Left != null) Direction.Left = true;
-        if(Collision.Right != null) Direction.Right = true;
+
+    private ConvertDirections(Collision: any): any {
+        let Direction: any = {};
+        if (Collision.Top != null) Direction.Up = true;
+        if (Collision.Bottom != null) Direction.Down = true;
+        if (Collision.Left != null) Direction.Left = true;
+        if (Collision.Right != null) Direction.Right = true;
         return Direction;
     }
-    private OnPress(Directions:any) : void
-    {
+
+    private OnPress(Directions: any): void {
         this._Up.Active = Directions.Up;
         this._Right.Active = Directions.Right;
         this._Down.Active = Directions.Down;
         this._Left.Active = Directions.Left;
-        for(let i in this._Press)
-        {
+        for (let i in this._Press) {
             this.Press[i](Directions);
         }
     }
 }
+
+export default DPadControl;

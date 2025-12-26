@@ -1,3 +1,4 @@
+import * as Core from "./toybox-core";
 import * as Math from "./toybox-math";
 import * as Engine from "./toybox-engine";
 
@@ -6,14 +7,13 @@ export enum DrawEngineType
     ThreeJS = 0
 }
 
-export class DrawEngine
+export class DrawEngine extends Core.Service
 {
     Renderer:any;
     GlobalScale:Math.Vertex;
     Resolution:Math.Vertex;
     Data: any;
-    constructor(Old?:DrawEngine)
-    Copy() : DrawEngine
+    constructor()
     UpdateResolution(Resolution?:Math.Vertex, FixedSize?:boolean) : void
     TransformToCanvas(X:number, Y:number) : Math.Vertex
     Draw2DScene(Scene:Engine.Scene2D, Width:number, Height:number) : void

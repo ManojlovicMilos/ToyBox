@@ -10,8 +10,7 @@ import { LayoutStyle } from "./LayoutStyle";
 
 export { Style }
 
-class Style
-{
+class Style {
     private _Text: TextStyle;
     private _Border: BorderStyle;
     private _Background: BackgroundStyle;
@@ -20,20 +19,20 @@ class Style
     private _Padding: OffsetStyle;
     private _Layout: LayoutStyle;
     private _Values: any;
-    public get Text():TextStyle { return this._Text; }
-    public get Border():BorderStyle { return this._Border; }
-    public get Background():BackgroundStyle { return this._Background; }
-    public get Content():ContentStyle { return this._Content; }
-    public get Margin():OffsetStyle { return this._Margin; }
-    public get Padding():OffsetStyle { return this._Padding; }
-    public get Layout():LayoutStyle { return this._Layout; }
+
+    public get Text(): TextStyle { return this._Text; }
+    public get Border(): BorderStyle { return this._Border; }
+    public get Background(): BackgroundStyle { return this._Background; }
+    public get Content(): ContentStyle { return this._Content; }
+    public get Margin(): OffsetStyle { return this._Margin; }
+    public get Padding(): OffsetStyle { return this._Padding; }
+    public get Layout(): LayoutStyle { return this._Layout; }
     public get Values(): any { return this._Values; }
-    public get Font():string { return this._Text.Font; }
-    public set Font(value:string) { this._Text.Font = value; }
-    public constructor(Old?:Style)
-    {
-        if(Old != null)
-        {
+    public get Font(): string { return this._Text.Font; }
+    public set Font(value: string) { this._Text.Font = value; }
+
+    public constructor(Old?: Style) {
+        if (Old != null) {
             this._Text = Old._Text.Copy();
             this._Border = Old._Border.Copy();
             this._Background = Old._Background.Copy();
@@ -43,8 +42,7 @@ class Style
             this._Layout = Old._Layout.Copy();
             this._Values = Object.assign({}, Old._Values);
         }
-        else
-        {
+        else {
             this._Text = new TextStyle();
             this._Border = new BorderStyle();
             this._Background = new BackgroundStyle();
@@ -55,12 +53,12 @@ class Style
             this._Values = {};
         }
     }
-    public Copy() : Style
-    {
+
+    public Copy(): Style {
         return new Style(this);
     }
-    public Apply(Control: Control) : void
-    {
+
+    public Apply(Control: Control): void {
         this._Text.Apply(Control.Element, Control.Scale);
         this._Border.Apply(Control.Element, Control.Scale);
         this._Background.Apply(Control.Element);
@@ -69,9 +67,8 @@ class Style
         this._Padding.Apply(Control.Element, Control.Scale);
         this._Layout.Apply(Control);
         Object.keys(this._Values)
-        .forEach(Key =>
-        {
-            Control.Element.style[Key] = this._Values[Key];
-        });
+            .forEach(Key => {
+                Control.Element.style[Key] = this._Values[Key];
+            });
     }
 }

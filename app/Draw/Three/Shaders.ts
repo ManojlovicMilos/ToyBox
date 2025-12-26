@@ -1,8 +1,7 @@
 export { ThreeJSShaders }
 
-class ThreeJSShaders
-{
-    public static Vertex2D : string = `
+class ThreeJSShaders {
+    public static Vertex2D: string = `
         varying vec2 vUv;
         void main()
         {
@@ -10,7 +9,7 @@ class ThreeJSShaders
 			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
         `;
-    public static Fragment2D : string = `
+    public static Fragment2D: string = `
         uniform int index;
         uniform vec4 color;
         uniform sampler2D tex;

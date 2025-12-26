@@ -1,40 +1,35 @@
 export { Button }
 
-import * as Engine from "./../Engine/Engine";
+import * as Core from "./../Core/Core";
 import * as Math from "./../Mathematics/Mathematics";
 
 import { Label } from "./Label";
 
-class Button extends Label
-{
-    public constructor(Old?:Button, Text?:string)
-    {
+class Button extends Label {
+    public constructor(Old?: Button, Text?: string) {
         super(Old, Text);
-        if(Old)
-        {
+        if (Old) {
 
         }
-        else
-        {
-            this.BackColor = Math.Color.FromRGBA(127,127,127,255);
+        else {
+            this.BackColor = Math.Color.FromRGBA(127, 127, 127, 255);
         }
     }
-    public Copy() : Button
-    {
+
+    public Copy(): Button {
         return new Button(this);
     }
-    public Update() : void
-    {
+
+    public Update(): void {
         // Override
         super.Update();
-        if(!this.Element) return;
-        if(Engine.Settings.EngineUIStyle)
-        {
+        if (!this.Element) return;
+        if (Core.Settings.EngineUIStyle) {
             this._Style.Values["cursor"] = "pointer";
         }
     }
-    protected Create() : void
-    {
+
+    protected Create(): void {
         // Override
         super.Create();
         this.Element.className += " button";

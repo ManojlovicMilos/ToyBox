@@ -3,47 +3,45 @@ export { Input }
 import * as Mathematics from "./../Mathematics/Mathematics";
 
 import { Text } from "./Text";
-import { Settings } from "./../Engine/Settings";
+import { Settings } from "../Core/Core";
 import { ContentAlign } from "./Style/ContentStyle";
 
-class Input extends Text
-{
+class Input extends Text {
     private _Placeholder: string;
     private _PlaceholderColor: Mathematics.Color;
-    public get Placeholder():string { return this._Placeholder; }
-    public set Placeholder(value:string) { this._Placeholder = value; }
-    public get PlaceholderColor():Mathematics.Color { return this._PlaceholderColor; }
-    public set PlaceholderColor(value:Mathematics.Color) { this._PlaceholderColor = value; }
-    public constructor(Old?:Input, Text?:string)
-    {
+
+    public get Placeholder(): string { return this._Placeholder; }
+    public set Placeholder(value: string) { this._Placeholder = value; }
+    public get PlaceholderColor(): Mathematics.Color { return this._PlaceholderColor; }
+    public set PlaceholderColor(value: Mathematics.Color) { this._PlaceholderColor = value; }
+
+    public constructor(Old?: Input, Text?: string) {
         super(Old, Text);
-        if(Old)
-        {
+        if (Old) {
             this._Placeholder = Old._Placeholder;
             this._PlaceholderColor = Old._PlaceholderColor.Copy();
         }
-        else
-        {
+        else {
             this._Placeholder = "";
             this._PlaceholderColor = Mathematics.Color.FromRGBA(100, 100, 100, 255);
             this._Style.Content.HorizontalAlign = ContentAlign.Start;
         }
     }
-    public Copy() : Input
-    {
+
+    public Copy(): Input {
         return new Input(this);
     }
-    public Update() : void
-    {
+
+    public Update(): void {
         // Override
         super.Update();
-        if(!this.Element) return;
+        if (!this.Element) return;
         (<HTMLInputElement>this._TextElement).type = "text";
         (<HTMLInputElement>this._TextElement).value = this._Text;
         (<HTMLInputElement>this._TextElement).placeholder = this._Placeholder;
     }
-    public Create() : void
-    {
+
+    public Create(): void {
         // Override
         super.Create();
         this.Element.className += " input";

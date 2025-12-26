@@ -1,27 +1,29 @@
+import * as Core from "./toybox-core";
 import * as Engine from "./toybox-engine";
 
-export class Uuid
+export class LogService extends Core.Service
 {
-    static Create() : string
+    Enabled: { [key: string]: boolean }
+    RegisterCustomLog(type: string): void
+    Out(message: string, data?: any, type?: string, method?: () => void): void
+    Info(message: string, data?: any): void
+    Error(message: string, data?: any): void
+    Event(message: string, data?: any): void
+    Warning(message: string, data?: any): void
 }
 
-export class HTTP
+export class HTTPService extends Core.Service
 {
-    static Get(Url:string) : Promise<any>
-    static Delete(Url:string) : Promise<any>
-    static Post(Url:string, Body?:Object) : Promise<any>
-    static Update(Url:string, Body?:Object) : Promise<any>
+    Get(Url:string) : Promise<any>
+    Delete(Url:string) : Promise<any>
+    Post(Url:string, Body?:Object) : Promise<any>
+    Update(Url:string, Body?:Object) : Promise<any>
 }
 
-export class Reader
+export class SerializationService extends Core.Service
 {
-    static Read(FilePath:string): Promise<any>
-}
-
-export class Serialization
-{
-    static CleanData(Data:any) : any
-    static DeserializeSceneObject(Data) : Engine.SceneObject
+    CleanData(Data:any) : any
+    DeserializeSceneObject(Data) : Engine.SceneObject
 }
 
 export as namespace Data;

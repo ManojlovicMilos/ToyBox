@@ -1,7 +1,7 @@
 {
   "name": "toybox-engine",
   "type": "module",
-  "version": "0.2.3",
+  "version": "0.2.5-beta.1",
   "description": "Toybox Engine",
   "main": "build/toybox.js",
   "types": "build/toybox.d.ts",

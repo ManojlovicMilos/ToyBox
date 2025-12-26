@@ -2,23 +2,20 @@ export { SpriteEventPackage }
 
 import { ImageObjectEventPackage } from "./ImageObjectEventPackage";
 
-class SpriteEventPackage extends ImageObjectEventPackage
-{
-    public get SetComplete() : Function[] { return this._Data["SetComplete"]; }
-    public constructor(Old?:SpriteEventPackage)
-    {
+class SpriteEventPackage extends ImageObjectEventPackage {
+    public get SetComplete(): Function[] { return this._Data["SetComplete"]; }
+    
+    public constructor(Old?: SpriteEventPackage) {
         super(Old);
-        if(Old)
-        {
+        if (Old) {
 
         }
-        else
-        {
+        else {
             this._Data["SetComplete"] = [];
         }
     }
-    public Copy() : SpriteEventPackage
-    {
+
+    public Copy(): SpriteEventPackage {
         return new SpriteEventPackage(this);
     }
 }

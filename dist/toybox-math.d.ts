@@ -1,3 +1,5 @@
+import * as Core from "./toybox-core";
+
 export enum Axis { }
 export const X: Axis;
 export const Y: Axis;
@@ -68,7 +70,7 @@ export class Matrix
     static CreateIdentity() : number[]
 }
 
-export class MatrixTransformer
+export class TransformationService extends Core.Service
 {
     ProjectionMatrix:Matrix;
     ModelViewMatrix:Matrix;
@@ -177,7 +179,7 @@ export class ColliderObject
     Reference:any;
 }
 
-export class Collision
+export class CollisionService extends Core.Service
 {
     static AdditionalSideCheck:boolean;
     static FocusOffset:number;
@@ -203,7 +205,7 @@ export class Collision
     static GetDefaultRectangularWay(Collider:ColliderObject, Position:Vertex) : CollisionResult
 }
 
-export class Random
+export class RandomService extends Core.Service
 {
     static Next(Min, Max) : number
 }

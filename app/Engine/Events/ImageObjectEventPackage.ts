@@ -1,6 +1,6 @@
 export { ImageObjectEventPackage }
 
-import { EventPackage } from "./EventPackage";
+import EventPackage from "./EventPackage";
 
 class ImageObjectEventPackage extends EventPackage
 {
