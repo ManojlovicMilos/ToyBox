@@ -7,7 +7,7 @@ enum RequestType {
     Delete = "DELETE"
 }
 
-@Core.TBXService('TBX.HTTPService')
+@Core.Injectable('TBX.HTTPService')
 class HTTPService extends Core.Service {
     public Get(Url: string): Promise<any> {
         return this.Request(RequestType.Get, Url);

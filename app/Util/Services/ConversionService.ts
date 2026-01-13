@@ -2,7 +2,7 @@ import * as Core from "../../Core/Core";
 import * as Engine from "../../Engine/Engine";
 import * as Math from "../../Mathematics/Mathematics";
 
-@Core.TBXService('TBX.ConversionService')
+@Core.Injectable('TBX.ConversionService')
 class ConversionService extends Core.Service {
     public VerticesToByteArray(Vertices: Math.Vertex[], Relevant: number): Float32Array {
         let NewArrayBuffer: number[] = [];

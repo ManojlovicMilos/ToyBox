@@ -1,6 +1,6 @@
 import * as Core from "../../Core/Core";
 
-@Core.TBXService('TBX.BufferService')
+@Core.Injectable('TBX.BufferService')
 class BufferService extends Core.Service {
     public Append(Buffer1: ArrayBuffer, Buffer2: ArrayBuffer) {
         var Tmp = new Uint8Array(Buffer1.byteLength + Buffer2.byteLength);

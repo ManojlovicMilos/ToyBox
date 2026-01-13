@@ -18,16 +18,16 @@ class Style {
     private _Padding: OffsetStyle;
     private _Layout: LayoutStyle;
     private _Classes: StyleClassesObject;
-    private _Values: any;
-    public get Text():TextStyle { return this._Text; }
-    public get Border():BorderStyle { return this._Border; }
-    public get Background():BackgroundStyle { return this._Background; }
-    public get Content():ContentStyle { return this._Content; }
-    public get Margin():OffsetStyle { return this._Margin; }
-    public get Padding():OffsetStyle { return this._Padding; }
-    public get Layout():LayoutStyle { return this._Layout; }
-    public get Classes():StyleClassesObject { return this._Classes }
-    public get Values(): any { return this._Values; }
+    private _Values: { [key: string]: string };
+    public get Text(): TextStyle { return this._Text; }
+    public get Border(): BorderStyle { return this._Border; }
+    public get Background(): BackgroundStyle { return this._Background; }
+    public get Content(): ContentStyle { return this._Content; }
+    public get Margin(): OffsetStyle { return this._Margin; }
+    public get Padding(): OffsetStyle { return this._Padding; }
+    public get Layout(): LayoutStyle { return this._Layout; }
+    public get Classes(): StyleClassesObject { return this._Classes }
+    public get Values(): { [key: string]: string } { return this._Values; }
     public get Font(): string { return this._Text.Font; }
     public set Font(value: string) { this._Text.Font = value; }
 

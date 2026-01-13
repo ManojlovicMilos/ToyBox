@@ -6,7 +6,6 @@ enum Quality {
 
 class Settings {
     public static Version: string = '0.2.5-beta.1';
-    public static LibPath: string = 'Resources/';
     public static Graphics: Quality = Quality.High;
     public static EngineUIStyle: boolean = true;
     public static GlobalFontScale: number = 1.0;

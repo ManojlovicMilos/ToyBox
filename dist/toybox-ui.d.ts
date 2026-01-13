@@ -1,40 +1,35 @@
 import * as Math from "./toybox-math";
 import * as Engine from "./toybox-engine";
 
-export namespace UI
-{
-    class BackgroundStyle
-    {
+export namespace UI {
+    class BackgroundStyle {
         Image: string;
         Color: Math.Color;
-        constructor(Old?:BackgroundStyle)
-        Copy() : BackgroundStyle
-        Apply(Element:HTMLElement) : void
+        constructor(Old?: BackgroundStyle)
+        Copy(): BackgroundStyle
+        Apply(Element: HTMLElement): void
     }
 
-    class BorderStyle
-    {
+    class BorderStyle {
         Width: number;
         Radius: number;
         Color: Math.Color;
-        constructor(Old?:BorderStyle, Width?:number, Color?:Math.Color)
-        Copy() : BorderStyle
-        Apply(Element:HTMLElement, Scale: Math.Vertex) : void
+        constructor(Old?: BorderStyle, Width?: number, Color?: Math.Color)
+        Copy(): BorderStyle
+        Apply(Element: HTMLElement, Scale: Math.Vertex): void
     }
 
-    class TextStyle
-    {
+    class TextStyle {
         Size: number;
         Weight: number;
         Font: string;
         Color: Math.Color;
-        constructor(Old?:TextStyle)
-        Copy() : TextStyle
-        Apply(Element:HTMLElement, Scale: Math.Vertex) : void
+        constructor(Old?: TextStyle)
+        Copy(): TextStyle
+        Apply(Element: HTMLElement, Scale: Math.Vertex): void
     }
 
-    enum ContentAlign
-    {
+    enum ContentAlign {
         Start,
         End,
         Center,
@@ -42,25 +37,22 @@ export namespace UI
         Around
     }
 
-    enum ContentDirection
-    {
+    enum ContentDirection {
         Row,
         Column
     }
 
-    class ContentStyle
-    {
+    class ContentStyle {
         Enabled: boolean;
         Direction: ContentDirection;
         Align: ContentAlign;
         VerticalAlign: ContentAlign;
         HorizontalAlign: ContentAlign;
-        constructor(Old?:ContentStyle)
-        Apply(Element: HTMLElement, Active) : void
+        constructor(Old?: ContentStyle)
+        Apply(Element: HTMLElement, Active): void
     }
 
-    class OffsetStyle
-    {
+    class OffsetStyle {
         All: number;
         Vertical: number;
         Horizontal: number;
@@ -69,13 +61,12 @@ export namespace UI
         Left: number;
         Right: number;
         Unit: string;
-        constructor(Old?:OffsetStyle, Property?: string)
-        Copy() : OffsetStyle
-        Apply(Element: HTMLElement, Scale: Math.Vertex) : void
+        constructor(Old?: OffsetStyle, Property?: string)
+        Copy(): OffsetStyle
+        Apply(Element: HTMLElement, Scale: Math.Vertex): void
     }
 
-    enum DockType
-    {
+    enum DockType {
         None,
         Top,
         Bottom,
@@ -89,12 +80,11 @@ export namespace UI
         Stretch
     }
 
-    class LayoutStyle
-    {
+    class LayoutStyle {
         Dock: DockType;
-        constructor(Old?:LayoutStyle)
-        Copy() : LayoutStyle
-        Apply(Control: Control) : void
+        constructor(Old?: LayoutStyle)
+        Copy(): LayoutStyle
+        Apply(Control: Control): void
     }
 
     class StyleClassesObject {
@@ -104,11 +94,10 @@ export namespace UI
         Remove(ClassName: string): void
         Contains(ClassName: string): boolean
         Clear(): void
-        Apply(Element:HTMLElement): void
+        Apply(Element: HTMLElement): void
     }
 
-    class Style
-    {
+    class Style {
         Text: TextStyle;
         Border: BorderStyle;
         Background: BackgroundStyle;
@@ -119,24 +108,22 @@ export namespace UI
         Classes: StyleClassesObject;
         Values: { [key: string]: string; };
         Font: string;
-        constructor(Old?:Style)
-        Copy() : Style
-        Apply(Control: Control) : void
+        constructor(Old?: Style)
+        Copy(): Style
+        Apply(Control: Control): void
     }
 
-    class ControlEventPackage extends Engine.EventPackage
-    {
-        Click:Function[];
-        Input:Function[];
-        MouseEnter:Function[];
-        MouseLeave:Function[];
-        constructor(Old?:ControlEventPackage)
-        Copy() : ControlEventPackage
-        Connect(Control:Engine.SceneObject, Element:HTMLElement) : void
+    class ControlEventPackage extends Engine.EventPackage {
+        Click: Function[];
+        Input: Function[];
+        MouseEnter: Function[];
+        MouseLeave: Function[];
+        constructor(Old?: ControlEventPackage)
+        Copy(): ControlEventPackage
+        Connect(Control: Engine.SceneObject, Element: HTMLElement): void
     }
 
-    class Control extends Engine.SceneObject
-    {
+    class Control extends Engine.SceneObject {
         Active: boolean;
         ParentAspectRatio: number;
         Position: Math.Vertex;
@@ -149,50 +136,45 @@ export namespace UI
         Dock: DockType;
         ForeColor: Math.Color;
         BackColor: Math.Color;
-        constructor(Old?:Control)
-        Copy() : Control
-        Update() : void
-        Create() : void
-        OnToggle(Value:boolean) : void
+        constructor(Old?: Control)
+        Copy(): Control
+        Update(): void
+        Create(): void
+        OnToggle(Value: boolean): void
     }
 
-    class Text extends Control
-    {
-        Text:string;
-        TextElement:HTMLElement;
-        constructor(Old?:Text, Text?:string)
-        Copy() : Text
+    class Text extends Control {
+        Text: string;
+        TextElement: HTMLElement;
+        constructor(Old?: Text, Text?: string)
+        Copy(): Text
     }
 
-    class Label extends Text
-    {
-        constructor(Old?:Label, Text?:string)
-        Copy() : Label
+    class Label extends Text {
+        constructor(Old?: Label, Text?: string)
+        Copy(): Label
     }
 
-    class Input extends Text
-    {
-        Placeholder:string;
-        PlaceholderColor:Math.Color;
-        constructor(Old?:Input, Text?:string)
-        Copy() : Input
+    class Input extends Text {
+        Placeholder: string;
+        PlaceholderColor: Math.Color;
+        constructor(Old?: Input, Text?: string)
+        Copy(): Input
     }
 
-    class Button extends Label
-    {
-        constructor(Old?:Button, Text?:string)
-        OnMouseEnter(Event:any) : void
-        OnMouseLeave(Event:any) : void
-        Copy() : Button
+    class Button extends Label {
+        constructor(Old?: Button, Text?: string)
+        OnMouseEnter(Event: any): void
+        OnMouseLeave(Event: any): void
+        Copy(): Button
     }
 
-    class Panel extends Control
-    {
-        Children:Control[];
-        constructor(Old?:Panel)
-        Copy() : Panel
-        Attach(Child:Control) : void
-        Remove(Child:Control) : void
-        RemoveAll() : void
+    class Panel extends Control {
+        Children: Control[];
+        constructor(Old?: Panel)
+        Copy(): Panel
+        Attach(Child: Control): void
+        Remove(Child: Control): void
+        RemoveAll(): void
     }
 }

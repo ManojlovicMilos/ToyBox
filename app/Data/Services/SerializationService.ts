@@ -4,7 +4,7 @@ import * as Engine from '../../Engine/Engine';
 const EDITOR_PREFIX = 'EDITOR_';
 const TOYBOX_PREFIX = 'TOYBOX_';
 
-@Core.TBXService('TBX.SerializationService')
+@Core.Injectable('TBX.SerializationService')
 class SerializationService extends Core.Service {
     public CleanData(Data: any): any {
         let NewData: any = {};

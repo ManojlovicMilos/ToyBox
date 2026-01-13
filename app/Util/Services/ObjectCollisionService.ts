@@ -2,7 +2,7 @@ import * as Core from "../../Core/Core";
 import * as Engine from "../../Engine/Engine";
 import * as Math from "../../Mathematics/Mathematics";
 
-@Core.TBXService('TBX.ObjectCollisionService')
+@Core.Injectable('TBX.ObjectCollisionService')
 class ObjectCollisionService extends Core.Service {
     private CollisionService: Math.CollisionService;
 

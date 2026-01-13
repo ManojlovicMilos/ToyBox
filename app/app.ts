@@ -1,7 +1,7 @@
 // Core
 import Settings, { Quality } from "./Core/Settings";
 import Service from "./Core/Services/Service";
-import TBXService from "./Core/Utilities/TBXService";
+import Injectable from "./Core/Utilities/Injectable";
 import CreateUuid from "./Core/Utilities/CreateUuid";
 import UuidService from "./Core/Services/UuidService";
 import Inject, { InjectionManager } from "./Core/Services/InjectionManager";
@@ -76,7 +76,7 @@ import { Runner } from "./Runner/Runner";
 export {
     // Core
     Inject,
-    TBXService,
+    Injectable,
     CreateUuid,
     Quality,
     Service,

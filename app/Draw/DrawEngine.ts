@@ -11,7 +11,7 @@ enum DrawEngineType {
     ThreeJS = 0
 }
 
-@Core.TBXService('TBX.DrawEngine')
+@Core.Injectable('TBX.DrawEngine')
 class DrawEngine extends Core.Service {
     private _Matrix: Math.TransformationService;
     private _Renderer: any;

@@ -7,7 +7,7 @@ const MESSAGE_TEXT_EVENT = 'Event';
 const MESSAGE_TEXT_WARNING = 'Warning';
 const MESSAGE_TEXT_DEFAULT = 'Message';
 
-@Core.TBXService('TBX.LogService')
+@Core.Injectable('TBX.LogService')
 export default class LogService extends Core.Service {
     public Enabled: { [key: string]: boolean } = {
         global: true,

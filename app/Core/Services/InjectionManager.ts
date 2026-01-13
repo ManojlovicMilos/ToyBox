@@ -3,40 +3,40 @@ import Service from './Service'
 export class InjectionManager {
     private static rootServices: { [key: string]: Service }
 
-    public static Exists(service: typeof Service): boolean {
-        return !!this.rootServices[service.InjectionToken];
+    public static Exists(InjectedService: typeof Service): boolean {
+        return !!this.rootServices[InjectedService.InjectionToken];
     }
 
-    public static GetService(service: typeof Service): Service {
-        const InjectionToken = service.InjectionToken;
+    public static GetService(InjectedService: typeof Service): Service {
+        const InjectionToken = InjectedService.InjectionToken;
         if (!this.rootServices) {
             this.rootServices = {};
         }
         if (this.rootServices[InjectionToken]) {
             return this.rootServices[InjectionToken];
         } else {
-            this.RegisterService(service);
+            this.RegisterService(InjectedService);
             return this.rootServices[InjectionToken];
         }
     }
 
-    public static RegisterService(service: typeof Service, forAbstract?: typeof Service): boolean {
-        const InjectionToken: string = forAbstract?.InjectionToken || service.InjectionToken;
+    public static RegisterService(InjectedService: typeof Service, ForAbstract?: typeof Service): boolean {
+        const InjectionToken: string = ForAbstract?.InjectionToken || InjectedService.InjectionToken;
         if (!this.rootServices) {
             this.rootServices = {};
         }
         if (this.rootServices[InjectionToken]) {
             return false;
         } else {
-            this.rootServices[InjectionToken] = new service();
+            this.rootServices[InjectionToken] = new InjectedService();
             return true;
         }
     }
 }
 
-const Inject = <T>(service: typeof Service): T => InjectionManager.GetService(service) as T;
+const Inject = <T>(InjectedService: typeof Service): T => InjectionManager.GetService(InjectedService) as T;
 
-const RegisterService = <T>(service: typeof Service, forAbstract?: typeof Service): boolean => InjectionManager.RegisterService(service, forAbstract);
+const RegisterService = <T>(InjectedService: typeof Service, ForAbstract?: typeof Service): boolean => InjectionManager.RegisterService(InjectedService, ForAbstract);
 
 export { RegisterService }
 

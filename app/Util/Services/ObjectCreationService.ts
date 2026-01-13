@@ -2,7 +2,7 @@ import * as Core from "../../Core/Core";
 import * as Engine from "../../Engine/Engine";
 import * as Math from "../../Mathematics/Mathematics";
 
-@Core.TBXService('TBX.ObjectCreationService')
+@Core.Injectable('TBX.ObjectCreationService')
 class ObjectCreationService extends Core.Service {
     public CreateSprite(Name?: string, Images?: string[], Position?: Math.Vertex, Size?: Math.Vertex): Engine.Sprite {
         let NewSprite: Engine.Sprite = new Engine.Sprite();

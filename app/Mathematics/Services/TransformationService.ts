@@ -5,7 +5,7 @@ import Vertex from '../Structures/Vertex';
 import Matrix from '../Structures/Matrix';
 import MatrixMode from '../Structures/MatrixMode';
 
-@Core.TBXService('TBX.TransformationService')
+@Core.Injectable('TBX.TransformationService')
 class TransformationService extends Core.Service {
     private _MatrixMode: MatrixMode;
     private _PushedProjectionMatrix: Matrix;

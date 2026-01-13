@@ -5,7 +5,7 @@ import CollisionType from './CollisionType';
 import ColliderObject from './ColliderObject';
 import CollisionResult from './CollisionResult';
 
-@Core.TBXService('TBX.CollisionService')
+@Core.Injectable('TBX.CollisionService')
 class CollisionService extends Core.Service {
     public AdditionalSideCheck: boolean = true;
     public FocusOffset: number = 10;

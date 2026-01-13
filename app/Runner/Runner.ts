@@ -9,7 +9,7 @@ import * as Three from "./../Draw/Three/Three";
 
 const DEFAULT_HTML_ELEMENT_ID = 'canvas';
 
-@Core.TBXService('TBX.Runner')
+@Core.Injectable('TBX.Runner')
 class Runner extends Core.Service {
     private _Stop: boolean;
     private _EngineInit: boolean;
