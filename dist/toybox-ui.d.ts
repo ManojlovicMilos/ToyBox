@@ -97,6 +97,16 @@ export namespace UI
         Apply(Control: Control) : void
     }
 
+    class StyleClassesObject {
+        constructor(Old?: StyleClassesObject)
+        Copy(): StyleClassesObject
+        Add(ClassName: string): void
+        Remove(ClassName: string): void
+        Contains(ClassName: string): boolean
+        Clear(): void
+        Apply(Element:HTMLElement): void
+    }
+
     class Style
     {
         Text: TextStyle;
@@ -106,6 +116,7 @@ export namespace UI
         Margin: OffsetStyle;
         Padding: OffsetStyle;
         Layout: LayoutStyle;
+        Classes: StyleClassesObject;
         Values: { [key: string]: string; };
         Font: string;
         constructor(Old?:Style)
