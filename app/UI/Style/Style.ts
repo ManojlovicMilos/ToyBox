@@ -1,12 +1,11 @@
-import * as Math from "./../../Mathematics/Mathematics";
-
-import { TextStyle } from "./TextStyle"
-import { BorderStyle } from "./BorderStyle";
-import { BackgroundStyle } from "./BackgroundStyle";
-import { ContentStyle } from "./ContentStyle";
-import { OffsetStyle } from "./OffsetStyle";
 import { Control } from "../Control";
+import { TextStyle } from "./TextStyle"
 import { LayoutStyle } from "./LayoutStyle";
+import { BorderStyle } from "./BorderStyle";
+import { OffsetStyle } from "./OffsetStyle";
+import { ContentStyle } from "./ContentStyle";
+import { BackgroundStyle } from "./BackgroundStyle";
+import StyleClassesObject from "./StyleClassesObject";
 
 export { Style }
 
@@ -19,6 +18,7 @@ class Style
     private _Margin: OffsetStyle;
     private _Padding: OffsetStyle;
     private _Layout: LayoutStyle;
+    private _Classes: StyleClassesObject;
     private _Values: any;
     public get Text():TextStyle { return this._Text; }
     public get Border():BorderStyle { return this._Border; }
@@ -27,6 +27,7 @@ class Style
     public get Margin():OffsetStyle { return this._Margin; }
     public get Padding():OffsetStyle { return this._Padding; }
     public get Layout():LayoutStyle { return this._Layout; }
+    public get Classes():StyleClassesObject { return this._Classes }
     public get Values(): any { return this._Values; }
     public get Font():string { return this._Text.Font; }
     public set Font(value:string) { this._Text.Font = value; }
@@ -41,6 +42,7 @@ class Style
             this._Margin = Old._Margin.Copy();
             this._Padding = Old._Padding.Copy();
             this._Layout = Old._Layout.Copy();
+            this._Classes = Old._Classes.Copy();
             this._Values = Object.assign({}, Old._Values);
         }
         else
@@ -52,6 +54,7 @@ class Style
             this._Margin = new OffsetStyle(null, "margin");
             this._Padding = new OffsetStyle(null, "padding");
             this._Layout = new LayoutStyle();
+            this._Classes = new StyleClassesObject();
             this._Values = {};
         }
     }
@@ -68,6 +71,7 @@ class Style
         this._Margin.Apply(Control.Element, Control.Scale);
         this._Padding.Apply(Control.Element, Control.Scale);
         this._Layout.Apply(Control);
+        this._Classes.Apply(Control.Element);
         Object.keys(this._Values)
         .forEach(Key =>
         {
