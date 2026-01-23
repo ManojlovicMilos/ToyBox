@@ -195,7 +195,7 @@ export class CollisionService extends Core.Service {
 }
 
 export class RandomService extends Core.Service {
-    static Next(Min, Max): number
+    Next(Min, Max): number
 }
 
 export as namespace Math;

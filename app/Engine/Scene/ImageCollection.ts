@@ -1,11 +1,10 @@
-export { ImageCollection }
-
-import * as Core from "./../../Core/Core";
+import * as Core from './../../Core/Core';
 
 class ImageCollection {
     private _ID: string;
     private _Origin: string;
     private _Images: string[];
+
     public get ID(): string { return this._ID; }
     public get Origin(): string { return this._Origin; }
     public get Images(): string[] { return this._Images; }
@@ -25,12 +24,13 @@ class ImageCollection {
         }
     }
 
+    // virtual
     public Copy(): ImageCollection {
         return new ImageCollection(this);
     }
 
+    // virtual
     public Serialize(): any {
-        // Virtual
         let TC =
         {
             ID: this._ID,
@@ -40,10 +40,12 @@ class ImageCollection {
         return TC;
     }
 
+    // virtual
     public Deserialize(Data): void {
-        // Virtual
         this._ID = Data.ID;
         this._Origin = Data.Origin;
         this._Images = Data.Images;
     }
 }
+
+export default ImageCollection;

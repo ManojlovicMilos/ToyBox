@@ -1,15 +1,13 @@
-export { ImageObject }
+import * as Core from './../../Core/Core';
+import * as Math from './../../Mathematics/Mathematics';
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
+import DrawObject from './DrawObject';
+import { Material } from './../Material/Material';
+import ImageCollection from './ImageCollection';
+import ImageObjectEventPackage from './../Events/ImageObjectEventPackage';
 
-import { Material } from "./../Material/Material";
-import { DrawObject, DrawObjectType } from "./DrawObject";
-import { ImageCollection } from "./ImageCollection";
-import { ImageObjectEventPackage } from "./../Events/ImageObjectEventPackage";
-
+@Core.TypedObject('TBX.ImageObject')
 class ImageObject extends DrawObject {
-    // Abstract
     private _FlipX: boolean;
     private _FlipY: boolean;
     private _RepeatX: number;
@@ -17,9 +15,11 @@ class ImageObject extends DrawObject {
     private _AmbientColor: Math.Color;
     private _Material: Material;
     private _CustomShader: any;
+
     protected _Collection: ImageCollection;
     protected _NormalCollection: ImageCollection;
     protected _SpecularCollection: ImageCollection;
+
     public get Index(): number { /*Virtual*/ return -1; }
     public set Index(value: number) { /*Virtual*/ }
     public get Images(): string[] { /* Virtual */ return this._Collection.Images; }
@@ -49,6 +49,7 @@ class ImageObject extends DrawObject {
 
     public constructor(Old?: ImageObject) {
         super(Old);
+        this.RegisterType(ImageObject, true);
         if (Old != null) {
             this._FlipX = Old._FlipX;
             this._FlipY = Old._FlipY;
@@ -67,16 +68,11 @@ class ImageObject extends DrawObject {
             this._RepeatX = 1;
             this._RepeatY = 1;
             this._AmbientColor = Math.Color.FromRGBA(50, 50, 50, 255);
-            this.DrawType = DrawObjectType.Image;
             this._Material = new Material();
             this._Collection = new ImageCollection();
             this._NormalCollection = new ImageCollection();
             this._SpecularCollection = new ImageCollection();
         }
-    }
-
-    public Copy(): ImageObject {
-        return new ImageObject(this);
     }
 
     public Serialize(): any {
@@ -102,3 +98,5 @@ class ImageObject extends DrawObject {
         if (Data.CustomMaterial) this._Material.Deserialize(Data.CustomMaterial);
     }
 }
+
+export default ImageObject;

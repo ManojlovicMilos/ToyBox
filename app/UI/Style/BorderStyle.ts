@@ -1,7 +1,4 @@
-export { BorderStyle }
-
-import { Control } from "../Control";
-import * as Math from "../../Mathematics/Mathematics";
+import * as Math from '../../Mathematics/Mathematics';
 
 class BorderStyle {
     private _Width: number;
@@ -35,9 +32,11 @@ class BorderStyle {
     }
 
     public Apply(Element: HTMLElement, Scale: Math.Vertex): void {
-        Element.style.borderStyle = "solid";
-        Element.style.borderWidth = this._Width * Scale.Y + "px";
-        Element.style.borderRadius = this._Radius + "px";
+        Element.style.borderStyle = 'solid';
+        Element.style.borderWidth = this._Width * Scale.Y + 'px';
+        Element.style.borderRadius = this._Radius + 'px';
         Element.style.borderColor = this._Color.ToString();
     }
 }
+
+export default BorderStyle;

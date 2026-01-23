@@ -1,37 +1,34 @@
-export { Button }
+import * as Core from './../Core/Core';
+import * as Math from './../Mathematics/Mathematics';
 
-import * as Core from "./../Core/Core";
-import * as Math from "./../Mathematics/Mathematics";
+import Label from './Label';
 
-import { Label } from "./Label";
-
+@Core.TypedObject('TBX.UI.Button')
 class Button extends Label {
     public constructor(Old?: Button, Text?: string) {
         super(Old, Text);
-        if (Old) {
-
-        }
-        else {
+        this.RegisterType(Button);
+        if (!Old) {
             this.BackColor = Math.Color.FromRGBA(127, 127, 127, 255);
         }
     }
 
-    public Copy(): Button {
+    public override Copy(): Button {
         return new Button(this);
     }
 
-    public Update(): void {
-        // Override
+    public override Update(): void {
         super.Update();
         if (!this.Element) return;
         if (Core.Settings.EngineUIStyle) {
-            this._Style.Values["cursor"] = "pointer";
+            this._Style.Values['cursor'] = 'pointer';
         }
     }
 
-    protected Create(): void {
-        // Override
+    protected override Create(): void {
         super.Create();
-        this.Element.className += " button";
+        this.Element.className += ' button';
     }
 }
+
+export default Button;

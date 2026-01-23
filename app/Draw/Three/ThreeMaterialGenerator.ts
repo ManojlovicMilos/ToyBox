@@ -234,7 +234,7 @@ class ThreeMaterialGenerator {
             LightColors.push(TMGUtil.Vec4FromData(Lights[i].Paint.ToArray()));
             Parameters.push(Lights[i].Parameter);
             Directions.push(TMGUtil.Vec3FromData(Lights[i].Direction.ToArray()));
-            Types.push(TMGUtil.CodeLightType(Lights[i].LightType));
+            Types.push(TMGUtil.CodeLightType(Lights[i].Type));
         }
         for (let i = Intensities.length; i < TOYBOX_MAX_LIGHTS; i++) {
             Radii.push(0.0);
@@ -273,10 +273,10 @@ class ThreeMaterialGenerator {
 }
 
 class TMGUtil {
-    public static CodeLightType(Type: Engine.LightType): number {
-        if (Type == Engine.LightType.Point) return 0;
-        if (Type == Engine.LightType.Spot) return 1;
-        if (Type == Engine.LightType.Directional) return 2;
+    public static CodeLightType(Type: string): number {
+        if (Type == Engine.Light.TypeNameToken) return 0;
+        if (Type == Engine.SpotLight.TypeNameToken) return 1;
+        if (Type == Engine.DirectionalLight.TypeNameToken) return 2;
         return -1;
     }
 

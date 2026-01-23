@@ -100,13 +100,13 @@ class ThreeDrawEngine extends DrawEngine {
             if (LoadData.Report) {
                 LoadData.Report(Math.ceil(i * 100.0 / Scene.Objects.length));
             }
-            if (Scene.Objects[i].Type != Engine.SceneObjectType.Drawn) continue;
+            if (!Scene.Objects[i].Is(Engine.DrawObject)) continue;
             let Drawn: Engine.DrawObject = <Engine.DrawObject>Scene.Objects[i];
-            if (Drawn.DrawType == Engine.DrawObjectType.Sprite || Drawn.DrawType == Engine.DrawObjectType.Tile) {
-                this.LoadImage(Scene, <Engine.ImageObject>Drawn, LoadData);
+            if (Drawn.IsAnyOf([Engine.Tile, Engine.Sprite])) {
+                this.LoadImage(Scene, Drawn as Engine.ImageObject, LoadData);
             }
-            else if (Drawn.DrawType == Engine.DrawObjectType.Light) {
-                this.LoadLight(Scene, <Engine.Light>Drawn, LoadData);
+            else if (Drawn.Is(Engine.Light)) {
+                this.LoadLight(Scene, Drawn as Engine.Light, LoadData);
             }
         }
         this._Generator.Update2DLights();
@@ -180,10 +180,10 @@ class ThreeDrawEngine extends DrawEngine {
                 return;
             }
         }
-        if (Drawn.DrawType == Engine.DrawObjectType.Sprite) {
+        if (Drawn.Is(Engine.Sprite)) {
             this.LoadSprite(Scene, <Engine.Sprite>Drawn, LoadData);
         }
-        else if (Drawn.DrawType == Engine.DrawObjectType.Tile) {
+        else if (Drawn.Is(Engine.Tile)) {
             this.LoadTile(Scene, <Engine.Tile>Drawn, LoadData);
         }
     }

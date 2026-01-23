@@ -1,78 +1,65 @@
 export { Panel }
 
-import { Control } from "./Control";
+import * as Core from '../Core/Core';
 
+import Control from './Control';
+
+@Core.TypedObject('TBX.UI.Panel')
 class Panel extends Control {
-    private _Children: Control[];
-
-    public get Children(): Control[] { return this._Children; }
-
     public constructor(Old?: Panel) {
         super(Old);
-        this._Children = [];
-        if (Old) {
-            for (let i in Old._Children) {
-                this._Children.push(Old._Children[i].Copy())
-            }
-        }
-        else {
-
-        }
+        this.Children = Old?.Children.map((entry: Control) => entry.Copy()) || [];
     }
 
-    public Copy(): Panel {
+    public override Copy(): Panel {
         return new Panel(this);
     }
 
-    public Update(): void {
-        // Override
+    public override Update(): void {
         super.Update();
         if (!this.Element) return;
-        for (let i in this._Children) {
-            this._Children[i].Check();
-            if (!this._Children[i].Data["AppendedTo" + this.ID]) {
-                this.Element.appendChild(this._Children[i].Element);
-                this._Children[i].Data["AppendedTo" + this.ID] = true;
+        (this.Children as Control[]).forEach((entry: Control) => {
+            entry.Check();
+            if (!entry.Data['AppendedTo' + this.ID]) {
+                this.Element.appendChild(entry.Element);
+                entry.Data['AppendedTo' + this.ID] = true;
             }
-            this._Children[i].Offset = this.Position;
-            this._Children[i].Update();
-        }
+            entry.Offset = this.Position;
+            entry.Update();
+        });
     }
 
-    protected Create(): void {
-        // Override
+    protected override Create(): void {
         super.Create();
-        this.Element.className += " panel";
-        for (let i in this._Children) {
-            this._Children[i].Check();
-            this._Children[i].Update();
-            this.Element.appendChild(this._Children[i].Element);
-            this._Children[i].Data["AppendedTo" + this.ID] = true;
+        this.Element.className += ' panel';
+        (this.Children as Control[]).forEach((entry: Control) => {
+            entry.Check();
+            entry.Update();
+            this.Element.appendChild(entry.Element);
+            entry.Data['AppendedTo' + this.ID] = true;
+        });
+    }
+
+    public override Attach(Child: Control): void {
+        if (Child.Is(Control)) {
+            super.Attach(Child);
+            Child.Scale = this.Scale;
         }
     }
 
-    public Attach(Child: Control): void {
-        Child.OnAttach({ Parent: this });
-        Child.Scale = this.Scale;
-        this._Children.push(Child);
-    }
-
-    public Remove(Child: Control): void {
-        Child.OnRemove({ Parent: this });
-        this._Children.splice(this._Children.indexOf(Child), 1);
-    }
-
-    public OnResize(Args: any): void {
-        // Override
-        this._Children.forEach(Entry => Entry.OnResize(Args));
+    public override OnResize(Args: any): void {
+        super.OnResize(Args);
+        this.Children.forEach(Entry => (Entry as Control).OnResize(Args));
         super.OnResize(Args);
     }
 
     public RemoveAll(): void {
-        this._Children
+        this.Children
             .forEach(Entry => {
-                Entry.OnRemove({ Parent: this });
+                Entry.OnRemove(this);
             });
-        this._Children = [];
+        this.Children = [];
     }
 }
+
+export default Panel;

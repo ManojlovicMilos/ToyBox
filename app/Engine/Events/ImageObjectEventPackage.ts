@@ -1,14 +1,12 @@
-export { ImageObjectEventPackage }
-
-import EventPackage from "./EventPackage";
+import EventPackage from './EventPackage';
 
 class ImageObjectEventPackage extends EventPackage
 {
-    public get Click() : Function[] { return this._Data["Click"]; }
-    public get MouseDown() : Function[] { return this._Data["MouseDown"]; }
-    public get MouseUp() : Function[] { return this._Data["MouseUp"]; }
-    public get TouchStart() : Function[] { return this._Data["TouchStart"]; }
-    public get TouchEnd() : Function[] { return this._Data["TouchEnd"]; }
+    public get Click() : Function[] { return this._Data['Click']; }
+    public get MouseDown() : Function[] { return this._Data['MouseDown']; }
+    public get MouseUp() : Function[] { return this._Data['MouseUp']; }
+    public get TouchStart() : Function[] { return this._Data['TouchStart']; }
+    public get TouchEnd() : Function[] { return this._Data['TouchEnd']; }
     public constructor(Old?:ImageObjectEventPackage)
     {
         super(Old);
@@ -18,11 +16,11 @@ class ImageObjectEventPackage extends EventPackage
         }
         else
         {
-            this._Data["Click"] = [];
-            this._Data["MouseDown"] = [];
-            this._Data["MouseUp"] = [];
-            this._Data["TouchStart"] = [];
-            this._Data["TouchEnd"] = [];
+            this._Data['Click'] = [];
+            this._Data['MouseDown'] = [];
+            this._Data['MouseUp'] = [];
+            this._Data['TouchStart'] = [];
+            this._Data['TouchEnd'] = [];
         }
     }
     public Copy() : ImageObjectEventPackage
@@ -30,3 +28,5 @@ class ImageObjectEventPackage extends EventPackage
         return new ImageObjectEventPackage(this);
     }
 }
+
+export default ImageObjectEventPackage;

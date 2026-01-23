@@ -1,13 +1,11 @@
-import { Control } from "../Control";
-import { TextStyle } from "./TextStyle"
-import { LayoutStyle } from "./LayoutStyle";
-import { BorderStyle } from "./BorderStyle";
-import { OffsetStyle } from "./OffsetStyle";
-import { ContentStyle } from "./ContentStyle";
-import { BackgroundStyle } from "./BackgroundStyle";
-import StyleClassesObject from "./StyleClassesObject";
-
-export { Style }
+import Control from '../Control';
+import TextStyle from './TextStyle'
+import LayoutStyle from './LayoutStyle';
+import BorderStyle from './BorderStyle';
+import OffsetStyle from './OffsetStyle';
+import ContentStyle from './Content/ContentStyle';
+import BackgroundStyle from './BackgroundStyle';
+import StyleClassesObject from './StyleClassesObject';
 
 class Style {
     private _Text: TextStyle;
@@ -48,8 +46,8 @@ class Style {
             this._Border = new BorderStyle();
             this._Background = new BackgroundStyle();
             this._Content = new ContentStyle();
-            this._Margin = new OffsetStyle(null, "margin");
-            this._Padding = new OffsetStyle(null, "padding");
+            this._Margin = new OffsetStyle(null, 'margin');
+            this._Padding = new OffsetStyle(null, 'padding');
             this._Layout = new LayoutStyle();
             this._Classes = new StyleClassesObject();
             this._Values = {};
@@ -75,3 +73,6 @@ class Style {
             });
     }
 }
+
+export default Style;
+

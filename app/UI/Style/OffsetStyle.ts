@@ -1,6 +1,4 @@
-export { OffsetStyle }
-
-import * as TBXMath from "../../Mathematics/Mathematics";
+import * as TBXMath from '../../Mathematics/Mathematics';
 
 class OffsetStyle {
     private _Property: string;
@@ -43,7 +41,7 @@ class OffsetStyle {
         else {
             this._Property = Property;
             this._All = 0;
-            this._Unit = "px";
+            this._Unit = 'px';
         }
     }
 
@@ -54,7 +52,7 @@ class OffsetStyle {
     public Apply(Element: HTMLElement, Scale: TBXMath.Vertex): void {
         Element.style[this._Property] = Math.round(this._All * Scale.Y) + this._Unit;
         if (this._Vertical || this._Horizontal) {
-            Element.style[this._Property] = Math.round((this._Vertical || this._All) * Scale.Y) + this._Unit + " "
+            Element.style[this._Property] = Math.round((this._Vertical || this._All) * Scale.Y) + this._Unit + ' '
                 + Math.round((this._Horizontal || this._All) * Scale.Y) + this._Unit;
         }
         if (this._Top) Element.style[this._Property + 'Top'] = Math.round(this._Top * Scale.Y) + this._Unit;
@@ -63,3 +61,5 @@ class OffsetStyle {
         if (this._Right) Element.style[this._Property + 'Right'] = Math.round(this._Right * Scale.Y) + this._Unit;
     }
 }
+
+export default OffsetStyle;

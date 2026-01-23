@@ -1,4 +1,4 @@
-import { Game } from './../Game/Game';
+import Game from './../Game/Game';
 
 class EventPackage {
     protected _Data: any;

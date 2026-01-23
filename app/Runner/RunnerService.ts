@@ -1,16 +1,14 @@
-export { Runner };
-
-import * as Core from "../Core/Core";
-import * as Data from "../Data/Data";
-import * as Math from "./../Mathematics/Mathematics"
-import * as Engine from "./../Engine/Engine";
-import * as Draw from "./../Draw/Draw";
-import * as Three from "./../Draw/Three/Three";
+import * as Core from '../Core/Core';
+import * as Data from '../Data/Data';
+import * as Draw from '../Draw/Draw';
+import * as Engine from '../Engine/Engine';
+import * as Three from '../Draw/Three/Three';
+import * as Math from '../Mathematics/Mathematics';
 
 const DEFAULT_HTML_ELEMENT_ID = 'canvas';
 
-@Core.Injectable('TBX.Runner')
-class Runner extends Core.Service {
+@Core.Injectable('TBX.RunnerService')
+class RunnerService extends Core.Service {
     private _Stop: boolean;
     private _EngineInit: boolean;
     private _Seed: number;
@@ -60,23 +58,23 @@ class Runner extends Core.Service {
                 return;
             }
         }
-        this.Log.Warning("Scene " + SceneName + " does not exist in " + this._Game.Name + ".", this._Game.Scenes);
+        this.Log.Warning('Scene ' + SceneName + ' does not exist in ' + this._Game.Name + '.', this._Game.Scenes);
     }
 
     public SwitchScene(SceneName: string): void {
         for (let i = 0; i < this._Game.Scenes.length; i++) {
             if (this._Game.Scenes[i].Name == SceneName) {
                 if (this._Current) {
-                    this._Current.OnLeave();
-                    this._Current.Events.Invoke("Leave", this._Game, { Next: this._Game.Scenes[i] });
+                    this._Current?.OnLeave();
+                    this._Current?.Events.Invoke('Leave', this._Game, { Next: this._Game.Scenes[i] });
                 }
                 this._Current = this._Game.Scenes[i];
-                this._Current.OnSwitch();
-                this._Current.Events.Invoke("Switch", this._Game, {});
+                this._Current?.OnSwitch();
+                this._Current?.Events.Invoke('Switch', this._Game, {});
                 return;
             }
         }
-        this.Log.Warning("Scene " + SceneName + " does not exist in " + this._Game.Name + ".", this._Game.Scenes);
+        this.Log.Warning('Scene ' + SceneName + ' does not exist in ' + this._Game.Name + '.', this._Game.Scenes);
     }
 
     public SetResolution(Resolution: Math.Vertex, FixedSize?: boolean) {
@@ -98,7 +96,7 @@ class Runner extends Core.Service {
     private Loop(): void {
         if (this._Stop) return;
         this.UpdateScene();
-        this._Current.Events.Invoke("Update", this._Game, {});
+        this._Current?.Events.Invoke('Update', this._Game, {});
         this._LoopHandle = requestAnimationFrame(this.Loop.bind(this));
     }
 
@@ -109,24 +107,24 @@ class Runner extends Core.Service {
     }
 
     private AttachEvents(): void {
-        document.addEventListener("beforeunload", this.OnClosing.bind(this), false);
-        document.addEventListener("keypress", this.OnKeyPress.bind(this), false);
-        document.addEventListener("keydown", this.OnKeyDown.bind(this), false);
-        document.addEventListener("keyup", this.OnKeyUp.bind(this), false);
-        this._Canvas.addEventListener("mousedown", this.OnMouseDown.bind(this), false);
-        this._Canvas.addEventListener("mouseup", this.OnMouseUp.bind(this), false);
-        this._Canvas.addEventListener("mousemove", this.OnMouseMove.bind(this), false);
-        this._Canvas.addEventListener("wheel", this.OnMouseWheel.bind(this), false);
-        this._Canvas.addEventListener("contextmenu", this.OnMouseRight.bind(this), false);
-        this._Canvas.addEventListener("touchstart", this.OnTouchStart.bind(this), false);
-        this._Canvas.addEventListener("touchend", this.OnTouchEnd.bind(this), false);
-        this._Canvas.addEventListener("touchmove", this.OnTouchMove.bind(this), false);
-        window.addEventListener("resize", this.OnResize.bind(this), false);
+        document.addEventListener('beforeunload', this.OnClosing.bind(this), false);
+        document.addEventListener('keypress', this.OnKeyPress.bind(this), false);
+        document.addEventListener('keydown', this.OnKeyDown.bind(this), false);
+        document.addEventListener('keyup', this.OnKeyUp.bind(this), false);
+        this._Canvas.addEventListener('mousedown', this.OnMouseDown.bind(this), false);
+        this._Canvas.addEventListener('mouseup', this.OnMouseUp.bind(this), false);
+        this._Canvas.addEventListener('mousemove', this.OnMouseMove.bind(this), false);
+        this._Canvas.addEventListener('wheel', this.OnMouseWheel.bind(this), false);
+        this._Canvas.addEventListener('contextmenu', this.OnMouseRight.bind(this), false);
+        this._Canvas.addEventListener('touchstart', this.OnTouchStart.bind(this), false);
+        this._Canvas.addEventListener('touchend', this.OnTouchEnd.bind(this), false);
+        this._Canvas.addEventListener('touchmove', this.OnTouchMove.bind(this), false);
+        window.addEventListener('resize', this.OnResize.bind(this), false);
     }
 
     private UpdateScene(): void {
         this._Seed++;
-        if (this._Current.Type == Engine.SceneType.Scene2D) {
+        if (this._Current?.Is(Engine.Scene2D)) {
             let Current2DScene: Engine.Scene2D = <Engine.Scene2D>this._Current;
             let SceneSprites: Engine.Sprite[] = Current2DScene.Sprites;
             for (let i = 0; i < SceneSprites.length; i++) {
@@ -141,10 +139,10 @@ class Runner extends Core.Service {
     private OnRenderFrame(): void {
         if (this._Stop) return;
         this._DrawHandle = requestAnimationFrame(this.OnRenderFrame.bind(this));
-        if (this._Current.Type == Engine.SceneType.Scene2D) {
+        if (this._Current?.Is(Engine.Scene2D)) {
             this._DrawEngine.Draw2DScene(<Engine.Scene2D>this._Current, window.innerWidth, window.innerHeight);
         }
-        else this.Log.Error("Scene " + this._Current.Name + "is not of valid type.", this._Current);
+        else this.Log.Error('Scene ' + this._Current?.Name + ' is not of valid type.', this._Current);
     }
 
     private PackEventArgs(Event): any {
@@ -178,62 +176,62 @@ class Runner extends Core.Service {
     }
 
     private OnClosing(Event): void {
-        this.Log.Event("Closing");
+        this.Log.Event('Closing');
         Event.preventDefault();
     }
 
     private OnKeyPress(Event): void {
-        this.Log.Event("KeyPress");
-        this._Current.Events.Invoke("KeyPress", this._Game, this.PackEventArgs(Event));
+        this.Log.Event('KeyPress');
+        this._Current?.Events.Invoke('KeyPress', this._Game, this.PackEventArgs(Event));
     }
 
     private OnKeyDown(Event): void {
-        this.Log.Event("KeyDown");
-        this._Current.Events.Invoke("KeyDown", this._Game, this.PackEventArgs(Event));
+        this.Log.Event('KeyDown');
+        this._Current?.Events.Invoke('KeyDown', this._Game, this.PackEventArgs(Event));
     }
 
     private OnKeyUp(Event): void {
-        this.Log.Event("KeyUp");
-        this._Current.Events.Invoke("KeyUp", this._Game, this.PackEventArgs(Event));
+        this.Log.Event('KeyUp');
+        this._Current?.Events.Invoke('KeyUp', this._Game, this.PackEventArgs(Event));
     }
 
     private OnMouseDown(Event): void {
-        if (!this.CheckObjectMouseEvents(["Click", "MouseDown"], Event)) {
-            this.Log.Event("Click");
-            this.Log.Event("MouseDown");
-            this._Current.Events.Invoke("Click", this._Game, this.PackEventArgs(Event));
-            this._Current.Events.Invoke("MouseDown", this._Game, this.PackEventArgs(Event));
+        if (!this.CheckObjectMouseEvents(['Click', 'MouseDown'], Event)) {
+            this.Log.Event('Click');
+            this.Log.Event('MouseDown');
+            this._Current?.Events.Invoke('Click', this._Game, this.PackEventArgs(Event));
+            this._Current?.Events.Invoke('MouseDown', this._Game, this.PackEventArgs(Event));
         }
     }
 
     private OnMouseUp(Event): void {
-        if (!this.CheckObjectMouseEvents(["MouseUp"], Event)) {
-            this.Log.Event("MouseUp");
-            this._Current.Events.Invoke("MouseUp", this._Game, this.PackEventArgs(Event));
+        if (!this.CheckObjectMouseEvents(['MouseUp'], Event)) {
+            this.Log.Event('MouseUp');
+            this._Current?.Events.Invoke('MouseUp', this._Game, this.PackEventArgs(Event));
         }
     }
 
     private OnMouseWheel(Event): void {
-        this.Log.Event("MouseWheel");
-        this._Current.Events.Invoke("MouseWheel", this._Game, this.PackEventArgs(Event));
+        this.Log.Event('MouseWheel');
+        this._Current?.Events.Invoke('MouseWheel', this._Game, this.PackEventArgs(Event));
     }
 
     private OnMouseMove(Event): void {
-        this._Current.Events.Invoke("MouseMove", this._Game, this.PackEventArgs(Event));
+        this._Current?.Events.Invoke('MouseMove', this._Game, this.PackEventArgs(Event));
     }
 
     private OnMouseRight(Event): void {
-        this.Log.Event("MouseRight");
+        this.Log.Event('MouseRight');
         Event.preventDefault();
     }
 
     private OnTouchStart(Event): void {
         for (let i = 0; i < Event.touches.length; i++) {
             let TouchEvent: any = this.PackTouchEvent(Event.touches[i], i);
-            if (this._Current.Events.WireTouchEvents) this.OnMouseDown(TouchEvent);
-            else if (!this.CheckObjectMouseEvents(["TouchStart"], TouchEvent)) {
-                this.Log.Event("TouchStart");
-                this._Current.Events.Invoke("TouchStart", this._Game, this.PackEventArgs(TouchEvent));
+            if (this._Current?.Events.WireTouchEvents) this.OnMouseDown(TouchEvent);
+            else if (!this.CheckObjectMouseEvents(['TouchStart'], TouchEvent)) {
+                this.Log.Event('TouchStart');
+                this._Current?.Events.Invoke('TouchStart', this._Game, this.PackEventArgs(TouchEvent));
             }
         }
     }
@@ -241,10 +239,10 @@ class Runner extends Core.Service {
     private OnTouchEnd(Event): void {
         for (let i = 0; i < Event.changedTouches.length; i++) {
             let TouchEvent: any = this.PackTouchEvent(Event.changedTouches[i], i);
-            if (this._Current.Events.WireTouchEvents) this.OnMouseUp(TouchEvent);
-            else if (!this.CheckObjectMouseEvents(["TouchEnd"], TouchEvent)) {
-                this.Log.Event("TouchEnd");
-                this._Current.Events.Invoke("TouchEnd", this._Game, this.PackEventArgs(TouchEvent));
+            if (this._Current?.Events.WireTouchEvents) this.OnMouseUp(TouchEvent);
+            else if (!this.CheckObjectMouseEvents(['TouchEnd'], TouchEvent)) {
+                this.Log.Event('TouchEnd');
+                this._Current?.Events.Invoke('TouchEnd', this._Game, this.PackEventArgs(TouchEvent));
             }
         }
     }
@@ -252,34 +250,34 @@ class Runner extends Core.Service {
     private OnTouchMove(Event): void {
         for (let i = 0; i < Event.touches.length; i++) {
             let TouchEvent: any = this.PackTouchEvent(Event.touches[i], i);
-            if (this._Current.Events.WireTouchEvents) this.OnMouseMove(TouchEvent);
-            else this._Current.Events.Invoke("TouchMove", this._Game, this.PackEventArgs(TouchEvent));
+            if (this._Current?.Events.WireTouchEvents) this.OnMouseMove(TouchEvent);
+            else this._Current?.Events.Invoke('TouchMove', this._Game, this.PackEventArgs(TouchEvent));
         }
     }
 
     private OnResize(Event): void {
-        this.Log.Event("Resize");
-        this._Current.Events.Invoke("Resize", this._Game, this.PackEventArgs(Event));
+        this.Log.Event('Resize');
+        this._Current?.Events.Invoke('Resize', this._Game, this.PackEventArgs(Event));
     }
 
     private OnLoadProgress(Progress: number): void {
-        if (this._Preload) this._Preload.Events.Invoke("LoadProgress", this._Game, { Progress: Progress });
+        if (this._Preload) this._Preload.Events.Invoke('LoadProgress', this._Game, { Progress: Progress });
     }
 
     private OnLoadComplete(): void {
-        if (this._Preload) this._Preload.Events.Invoke("LoadComplete", this._Game, {});
+        if (this._Preload) this._Preload.Events.Invoke('LoadComplete', this._Game, {});
     }
 
     private CheckObjectMouseEvents(EventNames: string[], Event): boolean {
         let Handled: boolean = false;
-        if (this._Current.Type == Engine.SceneType.Scene2D) {
+        if (this._Current?.Is(Engine.Scene2D)) {
             let Current2DScene: Engine.Scene2D = <Engine.Scene2D>this._Current;
             let STrans: Math.Vertex = Current2DScene.Trans.Translation;
             STrans = new Math.Vertex(STrans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, STrans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
-            for (let i = this._Current.Objects.length - 1; i >= 0; i--) {
-                if (!this._Current.Objects[i]) continue;
-                if (this._Current.Objects[i].Type == Engine.SceneObjectType.Drawn) {
-                    let Current: Engine.DrawObject = <Engine.DrawObject>this._Current.Objects[i];
+            for (let i = this._Current?.Objects.length - 1; i >= 0; i--) {
+                if (!this._Current?.Objects[i]) continue;
+                if (this._Current?.Objects[i].Is(Engine.DrawObject)) {
+                    let Current: Engine.DrawObject = <Engine.DrawObject>this._Current?.Objects[i];
                     let Trans: Math.Vertex = Current.Trans.Translation;
                     Trans = new Math.Vertex(Trans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Trans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
                     let Scale: Math.Vertex = Current.Trans.Scale;
@@ -294,7 +292,7 @@ class Runner extends Core.Service {
                             Handled = Handled || Current.Events.Invoke(EventNames[i], this._Game, Args);
                         }
                         if (true || Handled) {
-                            for (let i = 0; i < EventNames.length; i++) this.Log.Event(EventNames[i] + " " + Current.ID);
+                            for (let i = 0; i < EventNames.length; i++) this.Log.Event(EventNames[i] + ' ' + Current.ID);
                         }
                     }
                 }
@@ -305,13 +303,13 @@ class Runner extends Core.Service {
 
     public PickSceneObject(Position: any): Engine.SceneObject {
         let Handled: boolean = false;
-        if (this._Current.Type == Engine.SceneType.Scene2D) {
+        if (this._Current?.Is(Engine.Scene2D)) {
             let Current2DScene: Engine.Scene2D = <Engine.Scene2D>this._Current;
             let STrans: Math.Vertex = Current2DScene.Trans.Translation;
             STrans = new Math.Vertex(STrans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, STrans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
-            for (let i = this._Current.Objects.length - 1; i >= 0; i--) {
-                if (this._Current.Objects[i].Type == Engine.SceneObjectType.Drawn) {
-                    let Current: Engine.DrawObject = <Engine.DrawObject>this._Current.Objects[i];
+            for (let i = this._Current?.Objects.length - 1; i >= 0; i--) {
+                if (this._Current?.Objects[i].Is(Engine.DrawObject)) {
+                    let Current: Engine.DrawObject = <Engine.DrawObject>this._Current?.Objects[i];
                     let Trans: Math.Vertex = Current.Trans.Translation;
                     Trans = new Math.Vertex(Trans.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Trans.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 0);
                     let Scale: Math.Vertex = Current.Trans.Scale;
@@ -320,7 +318,7 @@ class Runner extends Core.Service {
                     Scale = new Math.Vertex(Scale.X * Current2DScene.Trans.Scale.X / this._DrawEngine.GlobalScale.X, Scale.Y * Current2DScene.Trans.Scale.Y / this._DrawEngine.GlobalScale.Y, 1);
                     if ((Current.Fixed && Trans.X - Scale.X / 2 < X && X < Trans.X + Scale.X / 2 && Trans.Y - Scale.Y / 2 < Y && Y < Trans.Y + Scale.Y / 2) ||
                         (STrans.X + Trans.X - Scale.X / 2 < X && X < STrans.X + Trans.X + Scale.X / 2 && STrans.Y + Trans.Y - Scale.Y / 2 < Y && Y < STrans.Y + Trans.Y + Scale.Y / 2)) {
-                        if (Current.Data["Pickable"]) return Current;
+                        if (Current.Data['Pickable']) return Current;
                     }
                 }
             }
@@ -339,3 +337,5 @@ class Runner extends Core.Service {
         else return false;
     }
 }
+
+export default RunnerService;

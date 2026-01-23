@@ -1,7 +1,5 @@
-export { Game };
-
-import { Scene } from "./../Scene/Scene";
-import { SceneObject } from "./../Scene/SceneObject";
+import Scene from './../Scene/Scene';
+import SceneObject from './../Scene/SceneObject';
 
 class Game {
     private _Name: string;
@@ -16,7 +14,7 @@ class Game {
     public Data: { [key: string]: any; } = {};
 
     public constructor(Name?: string) {
-        this._Name = "ToyBox Game";
+        this._Name = 'ToyBox Game';
         this._Scenes = [];
         if (Name != null) this._Name = Name;
         this.UpdateName();
@@ -29,7 +27,7 @@ class Game {
     }
 
     private UpdateName(): void {
-        let Title: HTMLElement = document.getElementById("title") as HTMLElement;
+        let Title: HTMLElement = document.getElementById('title') as HTMLElement;
         Title.innerHTML = this._Name;
     }
 
@@ -65,3 +63,5 @@ class Game {
         return Objects;
     }
 }
+
+export default Game;

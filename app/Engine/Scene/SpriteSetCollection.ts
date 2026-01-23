@@ -1,16 +1,12 @@
-export { SpriteSetCollection }
-
-import * as Data from "./../../Data/Data";
-
-import { SpriteSet } from "./SpriteSet";
-import { ImageCollection } from "./ImageCollection";
+import SpriteSet from './SpriteSet';
+import ImageCollection from './ImageCollection';
 
 class SpriteSetCollection extends ImageCollection {
     private _SpriteSets: SpriteSet[];
 
+    public get Images(): string[] { return this.PackImages(); }
     public get SpriteSets(): SpriteSet[] { return this._SpriteSets; }
     public set SpriteSets(value: SpriteSet[]) { this._SpriteSets = value; }
-    public get Images(): string[] { return this.PackImages(); }
 
     public constructor(Old?: SpriteSetCollection, SpriteSets?: SpriteSet[]) {
         super(Old);
@@ -23,7 +19,7 @@ class SpriteSetCollection extends ImageCollection {
         }
     }
 
-    public Copy(): SpriteSetCollection {
+    public override Copy(): SpriteSetCollection {
         return new SpriteSetCollection(this);
     }
 
@@ -37,7 +33,7 @@ class SpriteSetCollection extends ImageCollection {
         return Images;
     }
 
-    public Serialize(): any {
+    public override Serialize(): any {
         let SSC = super.Serialize();
         SSC.SpriteSets = [];
         for (let i in this._SpriteSets) {
@@ -46,7 +42,7 @@ class SpriteSetCollection extends ImageCollection {
         return SSC;
     }
 
-    public Deserialize(Data: any): void {
+    public override Deserialize(Data: any): void {
         super.Deserialize(Data);
         for (let i in Data.SpriteSets) {
             let SS: SpriteSet = new SpriteSet();
@@ -55,3 +51,5 @@ class SpriteSetCollection extends ImageCollection {
         }
     }
 }
+
+export default SpriteSetCollection;

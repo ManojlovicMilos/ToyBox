@@ -1,9 +1,7 @@
-export { SpriteEventPackage }
-
-import { ImageObjectEventPackage } from "./ImageObjectEventPackage";
+import ImageObjectEventPackage from './ImageObjectEventPackage';
 
 class SpriteEventPackage extends ImageObjectEventPackage {
-    public get SetComplete(): Function[] { return this._Data["SetComplete"]; }
+    public get SetComplete(): Function[] { return this._Data['SetComplete']; }
     
     public constructor(Old?: SpriteEventPackage) {
         super(Old);
@@ -11,7 +9,7 @@ class SpriteEventPackage extends ImageObjectEventPackage {
 
         }
         else {
-            this._Data["SetComplete"] = [];
+            this._Data['SetComplete'] = [];
         }
     }
 
@@ -19,3 +17,5 @@ class SpriteEventPackage extends ImageObjectEventPackage {
         return new SpriteEventPackage(this);
     }
 }
+
+export default SpriteEventPackage;

@@ -1,14 +1,12 @@
-export { Sprite, SpriteSet };
+import * as Core from './../../Core/Core';
+import * as Math from './../../Mathematics/Mathematics';
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
+import ImageObject from './ImageObject';
+import SpriteSet from './SpriteSet';
+import SpriteSetCollection from './SpriteSetCollection';
+import SpriteEventPackage from '../Events/SpriteEventPackage';
 
-import { SpriteSet } from "./SpriteSet";
-import { SpriteSetCollection } from "./SpriteSetCollection";
-import { ImageObject } from "./ImageObject";
-import { DrawObject, DrawObjectType } from "./DrawObject";
-import { SpriteEventPackage } from "../Events/SpriteEventPackage";
-
+@Core.TypedObject('TBX.Sprite')
 class Sprite extends ImageObject {
     private _CurrentIndex: number;
     private _CurrentSpriteSet: number;
@@ -41,7 +39,7 @@ class Sprite extends ImageObject {
 
     public constructor(Old?: Sprite) {
         super(Old);
-        this.DrawType = DrawObjectType.Sprite;
+        this.RegisterType(Sprite);
         this._CurrentIndex = 0;
         this._CurrentSpriteSet = 0;
         this._BackUpSpriteSet = -1;
@@ -61,8 +59,7 @@ class Sprite extends ImageObject {
     }
 
     public Copy(): Sprite {
-        let New: Sprite = new Sprite(this);
-        return New;
+        return new Sprite(this);
     }
 
     private GetIndex(): number {
@@ -89,7 +86,7 @@ class Sprite extends ImageObject {
         this._CurrentIndex++;
         if (this.SpriteSets.length <= 0) this._CurrentIndex = -1;
         else if (this._CurrentIndex >= this.SpriteSets[this._CurrentSpriteSet].Images.length) {
-            this.Events.Invoke("SetComplete", null, { CurrentSpriteSet: this._CurrentSpriteSet, NextSpriteSet: ((this._BackUpSpriteSet != -1) ? this._BackUpSpriteSet : this._CurrentSpriteSet) });
+            this.Events.Invoke('SetComplete', null, { CurrentSpriteSet: this._CurrentSpriteSet, NextSpriteSet: ((this._BackUpSpriteSet != -1) ? this._BackUpSpriteSet : this._CurrentSpriteSet) });
             if (this._BackUpSpriteSet != -1) {
                 this._CurrentSpriteSet = this._BackUpSpriteSet;
                 this._BackUpSpriteSet = -1;
@@ -152,3 +149,5 @@ class Sprite extends ImageObject {
         }
     }
 }
+
+export default Sprite;

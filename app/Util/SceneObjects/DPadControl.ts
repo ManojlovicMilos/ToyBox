@@ -1,7 +1,8 @@
-import * as Core from "../../Core/Core";
-import * as Engine from "../../Engine/Engine";
-import * as Math from "../../Mathematics/Mathematics";
+import * as Core from '../../Core/Core';
+import * as Engine from '../../Engine/Engine';
+import * as Math from '../../Mathematics/Mathematics';
 
+@Core.TypedObject('TBX.Util.DPadControl')
 class DPadControl extends Engine.Tile {
     private _Touch: boolean;
     private _TouchID: number;
@@ -16,6 +17,7 @@ class DPadControl extends Engine.Tile {
 
     public constructor(Old?: DPadControl, Position?: Math.Vertex, Size?: Math.Vertex) {
         super(Old);
+        this.RegisterType(DPadControl);
         this._Touch = false;
         this._Press = [];
         this._CollisionService = Core.Inject(Math.CollisionService);
@@ -31,8 +33,8 @@ class DPadControl extends Engine.Tile {
     }
 
     private Init() {
-        let DPadCollection = new Engine.ImageCollection(null, ["public/tbx/dPad/dPad.png", "public/tbx/dPad/up.png", "public/tbx/dPad/right.png", "public/tbx/dPad/down.png", "public/tbx/dPad/left.png"]);
-        this.Name = "DPad";
+        let DPadCollection = new Engine.ImageCollection(null, ['public/tbx/dPad/dPad.png', 'public/tbx/dPad/up.png', 'public/tbx/dPad/right.png', 'public/tbx/dPad/down.png', 'public/tbx/dPad/left.png']);
+        this.Name = 'DPad';
         this.Collection = DPadCollection;
         this.Index = 0;
         this._Up = this.CreateDirection(1);
@@ -44,7 +46,7 @@ class DPadControl extends Engine.Tile {
 
     private CreateDirection(Index: number): Engine.Tile {
         let Direction: Engine.Tile = new Engine.Tile();
-        Direction.Name = "DPad Direction " + Index;
+        Direction.Name = 'DPad Direction ' + Index;
         Direction.Trans = this.Trans.Copy();
         Direction.Collection = this.Collection;
         Direction.Index = Index;

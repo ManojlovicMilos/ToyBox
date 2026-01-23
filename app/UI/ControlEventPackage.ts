@@ -1,25 +1,23 @@
-export { ControlEventPackage }
-
-import * as Core from "../Core/Core";
-import * as Runner from "./../Runner/Runner";
-import * as Engine from "./../Engine/Engine";
+import * as Core from '../Core/Core';
+import * as Engine from './../Engine/Engine';
+import RunnerService from '../Runner/RunnerService';
 
 class ControlEventPackage extends Engine.EventPackage {
-    public Runner: Runner.Runner;
+    public Runner: RunnerService;
     protected _Element: HTMLElement;
     protected _Sender: Engine.SceneObject;
-    public get Click(): Function[] { return this._Data["Click"]; }
-    public get Input(): Function[] { return this._Data["Input"]; }
-    public get MouseEnter(): Function[] { return this._Data["MouseEnter"]; }
-    public get MouseLeave(): Function[] { return this._Data["MouseLeave"]; }
+    public get Click(): Function[] { return this._Data['Click']; }
+    public get Input(): Function[] { return this._Data['Input']; }
+    public get MouseEnter(): Function[] { return this._Data['MouseEnter']; }
+    public get MouseLeave(): Function[] { return this._Data['MouseLeave']; }
     public constructor(Old?: ControlEventPackage) {
         super(Old);
-        this.Runner = Core.Inject(Runner.Runner);
+        this.Runner = Core.Inject(RunnerService);
         if (!Old) {
-            this._Data["Click"] = [];
-            this._Data["Input"] = [];
-            this._Data["MouseEnter"] = [];
-            this._Data["MouseLeave"] = [];
+            this._Data['Click'] = [];
+            this._Data['Input'] = [];
+            this._Data['MouseEnter'] = [];
+            this._Data['MouseLeave'] = [];
         }
     }
 
@@ -29,17 +27,17 @@ class ControlEventPackage extends Engine.EventPackage {
 
     public Connect(Sender: Engine.SceneObject, Element: HTMLElement): void {
         if (this._Element) {
-            this._Element.removeEventListener("mousedown", this.OnClick.bind(this));
-            this._Element.removeEventListener("input", this.OnInput.bind(this));
-            this._Element.removeEventListener("mouseenter", this.OnMouseEnter.bind(this));
-            this._Element.removeEventListener("mouseleave", this.OnMouseLeave.bind(this));
+            this._Element.removeEventListener('mousedown', this.OnClick.bind(this));
+            this._Element.removeEventListener('input', this.OnInput.bind(this));
+            this._Element.removeEventListener('mouseenter', this.OnMouseEnter.bind(this));
+            this._Element.removeEventListener('mouseleave', this.OnMouseLeave.bind(this));
         }
         this._Sender = Sender;
         this._Element = Element;
-        this._Element.addEventListener("mousedown", this.OnClick.bind(this));
-        this._Element.addEventListener("input", this.OnInput.bind(this));
-        this._Element.addEventListener("mouseenter", this.OnMouseEnter.bind(this));
-        this._Element.addEventListener("mouseleave", this.OnMouseLeave.bind(this));
+        this._Element.addEventListener('mousedown', this.OnClick.bind(this));
+        this._Element.addEventListener('input', this.OnInput.bind(this));
+        this._Element.addEventListener('mouseenter', this.OnMouseEnter.bind(this));
+        this._Element.addEventListener('mouseleave', this.OnMouseLeave.bind(this));
     }
 
     private PackEventArgs(Event): any {
@@ -68,18 +66,20 @@ class ControlEventPackage extends Engine.EventPackage {
     }
 
     private OnClick(Event): void {
-        this.Invoke("Click", this.Runner.Game, this.PackEventArgs(Event));
+        this.Invoke('Click', this.Runner.Game, this.PackEventArgs(Event));
     }
 
     private OnInput(Event): void {
-        this.Invoke("Input", this.Runner.Game, this.PackEventArgs(Event));
+        this.Invoke('Input', this.Runner.Game, this.PackEventArgs(Event));
     }
 
     private OnMouseEnter(Event): void {
-        this.Invoke("MouseEnter", this.Runner.Game, this.PackEventArgs(Event));
+        this.Invoke('MouseEnter', this.Runner.Game, this.PackEventArgs(Event));
     }
 
     private OnMouseLeave(Event): void {
-        this.Invoke("MouseLeave", this.Runner.Game, this.PackEventArgs(Event));
+        this.Invoke('MouseLeave', this.Runner.Game, this.PackEventArgs(Event));
     }
 }
+
+export default ControlEventPackage;

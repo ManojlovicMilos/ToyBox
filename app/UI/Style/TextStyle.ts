@@ -1,7 +1,5 @@
-export { TextStyle }
-
-import * as TBXMath from "../../Mathematics/Mathematics";
-import { Settings } from "../../Core/Core";
+import { Settings } from '../../Core/Core';
+import * as TBXMath from '../../Mathematics/Mathematics';
 
 class TextStyle {
     private _Size: number;
@@ -37,10 +35,12 @@ class TextStyle {
     }
 
     public Apply(Element: HTMLElement, Scale: TBXMath.Vertex): void {
-        Element.style.fontSize = Math.round(Settings.GlobalFontScale * this._Size * Scale.Y) + "px";
-        Element.style.lineHeight = Math.round(Settings.GlobalFontScale * this._Size * Scale.Y * Settings.GlobalLineHeightFactor) + "px";
+        Element.style.fontSize = Math.round(Settings.GlobalFontScale * this._Size * Scale.Y) + 'px';
+        Element.style.lineHeight = Math.round(Settings.GlobalFontScale * this._Size * Scale.Y * Settings.GlobalLineHeightFactor) + 'px';
         Element.style.fontWeight = this._Weight.toString();
         if (this._Font) Element.style.fontFamily = this._Font;
         Element.style.color = this._Color.ToString();
     }
 }
+
+export default TextStyle;

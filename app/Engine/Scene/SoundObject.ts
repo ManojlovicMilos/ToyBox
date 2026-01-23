@@ -1,15 +1,16 @@
-import * as Howler from "howler";
+import * as Howler from 'howler';
 
-export { SoundObject };
+import * as Core from '../../Core/Core';
 
-import { SceneObjectType, SceneObject } from "./SceneObject";
+import SceneObject from './SceneObject';
 
+@Core.TypedObject('TBX.SoundObject')
 class SoundObject extends SceneObject {
     private _Autoplay: boolean;
     private _Looped: boolean;
     private _Volume: number;
     private _Url: string;
-    private _Sound: any;
+    private _Sound: Howler.Howl;
 
     public get Autoplay(): boolean { return this._Autoplay; }
     public set Autoplay(value: boolean) { this._Autoplay = value; this.GenerateSound(); }
@@ -19,10 +20,11 @@ class SoundObject extends SceneObject {
     public set Volume(value: number) { this._Volume = value; this._Sound.volume(this._Volume); }
     public get Url(): string { return this._Url; }
     public set Url(value: string) { this._Url = value; this.GenerateSound(); }
-    public get Sound(): any { return this._Sound; }
+    public get Sound(): Howler.Howl { return this._Sound; }
 
-    public constructor(Url: string, Old?: SoundObject) {
+    public constructor(Old?: SoundObject, Url?: string) {
         super(Old);
+        this.RegisterType(SoundObject);
         if (Old != null) {
             this._Autoplay = Old._Autoplay;
             this._Looped = Old._Looped;
@@ -38,8 +40,8 @@ class SoundObject extends SceneObject {
         this.GenerateSound();
     }
 
-    public Copy(): SceneObject {
-        return new SceneObject(this);
+    public Copy(): SoundObject {
+        return new SoundObject(this);
     }
 
     private GenerateSound(): void {
@@ -78,3 +80,5 @@ class SoundObject extends SceneObject {
         this.GenerateSound();
     }
 }
+
+export default SoundObject;

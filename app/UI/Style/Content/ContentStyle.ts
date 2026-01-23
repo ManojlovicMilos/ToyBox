@@ -1,17 +1,5 @@
-export { ContentStyle, ContentAlign, ContentDirection }
-
-enum ContentAlign {
-    Start = "flex-start",
-    End = "flex-end",
-    Center = "center",
-    Between = "space-between",
-    Around = "space-around"
-}
-
-enum ContentDirection {
-    Row = "row",
-    Column = "column"
-}
+import ContentAlign from './ContentAlign';
+import ContentDirection from './ContentDirection';
 
 class ContentStyle {
     private _Enabled: boolean;
@@ -48,8 +36,8 @@ class ContentStyle {
     }
 
     public Apply(Element: HTMLElement, Active: boolean): void {
-        let DisplayMode: string = (this._Enabled) ? "flex" : "block";
-        Element.style.display = (Active) ? DisplayMode : "none";
+        let DisplayMode: string = (this._Enabled) ? 'flex' : 'block';
+        Element.style.display = (Active) ? DisplayMode : 'none';
         if (this._Enabled) {
             Element.style.flexDirection = this._Direction;
             if (this._Direction == ContentDirection.Row) {
@@ -63,3 +51,5 @@ class ContentStyle {
         }
     }
 }
+
+export default ContentStyle;

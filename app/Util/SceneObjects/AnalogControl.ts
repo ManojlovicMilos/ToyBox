@@ -1,6 +1,8 @@
-import * as Engine from "../../Engine/Engine";
-import * as Math from "../../Mathematics/Mathematics";
+import * as Core from '../../Core/Core';
+import * as Engine from '../../Engine/Engine';
+import * as Math from '../../Mathematics/Mathematics';
 
+@Core.TypedObject('TBX.Util.AnalogControl')
 class AnalogControl extends Engine.Tile {
     private _Touch: boolean;
     private _TouchID: number;
@@ -11,6 +13,7 @@ class AnalogControl extends Engine.Tile {
 
     public constructor(Old?: AnalogControl, Position?: Math.Vertex, Size?: Math.Vertex) {
         super(Old);
+        this.RegisterType(AnalogControl);
         this._Touch = false;
         this._Press = [];
         if (Old) {
@@ -23,8 +26,8 @@ class AnalogControl extends Engine.Tile {
     }
 
     private Init() {
-        let AnalogCollection = new Engine.ImageCollection(null, ["public/tbx/analog/stick.png", "public/tbx/analog/pointer.png"]);
-        this.Name = "Analog";
+        let AnalogCollection = new Engine.ImageCollection(null, ['public/tbx/analog/stick.png', 'public/tbx/analog/pointer.png']);
+        this.Name = 'Analog';
         this.Collection = AnalogCollection;
         this.Index = 0;
         this.CreatePointer();
@@ -33,7 +36,7 @@ class AnalogControl extends Engine.Tile {
 
     private CreatePointer(): void {
         let Pointer: Engine.Tile = new Engine.Tile();
-        Pointer.Name = "Analog Pointer";
+        Pointer.Name = 'Analog Pointer';
         Pointer.Trans.Translation = this.Trans.Translation.Copy();
         Pointer.Trans.Scale = this.Trans.Scale.Copy().Scalar(0.25);
         Pointer.Collection = this.Collection;

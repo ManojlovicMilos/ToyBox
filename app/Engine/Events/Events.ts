@@ -1,7 +1,4 @@
-export { EventPackage };
-
-import { Game } from "./../Game/Game";
-
+import Game from './../Game/Game';
 
 class EventPackage {
     private _Closing: Function[];
@@ -78,22 +75,22 @@ class EventPackage {
     }
 
     public Invoke(EventName: string, CurrentGame: Game, Args): boolean {
-        if (EventName == "Closing") return this.InvokeEvents(this._Closing, CurrentGame, Args);
-        if (EventName == "KeyDown") return this.InvokeEvents(this._KeyDown, CurrentGame, Args);
-        if (EventName == "KeyUp") return this.InvokeEvents(this._KeyUp, CurrentGame, Args);
-        if (EventName == "KeyPress") return this.InvokeEvents(this._KeyPress, CurrentGame, Args);
-        if (EventName == "Load") return this.InvokeEvents(this._Load, CurrentGame, Args);
-        if (EventName == "MouseDown") return this.InvokeEvents(this._MouseDown, CurrentGame, Args);
-        if (EventName == "MouseUp") return this.InvokeEvents(this._MouseUp, CurrentGame, Args);
-        if (EventName == "MouseClick") return this.InvokeEvents(this._MouseClick, CurrentGame, Args);
-        if (EventName == "MouseMove") return this.InvokeEvents(this._MouseMove, CurrentGame, Args);
-        if (EventName == "MouseWheel") return this.InvokeEvents(this._MouseWheel, CurrentGame, Args);
-        if (EventName == "RenderFrame") return this.InvokeEvents(this._RenderFrame, CurrentGame, Args);
-        if (EventName == "Resize") return this.InvokeEvents(this._Resize, CurrentGame, Args);
-        if (EventName == "TimeTick") return this.InvokeEvents(this._TimeTick, CurrentGame, Args);
-        if (EventName == "OperationProgress") return this.InvokeEvents(this._OperationProgress, CurrentGame, Args);
-        if (EventName == "OperationFinished") return this.InvokeEvents(this._OperationFinished, CurrentGame, Args);
-        if (EventName == "SpriteSetAnimationComplete") return this.InvokeEvents(this._SpriteSetAnimationComplete, CurrentGame, Args);
+        if (EventName == 'Closing') return this.InvokeEvents(this._Closing, CurrentGame, Args);
+        if (EventName == 'KeyDown') return this.InvokeEvents(this._KeyDown, CurrentGame, Args);
+        if (EventName == 'KeyUp') return this.InvokeEvents(this._KeyUp, CurrentGame, Args);
+        if (EventName == 'KeyPress') return this.InvokeEvents(this._KeyPress, CurrentGame, Args);
+        if (EventName == 'Load') return this.InvokeEvents(this._Load, CurrentGame, Args);
+        if (EventName == 'MouseDown') return this.InvokeEvents(this._MouseDown, CurrentGame, Args);
+        if (EventName == 'MouseUp') return this.InvokeEvents(this._MouseUp, CurrentGame, Args);
+        if (EventName == 'MouseClick') return this.InvokeEvents(this._MouseClick, CurrentGame, Args);
+        if (EventName == 'MouseMove') return this.InvokeEvents(this._MouseMove, CurrentGame, Args);
+        if (EventName == 'MouseWheel') return this.InvokeEvents(this._MouseWheel, CurrentGame, Args);
+        if (EventName == 'RenderFrame') return this.InvokeEvents(this._RenderFrame, CurrentGame, Args);
+        if (EventName == 'Resize') return this.InvokeEvents(this._Resize, CurrentGame, Args);
+        if (EventName == 'TimeTick') return this.InvokeEvents(this._TimeTick, CurrentGame, Args);
+        if (EventName == 'OperationProgress') return this.InvokeEvents(this._OperationProgress, CurrentGame, Args);
+        if (EventName == 'OperationFinished') return this.InvokeEvents(this._OperationFinished, CurrentGame, Args);
+        if (EventName == 'SpriteSetAnimationComplete') return this.InvokeEvents(this._SpriteSetAnimationComplete, CurrentGame, Args);
     }
 
     private InvokeEvents(Events: Function[], CurrentGame: Game, Args): boolean {
@@ -104,3 +101,5 @@ class EventPackage {
         return true;
     }
 }
+
+export default EventPackage;

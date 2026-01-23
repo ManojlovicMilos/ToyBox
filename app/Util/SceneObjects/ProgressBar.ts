@@ -1,8 +1,8 @@
-export { ProgressBar };
+import * as Core from '../../Core/Core';
+import * as Engine from '../../Engine/Engine';
+import * as Math from '../../Mathematics/Mathematics';
 
-import * as Engine from "../../Engine/Engine";
-import * as Math from "../../Mathematics/Mathematics";
-
+@Core.TypedObject('TBX.Util.ProgressBar')
 class ProgressBar extends Engine.Tile {
     private _Value: number;
     private _Scene: Engine.Scene;
@@ -14,6 +14,7 @@ class ProgressBar extends Engine.Tile {
 
     public constructor(Old?: ProgressBar, TargetScene?: Engine.Scene) {
         super(Old);
+        this.RegisterType(ProgressBar);
         this._Scene = TargetScene;
         if (Old) {
             this._Value = Old._Value;
@@ -25,13 +26,13 @@ class ProgressBar extends Engine.Tile {
     }
 
     private Init() {
-        this.Name = "Progress";
+        this.Name = 'Progress';
         this.Paint = Math.Color.Black;
         this.Fixed = true;
         this.Position = new Math.Vertex(960, 980, 0.3);
         this.Size = new Math.Vertex(1520, 30, 1);
         this._Indicator = new Engine.Tile();
-        this._Indicator.Name = "ProgressIndicator";
+        this._Indicator.Name = 'ProgressIndicator';
         this._Indicator.Paint = Math.Color.White;
         this._Indicator.Position = new Math.Vertex(200, 960, 0.3);
         this._Indicator.Size = new Math.Vertex(1, 30, 1);
@@ -49,9 +50,9 @@ class ProgressBar extends Engine.Tile {
         this._Indicator.Position.X = this.Position.X - this.Size.X / 2 + this._Indicator.Size.X / 2;
     }
 
-    public OnAttach(Args: any): void {
+    public OnAttach(Parent: Core.BaseObject): void {
         // Override
-        this.InitEvents(Args.Scene);
+        this.InitEvents(Parent as Engine.Scene);
         this.UpdateValue();
     }
 

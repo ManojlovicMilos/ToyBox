@@ -1,42 +1,43 @@
-export { SpotLight }
+import * as Core from '../../Core/Core';
+import * as Math from './../../Mathematics/Mathematics';
 
-import * as Math from "./../../Mathematics/Mathematics";
+import Light from './Light';
 
-import { Light, LightType } from "./Light";
-
+@Core.TypedObject('TBX.SpotLight')
 class SpotLight extends Light {
     private _RadiusAngle: number;
 
     public get RadiusAngle(): number { return this._RadiusAngle; }
     public set RadiusAngle(value: number) { this._RadiusAngle = value; }
-    public get Parameter(): number { /*Override*/ return this._RadiusAngle; }
+    public override get Parameter(): number { return this._RadiusAngle; }
 
     public constructor(Old?: SpotLight) {
         super(Old);
+        this.RegisterType(SpotLight);
         if (Old != null) {
             this._RadiusAngle = Old._RadiusAngle;
         }
         else {
-            this.LightType = LightType.Spot;
             this.Direction = new Math.Vertex(0, 1, 0);
             this._RadiusAngle = 60;
         }
     }
 
-    public Copy(): SpotLight {
+    public override Copy(): SpotLight {
         return new SpotLight(this);
     }
 
-    public Serialize(): any {
-        // Override
-        let SL = super.Serialize();
-        SL.RadiusAngle = this._RadiusAngle;
-        return SL;
+    public override Serialize(): any {
+        return {
+            ...super.Serialize(),
+            RadiusAngle: this._RadiusAngle,
+        }
     }
 
-    public Deserialize(Data: any): void {
-        // Override
+    public override Deserialize(Data: any): void {
         super.Deserialize(Data);
         this._RadiusAngle = Data.RadiusAngle;
     }
 }
+
+export default SpotLight;

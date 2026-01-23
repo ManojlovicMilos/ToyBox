@@ -1,12 +1,9 @@
-export { Tile };
+import * as Core from './../../Core/Core';
 
-import * as Data from "./../../Data/Data";
-import * as Math from "./../../Mathematics/Mathematics";
+import ImageObject from './ImageObject';
+import ImageCollection from './ImageCollection';
 
-import { ImageObject } from "./ImageObject";
-import { ImageCollection } from "./ImageCollection";
-import { DrawObject, DrawObjectType } from "./DrawObject";
-
+@Core.TypedObject('TBX.Tile')
 class Tile extends ImageObject {
     private _Index: number;
     private _SubTiles: Tile[];
@@ -22,7 +19,7 @@ class Tile extends ImageObject {
 
     public constructor(Old?: Tile) {
         super(Old);
-        this.DrawType = DrawObjectType.Tile;
+        this.RegisterType(Tile);
         if (Old != null) {
             this._Index = Old._Index;
             this._Collection = Old._Collection;
@@ -62,3 +59,5 @@ class Tile extends ImageObject {
         }
     }
 }
+
+export default Tile;

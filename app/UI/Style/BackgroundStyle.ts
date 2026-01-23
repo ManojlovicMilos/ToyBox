@@ -1,6 +1,4 @@
-export { BackgroundStyle }
-
-import * as Math from "../../Mathematics/Mathematics";
+import * as Math from '../../Mathematics/Mathematics';
 
 class BackgroundStyle {
     private _Image: string;
@@ -27,7 +25,9 @@ class BackgroundStyle {
 
     public Apply(Element: HTMLElement): void {
         if (this._Image) Element.style.backgroundImage = this._Image;
-        if (this.Color.A == 0) Element.style.backgroundColor = "rgba(0,0,0,0)";
+        if (this.Color.A == 0) Element.style.backgroundColor = 'rgba(0,0,0,0)';
         else Element.style.backgroundColor = this._Color.ToString();
     }
 }
+
+export default BackgroundStyle;

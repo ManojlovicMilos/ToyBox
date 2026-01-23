@@ -1,15 +1,13 @@
-export { Control }
+import * as Core from '../Core/Core';
+import * as Data from '../Data/Data';
+import * as Engine from '../Engine/Engine';
+import * as Math from '../Mathematics/Mathematics';
 
-import * as Core from "./../Core/Core";
-import * as Data from "./../Data/Data";
-import * as Util from "./../Util/Util";
-import * as Engine from "./../Engine/Engine";
-import * as Math from "./../Mathematics/Mathematics";
+import Style from './Style/Style';
+import DockType from './Style/DockType';
+import ControlEventPackage from './ControlEventPackage';
 
-import { Style } from "./Style/Style";
-import { ControlEventPackage } from "./ControlEventPackage";
-import { DockType } from "./Style/LayoutStyle";
-
+@Core.TypedObject('TBX.UI.Control')
 class Control extends Engine.SceneObject {
     protected _Active: boolean;
     protected _Ratio: number;
@@ -46,6 +44,7 @@ class Control extends Engine.SceneObject {
 
     public constructor(Old?: Control) {
         super(Old);
+        this.RegisterType(Control);
         this._Events = new ControlEventPackage();
         if (Old) {
             this._Active = Old._Active;
@@ -56,7 +55,6 @@ class Control extends Engine.SceneObject {
             this._Style = Old._Style.Copy();
         }
         else {
-            this.Type = Engine.SceneObjectType.Control;
             this._Active = true;
             this._Position = new Math.Vertex();
             this._Size = new Math.Vertex();
@@ -86,12 +84,12 @@ class Control extends Engine.SceneObject {
         const Log = Core.Inject<Data.LogService>(Data.LogService);
         this.Update();
         this.Check();
-        let Parent: HTMLElement = document.getElementById("ui-parent");
+        let Parent: HTMLElement = document.getElementById('ui-parent');
         if (this._Parent) {
             Parent = this._Parent._Element;
         }
         if (!Parent) {
-            Log.Error("UI Parent Not Found", "Unnable to find UI parent");
+            Log.Error('UI Parent Not Found', 'Unnable to find UI parent');
         }
         Parent.appendChild(this._Element);
     }
@@ -99,10 +97,10 @@ class Control extends Engine.SceneObject {
     protected RemoveElement(Parent?: HTMLElement): void {
         const Log = Core.Inject<Data.LogService>(Data.LogService);
         if (!Parent) {
-            Parent = document.getElementById("ui-parent");
+            Parent = document.getElementById('ui-parent');
         }
         if (!Parent) {
-            Log.Error("Parent Not Found", "Unnable to find parent");
+            Log.Error('Parent Not Found', 'Unnable to find parent');
         }
         Parent.removeChild(this._Element);
     }
@@ -116,29 +114,25 @@ class Control extends Engine.SceneObject {
     protected Create(): void {
         this._Element = <HTMLDivElement>(document.createElement('div'));
         this._Element.id = this.ID;
-        this._Element.className = "control";
+        this._Element.className = 'control';
         this.Events.Connect(this, this.Element);
     }
 
-    public OnSwitch(): void {
-        // Override
+    public override OnSwitch(): void {
         this.AddElement();
     }
 
-    public OnResize(Args: any): void {
-        // Override
+    public override OnResize(Args: any): void {
         this._Ratio = Args.Ratio;
         this._Scale = new Math.Vertex(Args.Scale.X / Args.GlobalScale.X, Args.Scale.Y / Args.GlobalScale.Y, 1);
         this.Update();
     }
 
-    public OnRemove(Args?: any): void {
-        // Override
-        this.RemoveElement((Args.Parent) ? Args.Parent.Element : null);
+    public override OnRemove(Parent: Control): void {
+        this.RemoveElement(Parent ? Parent.Element : null);
     }
 
-    public OnAttach(Args: any): void {
-        // Override
+    public override OnAttach(Args: any): void {
         super.OnAttach(Args);
         this.Create();
         if (Args.Scene) {
@@ -146,3 +140,5 @@ class Control extends Engine.SceneObject {
         }
     }
 }
+
+export default Control;

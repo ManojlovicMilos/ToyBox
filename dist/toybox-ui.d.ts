@@ -5,6 +5,7 @@ export namespace UI {
     class BackgroundStyle {
         Image: string;
         Color: Math.Color;
+        
         constructor(Old?: BackgroundStyle)
         Copy(): BackgroundStyle
         Apply(Element: HTMLElement): void
@@ -14,6 +15,7 @@ export namespace UI {
         Width: number;
         Radius: number;
         Color: Math.Color;
+
         constructor(Old?: BorderStyle, Width?: number, Color?: Math.Color)
         Copy(): BorderStyle
         Apply(Element: HTMLElement, Scale: Math.Vertex): void
@@ -24,6 +26,7 @@ export namespace UI {
         Weight: number;
         Font: string;
         Color: Math.Color;
+
         constructor(Old?: TextStyle)
         Copy(): TextStyle
         Apply(Element: HTMLElement, Scale: Math.Vertex): void
@@ -48,6 +51,7 @@ export namespace UI {
         Align: ContentAlign;
         VerticalAlign: ContentAlign;
         HorizontalAlign: ContentAlign;
+
         constructor(Old?: ContentStyle)
         Apply(Element: HTMLElement, Active): void
     }
@@ -61,6 +65,7 @@ export namespace UI {
         Left: number;
         Right: number;
         Unit: string;
+
         constructor(Old?: OffsetStyle, Property?: string)
         Copy(): OffsetStyle
         Apply(Element: HTMLElement, Scale: Math.Vertex): void
@@ -82,6 +87,7 @@ export namespace UI {
 
     class LayoutStyle {
         Dock: DockType;
+
         constructor(Old?: LayoutStyle)
         Copy(): LayoutStyle
         Apply(Control: Control): void
@@ -108,6 +114,7 @@ export namespace UI {
         Classes: StyleClassesObject;
         Values: { [key: string]: string; };
         Font: string;
+
         constructor(Old?: Style)
         Copy(): Style
         Apply(Control: Control): void
@@ -118,6 +125,7 @@ export namespace UI {
         Input: Function[];
         MouseEnter: Function[];
         MouseLeave: Function[];
+
         constructor(Old?: ControlEventPackage)
         Copy(): ControlEventPackage
         Connect(Control: Engine.SceneObject, Element: HTMLElement): void
@@ -132,10 +140,12 @@ export namespace UI {
         Style: Style;
         Parent: Control;
         Element: HTMLElement;
-        Events: ControlEventPackage;
         Dock: DockType;
         ForeColor: Math.Color;
         BackColor: Math.Color;
+
+        get Events(): ControlEventPackage;
+
         constructor(Old?: Control)
         Copy(): Control
         Update(): void
@@ -146,6 +156,7 @@ export namespace UI {
     class Text extends Control {
         Text: string;
         TextElement: HTMLElement;
+
         constructor(Old?: Text, Text?: string)
         Copy(): Text
     }
@@ -158,6 +169,7 @@ export namespace UI {
     class Input extends Text {
         Placeholder: string;
         PlaceholderColor: Math.Color;
+
         constructor(Old?: Input, Text?: string)
         Copy(): Input
     }
@@ -171,10 +183,10 @@ export namespace UI {
 
     class Panel extends Control {
         Children: Control[];
+
         constructor(Old?: Panel)
         Copy(): Panel
         Attach(Child: Control): void
-        Remove(Child: Control): void
         RemoveAll(): void
     }
 }
