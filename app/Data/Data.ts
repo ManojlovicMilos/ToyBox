@@ -1,4 +1,4 @@
-import LogService from './Services/LogService';
+import LogService from '../Core/Services/LogService';
 import HTTPService from './Services/HttpService';
 
 export  {

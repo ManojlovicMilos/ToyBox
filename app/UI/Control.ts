@@ -17,7 +17,7 @@ class Control extends Engine.SceneObject {
     protected _Offset: Math.Vertex;
     protected _Scale: Math.Vertex;
     protected _Style: Style;
-    protected _Parent: Control;
+    protected _UIParent: Control;
 
     public get Active(): boolean { return this._Active; }
     public set Active(value: boolean) { this._Active = value; this.OnToggle(value); this.Update(); }
@@ -37,8 +37,8 @@ class Control extends Engine.SceneObject {
     public get Scale(): Math.Vertex { return this._Scale; }
     public set Scale(value: Math.Vertex) { this._Scale = value; }
     public get Style(): Style { return this._Style; }
-    public get Parent(): Control { return this._Parent; }
-    public set Parent(value: Control) { this._Parent = value; }
+    public get UIParent(): Control { return this._UIParent; }
+    public set UIParent(value: Control) { this._UIParent = value; }
     public get Element(): HTMLElement { return this._Element; }
     public get Events(): ControlEventPackage { return <ControlEventPackage>this._Events; }
 
@@ -85,11 +85,11 @@ class Control extends Engine.SceneObject {
         this.Update();
         this.Check();
         let Parent: HTMLElement = document.getElementById('ui-parent');
-        if (this._Parent) {
-            Parent = this._Parent._Element;
+        if (this._UIParent) {
+            Parent = this._UIParent._Element;
         }
         if (!Parent) {
-            Log.Error('UI Parent Not Found', 'Unnable to find UI parent');
+            Core.Log('UI Parent Not Found - Unnable to find UI parent', 'Error');
         }
         Parent.appendChild(this._Element);
     }
@@ -100,7 +100,7 @@ class Control extends Engine.SceneObject {
             Parent = document.getElementById('ui-parent');
         }
         if (!Parent) {
-            Log.Error('Parent Not Found', 'Unnable to find parent');
+            Core.Log('Parent Not Found - Unnable to find parent', 'Error');
         }
         Parent.removeChild(this._Element);
     }

@@ -1,3 +1,11 @@
-import { DrawEngineType, DrawEngine } from "./DrawEngine";
+import DrawEngine from './DrawEngine';
+import DataHandlerObject from './DataHandlerObject';
+import ObjectLoaderService from './ObjectLoaderService';
+import ResourceLoaderService from './ResourceLoaderService';
 
-export { DrawEngineType, DrawEngine };
+export { 
+    DrawEngine,
+    DataHandlerObject,
+    ObjectLoaderService,
+    ResourceLoaderService,
+};

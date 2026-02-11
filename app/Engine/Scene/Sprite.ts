@@ -1,5 +1,4 @@
 import * as Core from './../../Core/Core';
-import * as Math from './../../Mathematics/Mathematics';
 
 import ImageObject from './ImageObject';
 import SpriteSet from './SpriteSet';
@@ -11,12 +10,12 @@ class Sprite extends ImageObject {
     private _CurrentIndex: number;
     private _CurrentSpriteSet: number;
     private _BackUpSpriteSet: number;
-    private _SubSprites: Sprite[];
 
-    public get Index(): number { /* Override */ return this.GetIndex(); }
-    public get Images(): string[] { /* Override */ return this.Collection.Images }
-    public get NormalMaps(): string[] { /* Override */ return this.NormalCollection.Images }
-    public get SpecularMaps(): string[] { /* Override */ return this.SpecularCollection.Images }
+    public override get Index(): number { return this.GetIndex(); }
+    public override get Images(): string[] { return this.Collection.Images }
+    public override get NormalMaps(): string[] { return this.NormalCollection.Images }
+    public override get SpecularMaps(): string[] { return this.SpecularCollection.Images }
+    
     public get BackUpSpriteSet(): number { return this._BackUpSpriteSet; }
     public set BackUpSpriteSet(value: number) { this._BackUpSpriteSet = value; }
     public get CurrentIndex(): number { return this._CurrentIndex; }
@@ -33,8 +32,6 @@ class Sprite extends ImageObject {
     public set NormalSets(value: SpriteSet[]) { (<SpriteSetCollection>this._NormalCollection).SpriteSets = value; }
     public get SpecularSets(): SpriteSet[] { return (<SpriteSetCollection>this._SpecularCollection).SpriteSets; }
     public set SpecularSets(value: SpriteSet[]) { (<SpriteSetCollection>this._SpecularCollection).SpriteSets = value; }
-    public get SubSprites(): Sprite[] { return this._SubSprites; }
-    public set SubSprites(value: Sprite[]) { this._SubSprites = value; }
     public get Events(): SpriteEventPackage { return <SpriteEventPackage>this._Events; }
 
     public constructor(Old?: Sprite) {
@@ -43,19 +40,10 @@ class Sprite extends ImageObject {
         this._CurrentIndex = 0;
         this._CurrentSpriteSet = 0;
         this._BackUpSpriteSet = -1;
-        if (Old != null) {
-            this._SubSprites = [];
-            for (let i = 0; i < Old._SubSprites.length; i++) this._SubSprites.push(Old._SubSprites[i].Copy());
-            this.Trans.Scale = Old.Trans.Scale.Copy();
-        }
-        else {
-            this._Events = new SpriteEventPackage();
-            this._SubSprites = [];
-            this.Trans.Scale = new Math.Vertex(100, 100, 1);
-            this._Collection = new SpriteSetCollection();
-            this._NormalCollection = new SpriteSetCollection();
-            this._SpecularCollection = new SpriteSetCollection();
-        }
+        this._Collection = Old?._Collection.Copy() || new SpriteSetCollection();
+        this._NormalCollection = Old?._NormalCollection.Copy() || new SpriteSetCollection();
+        this._SpecularCollection = Old?._SpecularCollection.Copy() || new SpriteSetCollection();
+        this._Events = new SpriteEventPackage();
     }
 
     public Copy(): Sprite {
@@ -63,7 +51,6 @@ class Sprite extends ImageObject {
     }
 
     private GetIndex(): number {
-        // Override
         let Index: number = 0;
         for (let i = 0; i < this._CurrentSpriteSet; i++) {
             Index += this.SpriteSets[i].Images.length;
@@ -93,12 +80,14 @@ class Sprite extends ImageObject {
             }
             this._CurrentIndex = 0;
         }
+        this.Modified = true;
     }
 
     public SetSpriteSet(Index: number): void {
         if (Index >= this.SpriteSets.length) return;
         this._CurrentSpriteSet = Index;
         this._CurrentIndex = 0;
+        this.Modified = true;
     }
 
     public UpdateSpriteSet(Index: number): void {
@@ -127,26 +116,16 @@ class Sprite extends ImageObject {
         return this.NormalSets[Set].Images;
     }
 
-    public Serialize(): any {
-        // Override
-        let S = super.Serialize();
-        S.Index = this._CurrentSpriteSet;
-        S.SubSprites = [];
-        for (let i in this._SubSprites) {
-            S.SubSprites.push(this._SubSprites[i].Serialize());
+    public override Serialize(): any {
+        return {
+            ...super.Serialize(),
+            Index: this._CurrentSpriteSet,
         }
-        return S;
     }
 
-    public Deserialize(Data: any): void {
-        // Override
+    public override Deserialize(Data: any): void {
         super.Deserialize(Data);
         this._CurrentSpriteSet = Data.Index;
-        for (let i in Data.SubSprites) {
-            let SS: Sprite = new Sprite();
-            SS.Deserialize(Data.SubSprites[i]);
-            this._SubSprites.push(SS);
-        }
     }
 }
 

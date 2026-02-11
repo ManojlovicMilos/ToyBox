@@ -146,11 +146,6 @@ export class ShaderCode {
     Copy(): ShaderCode
 }
 
-export enum TextureSamplingType {
-    Linear = 'Linear',
-    Nearest = 'Nearest'
-}
-
 export class Material {
     ID: string;
     Name: string;
@@ -158,7 +153,6 @@ export class Material {
     Nodes: MaterialNode[];
     Inputs: MaterialInput[];
     Shaders: ShaderCode;
-    Sampling: TextureSamplingType;
 
     constructor(Old?: Material)
     Copy(): Material
@@ -221,10 +215,16 @@ export abstract class ImageObject extends DrawObject {
     Copy(): ImageObject
 }
 
+export enum TextureSampling {
+    Linear = 'Linear',
+    Nearest = 'Nearest'
+}
+
 export class ImageCollection {
     ID: string;
     Origin: string;
     Images: string[];
+    Sampling: TextureSampling;
 
     constructor(Old?: ImageCollection, Images?: string[])
     Copy(): ImageCollection

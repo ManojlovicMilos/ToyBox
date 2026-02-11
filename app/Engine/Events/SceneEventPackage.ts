@@ -25,6 +25,7 @@ class SceneEventPackage extends EventPackage {
 
     public constructor(Old?: SceneEventPackage) {
         super(Old);
+        this._WireTouchEvents = true;
         if (Old) {
 
         }

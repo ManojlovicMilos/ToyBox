@@ -17,7 +17,6 @@ class RunnerService extends Core.Service {
     private _FrameUpdateRate: number;
     private _Current: Engine.Scene;
     private _Preload: Engine.Scene;
-    private _Next: Engine.Scene;
     private _Game: Engine.Game;
     private _DrawEngine: Draw.DrawEngine;
     private _Canvas: HTMLCanvasElement;
@@ -139,10 +138,7 @@ class RunnerService extends Core.Service {
     private OnRenderFrame(): void {
         if (this._Stop) return;
         this._DrawHandle = requestAnimationFrame(this.OnRenderFrame.bind(this));
-        if (this._Current?.Is(Engine.Scene2D)) {
-            this._DrawEngine.Draw2DScene(<Engine.Scene2D>this._Current, window.innerWidth, window.innerHeight);
-        }
-        else this.Log.Error('Scene ' + this._Current?.Name + ' is not of valid type.', this._Current);
+        this._DrawEngine.DrawScene(this._Current);
     }
 
     private PackEventArgs(Event): any {
@@ -301,8 +297,7 @@ class RunnerService extends Core.Service {
         return Handled;
     }
 
-    public PickSceneObject(Position: any): Engine.SceneObject {
-        let Handled: boolean = false;
+    public PickSceneObject(Position: Math.Vertex): Engine.SceneObject {
         if (this._Current?.Is(Engine.Scene2D)) {
             let Current2DScene: Engine.Scene2D = <Engine.Scene2D>this._Current;
             let STrans: Math.Vertex = Current2DScene.Trans.Translation;

@@ -1,15 +1,16 @@
 /// Core
-import Settings, { Quality } from "./Core/Settings";
-import Service from "./Core/Services/Service";
-import Injectable from "./Core/Utilities/Injectable";
-import CreateUuid from "./Core/Utilities/CreateUuid";
-import TypedObject from "./Core/Utilities/TypedObject";
-import UuidService from "./Core/Services/UuidService";
-import Inject, { InjectionManager } from "./Core/Services/InjectionManager";
+import Settings, { Quality } from './Core/Settings';
+import Log from './Core/Utilities/Log';
+import Service from './Core/Services/Service';
+import LogService from './Core/Services/LogService';
+import Injectable from './Core/Utilities/Injectable';
+import CreateUuid from './Core/Utilities/CreateUuid';
+import TypedObject from './Core/Utilities/TypedObject';
+import UuidService from './Core/Services/UuidService';
+import Inject, { InjectionManager } from './Core/Services/InjectionManager';
 
 /// Data
-import LogService from "./Data/Services/LogService";
-import HTTPService from "./Data/Services/HttpService";
+import HTTPService from './Data/Services/HttpService';
 
 /// Engine
 // Game
@@ -29,6 +30,7 @@ import LightAttenuation from './Engine/Scene/LightAttenuation';
 // Collections
 import SpriteSet from './Engine/Scene/SpriteSet';
 import ImageCollection from './Engine/Scene/ImageCollection';
+import TextureSampling from './Engine/Scene/TextureSampling';
 import SpriteSetCollection from './Engine/Scene/SpriteSetCollection';
 // EventPackages
 import MouseButton from './Engine/Events/EventArguments';
@@ -38,13 +40,16 @@ import SpriteEventPackage from './Engine/Events/SpriteEventPackage';
 import ImageObjectEventPackage from './Engine/Events/ImageObjectEventPackage';
 // Materials
 import { MaterialNode } from './Engine/Material/MaterialNode';
+import { Material, MaterialType } from './Engine/Material/Material';
 import { MaterialNodePool } from './Engine/Material/MaterialNodePool';
 import { MaterialInput, MaterialInputType } from './Engine/Material/MaterialInput';
-import { Material, MaterialType, TextureSamplingType } from './Engine/Material/Material';
 import { MaterialNodeValue, MaterialNodeValueType } from './Engine/Material/MaterialNodeValue';
 
 /// Draw
-import { DrawEngineType, DrawEngine } from "./Draw/DrawEngine";
+import DrawEngine from './Draw/DrawEngine';
+import DataHandlerObject from './Draw/DataHandlerObject';
+import ObjectLoaderService from './Draw/ObjectLoaderService';
+import ResourceLoaderService from './Draw/ResourceLoaderService';
 
 /// Math
 // Structures
@@ -64,22 +69,23 @@ import ColliderObject from './Mathematics/Collision/ColliderObject';
 import CollisionResult from './Mathematics/Collision/CollisionResult';
 import CollisionService from './Mathematics/Collision/CollisionService';
 // Util
-import ProgressBar from "./Util/SceneObjects/ProgressBar";
-import DPadControl from "./Util/SceneObjects/DPadControl";
-import AnalogControl from "./Util/SceneObjects/AnalogControl";
-import BufferService from "./Util/Services/BufferService";
-import ConversionService from "./Util/Services/ConversionService";
-import ObjectCreationService from "./Util/Services/ObjectCreationService";
-import ObjectCollisionService from "./Util/Services/ObjectCollisionService";
+import ProgressBar from './Util/SceneObjects/ProgressBar';
+import DPadControl from './Util/SceneObjects/DPadControl';
+import AnalogControl from './Util/SceneObjects/AnalogControl';
+import BufferService from './Util/Services/BufferService';
+import ConversionService from './Util/Services/ConversionService';
+import ObjectCreationService from './Util/Services/ObjectCreationService';
+import ObjectCollisionService from './Util/Services/ObjectCollisionService';
 
 /// UI
-import * as UI from "./UI/UI";
+import * as UI from './UI/UI';
 
 /// Runner
-import RunnerService from "./Runner/RunnerService";
+import RunnerService from './Runner/RunnerService';
 
 export {
     // Core
+    Log,
     Inject,
     Injectable,
     CreateUuid,
@@ -87,16 +93,18 @@ export {
     Quality,
     Service,
     Settings,
+    LogService,
     UuidService,
     InjectionManager,
 
     // Data
-    LogService,
     HTTPService,
 
     // Draw
     DrawEngine,
-    DrawEngineType,
+    DataHandlerObject,
+    ObjectLoaderService,
+    ResourceLoaderService,
 
     // Engine
     Game,
@@ -112,6 +120,7 @@ export {
     LightAttenuation,
     SpriteSet,
     ImageCollection,
+    TextureSampling,
     SpriteSetCollection,
     MouseButton,
     EventPackage,
@@ -126,7 +135,6 @@ export {
     MaterialNodeValueType,
     MaterialInput,
     MaterialInputType,
-    TextureSamplingType,
 
     // Math
     Axis,

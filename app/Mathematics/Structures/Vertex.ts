@@ -25,7 +25,7 @@ class Vertex {
     }
 
     public Add(V: Vertex): Vertex {
-        return this.Translate(V);
+        return this.Copy().Translate(V);
     }
 
     public Substract(V: Vertex): Vertex {

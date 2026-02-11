@@ -19,6 +19,7 @@ import LightAttenuation from './Scene/LightAttenuation';
 
 // Collections
 import SpriteSet from './Scene/SpriteSet';
+import TextureSampling from './Scene/TextureSampling';
 import ImageCollection from './Scene/ImageCollection';
 import SpriteSetCollection from './Scene/SpriteSetCollection';
 
@@ -33,7 +34,7 @@ import ImageObjectEventPackage from './Events/ImageObjectEventPackage';
 import { MaterialNode } from './Material/MaterialNode';
 import { MaterialNodePool } from './Material/MaterialNodePool';
 import { MaterialInput, MaterialInputType } from './Material/MaterialInput';
-import { Material, MaterialType, TextureSamplingType } from './Material/Material';
+import { Material, MaterialType } from './Material/Material';
 import { MaterialNodeValue, MaterialNodeValueType } from './Material/MaterialNodeValue';
 
 export {
@@ -57,6 +58,7 @@ export {
 
     // Collections
     SpriteSet,
+    TextureSampling,
     ImageCollection,
     SpriteSetCollection,
 
@@ -76,5 +78,4 @@ export {
     MaterialNodeValueType,
     MaterialInput,
     MaterialInputType,
-    TextureSamplingType,
 };

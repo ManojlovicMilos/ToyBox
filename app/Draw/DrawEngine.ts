@@ -1,43 +1,37 @@
-export { DrawEngineType, DrawEngine };
-
 import * as Core from './../Core/Core';
-import * as Data from './../Data/Data';
-import * as Engine from "./../Engine/Engine";
-import * as Math from "./../Mathematics/Mathematics"
+import * as Engine from './../Engine/Engine';
+import * as Math from './../Mathematics/Mathematics'
 
+import ObjectLoaderService from './ObjectLoaderService';
+
+const CANVAS_ELEMENT_ID = 'canvas';
+const PARENT_ELEMENT_ID = 'canvas-parent';
 const DEFAULT_RESOLUTION = new Math.Vertex(1920, 1080, 1);
-
-enum DrawEngineType {
-    ThreeJS = 0
-}
 
 @Core.Injectable('TBX.DrawEngine')
 class DrawEngine extends Core.Service {
-    private _Matrix: Math.TransformationService;
-    private _Renderer: any;
     protected _FixedSize: boolean;
+    protected _Resolution: Math.Vertex;
     protected _GlobalScale: Math.Vertex;
     protected _GlobalOffset: Math.Vertex;
-    protected _Resolution: Math.Vertex;
-    protected _Target: any;
-    protected _Parent: any;
-    public get Renderer(): any { return this._Renderer; }
-    public set Renderer(value: any) { this._Renderer = value; }
+    protected _Parent: HTMLElement;
+    protected _Target: HTMLCanvasElement;
+    protected _Loader: ObjectLoaderService<unknown>;
+
+    public get Resolution(): Math.Vertex { return this._Resolution; }
     public get GlobalScale(): Math.Vertex { return this._GlobalScale; }
     public get GlobalOffset(): Math.Vertex { return this._GlobalOffset; }
-    public get Resolution(): Math.Vertex { return this._Resolution; }
-    public Data: { [key: string]: any; } = {};
 
     public constructor() {
         super();
-        const Log = Core.Inject<Data.LogService>(Data.LogService);
         this._FixedSize = false;
-        Log.Info("ToyBox Version " + Core.Settings.Version);
-        this._Matrix = Core.Inject(Math.TransformationService);
+        this._Parent = document.getElementById(PARENT_ELEMENT_ID);
+        this._Target = document.getElementById(CANVAS_ELEMENT_ID) as HTMLCanvasElement;
+        Core.Log('ToyBox Version ' + Core.Settings.Version, null, 'Info');
     }
 
+    // virtual
     public UpdateResolution(Resolution?: Math.Vertex, FixedSize?: boolean): void {
-        // Virtual
         if (Resolution) this._Resolution = Resolution;
         else this._Resolution = DEFAULT_RESOLUTION;
         if (FixedSize != null) this._FixedSize = FixedSize;
@@ -48,39 +42,18 @@ class DrawEngine extends Core.Service {
         return new Math.Vertex((X / this._Target.clientWidth) * this._Resolution.X, (Y / this._Target.clientHeight) * this._Resolution.Y, 0);
     }
 
-    public Draw2DScene(Scene: Engine.Scene2D, Width: number, Height: number): void {
-        // Virtual
+    // virtual
+    public DrawScene(Scene: Engine.Scene): void {
+        if (Scene.Is(Engine.Scene2D)) {
+            this.DrawScene2D(Scene as Engine.Scene2D);
+        }
     }
 
-    public Preload2DScene(Scene: Engine.Scene2D, ReportProgress: Function): void {
-        // Virtual
-    }
+    // virtual
+    protected DrawScene2D(Scene: Engine.Scene2D): void {}
 
-    public Draw3DScene(Scene: Engine.Scene, Width: number, Height: number): void {
-        // Virtual
-    }
-
-    protected DrawSprite(Scene: Engine.Scene, Drawn: Engine.Sprite): void {
-        // Virtual
-    }
-
-    protected LoadSprite(Scene: Engine.Scene, Drawn: Engine.Sprite, LoadData: any): void {
-        // Virtual
-    }
-
-    protected DrawTile(Scene: Engine.Scene, Drawn: Engine.Tile): void {
-        // Virtual
-    }
-
-    protected LoadImage(Scene: Engine.Scene, Drawn: Engine.Tile, LoadData: any): void {
-        // Virtual
-    }
-
-    protected LoadTile(Scene: Engine.Scene, Drawn: Engine.Tile, LoadData: any): void {
-        // Virtual
-    }
-
-    protected LoadLight(Scene: Engine.Scene, Drawn: Engine.Light, LoadData: any): void {
-        // Virtual
-    }
+    // virtual
+    public Preload2DScene(Scene: Engine.Scene2D, ReportProgress: Function): void {}
 }
+
+export default DrawEngine;

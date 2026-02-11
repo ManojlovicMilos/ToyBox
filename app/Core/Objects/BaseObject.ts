@@ -11,6 +11,7 @@ class BaseObject {
 
     public Types: string[];
     public Children: BaseObject[];
+    public Parent: BaseObject | null;
     public Data: { [key: string]: any };
     
     public get ID(): string { return this._ID; }
@@ -67,8 +68,12 @@ class BaseObject {
     }
 
     public Attach(Child: BaseObject): void {
+        if (Child.Parent) {
+            Child.Parent.Remove(Child);
+        }
         this.Children.push(Child);
         this.ChildrenMap[Child.ID] = Child;
+        Child.Parent = this;
         this.OnAttachChild(Child);
         Child.OnAttach(this);
     }
@@ -78,6 +83,7 @@ class BaseObject {
     public Remove(Child: string | BaseObject): void {
         const childId = typeof Child === 'string' ? Child : Child.ID;
         if (this.ChildrenMap[childId]) {
+            this.ChildrenMap[childId].Parent = null;
             this.ChildrenMap[childId].OnRemove(this);
         }
         this.Children = this.Children.filter((child: BaseObject) => child.ID !== childId);

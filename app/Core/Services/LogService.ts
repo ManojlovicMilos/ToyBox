@@ -1,4 +1,5 @@
-import * as Core from '../../Core/Core';
+import Service from './Service';
+import Injectable from '../Utilities/Injectable';
 
 const TOYBOX_PREFIX = 'TBX: ';
 const MESSAGE_TEXT_INFO = 'Info';
@@ -7,8 +8,8 @@ const MESSAGE_TEXT_EVENT = 'Event';
 const MESSAGE_TEXT_WARNING = 'Warning';
 const MESSAGE_TEXT_DEFAULT = 'Message';
 
-@Core.Injectable('TBX.LogService')
-export default class LogService extends Core.Service {
+@Injectable('TBX.LogService')
+export default class LogService extends Service {
     public Enabled: { [key: string]: boolean } = {
         global: true,
         info: true,
@@ -24,12 +25,16 @@ export default class LogService extends Core.Service {
         if (!this.Enabled.global) return;
         if (!this.Enabled[type.toLowerCase()]) return;
         const logMethod = method || console.log;
-        logMethod(" - - - ");
+        logMethod(' - - - ');
         if (type) logMethod(TOYBOX_PREFIX + type);
         else logMethod(TOYBOX_PREFIX + MESSAGE_TEXT_DEFAULT);
         logMethod(message);
         if (data) logMethod(data);
-        logMethod(" - - - ");
+        logMethod(' - - - ');
+    };
+
+    public Log(message: string, data?: any): void {
+        this.Out(message, data, MESSAGE_TEXT_INFO);
     };
 
     public Info(message: string, data?: any): void {

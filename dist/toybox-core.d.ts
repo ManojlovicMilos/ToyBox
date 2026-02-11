@@ -72,4 +72,15 @@ export class UuidService extends Service {
     Create(): string
 }
 
+export class LogService extends Service {
+    Enabled: { [key: string]: boolean }
+    RegisterCustomLog(type: string): void
+    Out(message: string, data?: any, type?: string, method?: () => void): void
+    Log(message: string, data?: any): void
+    Info(message: string, data?: any): void
+    Error(message: string, data?: any): void
+    Event(message: string, data?: any): void
+    Warning(message: string, data?: any): void
+}
+
 export as namespace Core;
